@@ -1,0 +1,5 @@
+Git tutorial
+http://learngitbranching.js.org/
+
+TODO list:
+https://docs.google.com/document/d/1I4TOb9EuBxOZPhh428tChlneSD32oqTguikeHN8BZWM/edit?usp=sharing
