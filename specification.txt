@@ -1,0 +1,33 @@
+Szabályok:
+- A hajókat nem lehet egymás mellé lerakni.
+- 15 db hajót kell lerakni.
+- Hajó méretei:
+-- 1, 2, 3, 4, 5
+- 10x10 -es pálya
+- lehetnek mindenféle alakú hajók
+
+Hajó szám vizsgáló - ez a 3. mezõ
+- 1.: mutassa, azt, hogy hány hajót kell még lepakolnod majd - 2.: játék közben azt, hogy mennyit kell még kilõni
+ .. A két funkció ugyanúgy néz ki, ugyanazon a helyen van, közös õsosztállyal, külön példánnyal, futás közben változik, hogy melyik jelenik meg.
+
+GUI:
+- You are Winner! :)
+- 2 mezõ: a Sajátod és az ellenfél üres négyzethálója, amibe lõhetsz.
+- A mezõt víz és találat esetén színezze ki.
+- Soron lévõ fél jelzõje: Ha nem te jössz, szürkítse ki az ellenfél mezõjét.
+- Legyen státusz sor. (pakolás, háború, ki rak?, süllyesztve)
+
+- 3. mezõ: hajók lerakása / mi van kilõve ? szöveges mezõ.
+
+Hajó osztályok:
+- Adott méretûek, ki kell választani, hogy melyiket akarod lerakni. - Ezt highlight a 3.mezõben. Ahogy kiválasztod a koordinátáit, azokkal feltölti az osztály elemeit. Ekkor megvizsgálja, hogy szomszédos-e az elõzõleg lerakott koordinátával. Egyetemben vizsgálja, hogy nem szomszédos a már meglévõ hajókkal.
+- Új hajó indításánál környezõ mezõket kell csak vizsgálni, hogy van-e már lerakva hajó. 
+- NEW IDEA: Ne engedje a kattintást foglalt mezõre !
+
+- Törlés/Visszavonás gomb: a módosítás eshetõségére.
+
+FÕ menüben: start és csatlakozás gombok.
+- Start: elindítja a szervert és kiírja a Server IP-t
+- Csatlakozás: Elõhoz egy texbox-t, amibe be kell írni az IP-t.
+
+
