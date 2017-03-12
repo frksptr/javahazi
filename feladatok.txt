@@ -1,0 +1,11 @@
+1) start/connect ablak ip címmel
+
+2) mezõ berácsozása, leellenõrzés a rácsnál, kattintásra satíroz
+
+3) kliens -> szerver valaki kattintott, ellenõrizzük a mátrixot (control)
+
+4) hajó lerakó meg kilövõ
+
+5) átgondolni a pályán való hajók ellenõrzését, a hajó osztályok felépítését
+
+6) Gitbe egy Link.txt google docs linkekkel és ezentúl azokba írkáljunk TODO-kat
