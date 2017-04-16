@@ -30,8 +30,7 @@ public class GUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private Control ctrl;
-	private DrawPanel drawPanel;
-    private boolean running = false;
+	private boolean running = false;
     private Board enemyBoard, playerBoard;
     
     private boolean placement = true; // rakunk-e, vagy lövünk 
@@ -114,16 +113,6 @@ public class GUI extends JFrame {
 
 		menuBar.add(menu);
 
-		menuItem = new JMenuItem("Clear");
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				drawPanel.points.clear();
-				drawPanel.repaint();
-			}
-		});
-		menuBar.add(menuItem);
-
 		menuItem = new JMenuItem("Exit");
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -173,26 +162,6 @@ public class GUI extends JFrame {
 		setVisible(true);
 	}
 
-	void addPoint(Point p) {
-		drawPanel.points.add(p);
-		drawPanel.repaint();
-	}
-
-	private class DrawPanel extends JPanel {
-
-		private static final long serialVersionUID = 1L;
-		private ArrayList<Point> points = new ArrayList<Point>();
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-
-			for (Point p : points) {
-				g.drawOval(p.x, p.y, 10, 10);
-			}
-		}
-	}
-	
 	public void shootPos(Point p){
 		playerBoard.checkShoot(p);
 		//ctrl.sendClick(p);
