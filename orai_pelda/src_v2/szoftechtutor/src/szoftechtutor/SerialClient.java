@@ -22,7 +22,6 @@ public class SerialClient extends Network {
 	}
 
 	private class ReceiverThread implements Runnable {
-
 		public void run() {
 			System.out.println("Waiting for points...");
 			try {
