@@ -19,5 +19,7 @@ public class Main {
 		Control c = new Control();
 		GUI g = new GUI(c);
 		c.setGUI(g);
+		
+		
 	}
 }

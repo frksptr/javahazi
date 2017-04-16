@@ -1,173 +1,193 @@
 package szoftechtutor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Point;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 
-import javafx.event.EventHandler;
-import javafx.geometry.Point2D;
-import javafx.scene.Parent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
-public class Board extends Parent {
-    private VBox rows = new VBox();
-    private boolean enemy = false;
-    public int ships = 5;
+public class Board extends JPanel {
 
-    public Board(boolean enemy, EventHandler<? super MouseEvent> handler) {
-        this.enemy = enemy;
-        for (int y = 0; y < 10; y++) {
-            HBox row = new HBox();
-            for (int x = 0; x < 10; x++) {
-                Cell c = new Cell(x, y, this);
-                c.setOnMouseClicked(handler);
-                row.getChildren().add(c);
-            }
+	private boolean enemy = false;
+	public int ships = 5;
+	private JButton[][] buttonGrid = new JButton[10][10];
+	private Color waterColor = Color.BLUE;
+	private Color shipColor = Color.BLACK;
+	private Color shotShipColor = Color.RED;
+	private Color shotWaterColor = Color.GRAY;
 
-            rows.getChildren().add(row);
-        }
+	public Board(int posx, int posy, int width, int height, boolean enemy, ActionListener handler) {
 
-        getChildren().add(rows);
-    }
+		this.setBounds(posx, posy, width, height);
+		this.enemy = enemy;
 
-    public boolean placeShip(Ship ship, int x, int y) {
-        if (canPlaceShip(ship, x, y)) {
-            int length = ship.type;
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
 
-            if (ship.vertical) {
-                for (int i = y; i < y + length; i++) {
-                    Cell cell = getCell(x, i);
-                    cell.ship = ship;
-                    if (!enemy) {
-                        cell.setFill(Color.WHITE);
-                        cell.setStroke(Color.GREEN);
-                    }
-                }
-            }
-            else {
-                for (int i = x; i < x + length; i++) {
-                    Cell cell = getCell(i, y);
-                    cell.ship = ship;
-                    if (!enemy) {
-                        cell.setFill(Color.WHITE);
-                        cell.setStroke(Color.GREEN);
-                    }
-                }
-            }
+		c.ipadx = 0;
+		c.ipady = 0;
 
-            return true;
-        }
+		setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 
-        return false;
-    }
+		for (int col = 0; col < 10; col++) {
+			for (int row = 0; row < 10; row++) {
+				JButton button = new JButton();
+				
 
-    public Cell getCell(int x, int y) {
-        return (Cell)((HBox)rows.getChildren().get(y)).getChildren().get(x);
-    }
+				button.setBackground(waterColor);
 
-    private Cell[] getNeighbors(int x, int y) {
-        Point2D[] points = new Point2D[] {
-                new Point2D(x - 1, y),
-                new Point2D(x + 1, y),
-                new Point2D(x, y - 1),
-                new Point2D(x, y + 1)
-        };
+				button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				button.setPreferredSize(new java.awt.Dimension(height / 10, width / 10));
+				button.addActionListener(handler);
 
-        List<Cell> neighbors = new ArrayList<Cell>();
+				c.gridx = col;
+				c.gridy = row;
 
-        for (Point2D p : points) {
-            if (isValidPoint(p)) {
-                neighbors.add(getCell((int)p.getX(), (int)p.getY()));
-            }
-        }
+				this.add(button, c);
+				buttonGrid[row][col] = button;
+			}
+		}
 
-        return neighbors.toArray(new Cell[0]);
-    }
+	}
 
-    private boolean canPlaceShip(Ship ship, int x, int y) {
-        int length = ship.type;
+	public boolean placeShip(Ship ship, JButton button) {
+		button.setBackground(shipColor);
+		int x = 0;
+		int y = 0;
+		for (int row = 0; row < 10; row++) {
+			for (int col = 0; col < 10; col++) {
+				if (buttonGrid[row][col] == button) {
+					x = row;
+					y = col;
+				}
+			}
+		}
+		if (canPlaceShip(ship, x, y)) {
+			// int length = ship.type;
+			//
+			// if (ship.vertical) {
+			// for (int i = y; i < y + length; i++) {
+			// Cell cell = getCell(x, i);
+			// cell.ship = ship;
+			// if (!enemy) {
+			// cell.setFill(Color.WHITE);
+			// cell.setStroke(Color.GREEN);
+			// }
+			// }
+			// } else {
+			// for (int i = x; i < x + length; i++) {
+			// Cell cell = getCell(i, y);
+			// cell.ship = ship;
+			// if (!enemy) {
+			// cell.setFill(Color.WHITE);
+			// cell.setStroke(Color.GREEN);
+			// }
+			// }
+			// }
+			//
+			// return true;
+		}
 
-        if (ship.vertical) {
-            for (int i = y; i < y + length; i++) {
-                if (!isValidPoint(x, i))
-                    return false;
+		return false;
+	}
 
-                Cell cell = getCell(x, i);
-                if (cell.ship != null)
-                    return false;
+	public Point getPosition(JButton button) {
+		int x = 0;
+		int y = 0;
+		for (int row = 0; row < 10; row++) {
+			for (int col = 0; col < 10; col++) {
+				if (buttonGrid[row][col] == button) {
+					x = row;
+					y = col;
+				}
+			}
+		}
+		return new Point(x,y);
+	}
+	
+	public JButton getButton(Point p) {
+		return buttonGrid[p.x][p.y];
+		
+	}
+	
+	public void checkShoot(Point p) {
+		JButton button = buttonGrid[p.x][p.y];
+		if (button.getBackground() == waterColor) {
+			button.setBackground(shotWaterColor);
+		} else if (button.getBackground() == shipColor) {
+			button.setBackground(shotShipColor);
+		}
+	}
+	
+	public void showShot(JButton button) {
+		button.setText(".");		
+	}
 
-                for (Cell neighbor : getNeighbors(x, i)) {
-                    if (!isValidPoint(x, i))
-                        return false;
+	// private Cell[] getNeighbors(int x, int y) {
+	// Point2D[] points = new Point2D[] {
+	// new Point2D(x - 1, y),
+	// new Point2D(x + 1, y),
+	// new Point2D(x, y - 1),
+	// new Point2D(x, y + 1)
+	// };
+	//
+	// List<Cell> neighbors = new ArrayList<Cell>();
+	//
+	// for (Point2D p : points) {
+	// if (isValidPoint(p)) {
+	// neighbors.add(getCell((int)p.getX(), (int)p.getY()));
+	// }
+	// }
+	//
+	// return neighbors.toArray(new Cell[0]);
+	// return null;
+	// }
 
-                    if (neighbor.ship != null)
-                        return false;
-                }
-            }
-        }
-        else {
-            for (int i = x; i < x + length; i++) {
-                if (!isValidPoint(i, y))
-                    return false;
+	private boolean canPlaceShip(Ship ship, int x, int y) {
 
-                Cell cell = getCell(i, y);
-                if (cell.ship != null)
-                    return false;
+		// int length = ship.type;
+		//
+		// if (ship.vertical) {
+		// for (int i = y; i < y + length; i++) {
+		// if (!isValidPoint(x, i))
+		// return false;
+		//
+		// Cell cell = getCell(x, i);
+		// if (cell.ship != null)
+		// return false;
+		//
+		// for (Cell neighbor : getNeighbors(x, i)) {
+		// if (!isValidPoint(x, i))
+		// return false;
+		//
+		// if (neighbor.ship != null)
+		// return false;
+		// }
+		// }
+		// } else {
+		// for (int i = x; i < x + length; i++) {
+		// if (!isValidPoint(i, y))
+		// return false;
+		//
+		// Cell cell = getCell(i, y);
+		// if (cell.ship != null)
+		// return false;
+		//
+		// for (Cell neighbor : getNeighbors(i, y)) {
+		// if (!isValidPoint(i, y))
+		// return false;
+		//
+		// if (neighbor.ship != null)
+		// return false;
+		// }
+		// }
+		// }
 
-                for (Cell neighbor : getNeighbors(i, y)) {
-                    if (!isValidPoint(i, y))
-                        return false;
-
-                    if (neighbor.ship != null)
-                        return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    private boolean isValidPoint(Point2D point) {
-        return isValidPoint(point.getX(), point.getY());
-    }
-
-    private boolean isValidPoint(double x, double y) {
-        return x >= 0 && x < 10 && y >= 0 && y < 10;
-    }
-
-    public class Cell extends Rectangle {
-        public int x, y;
-        public Ship ship = null;
-        public boolean wasShot = false;
-
-        private Board board;
-
-        public Cell(int x, int y, Board board) {
-            super(30, 30);
-            this.x = x;
-            this.y = y;
-            this.board = board;
-            setFill(Color.LIGHTGRAY);
-            setStroke(Color.BLACK);
-        }
-
-        public boolean shoot() {
-            wasShot = true;
-            setFill(Color.BLACK);
-
-            if (ship != null) {
-                ship.hit();
-                setFill(Color.RED);
-                if (!ship.isAlive()) {
-                    board.ships--;
-                }
-                return true;
-            }
-
-            return false;
-        }
-    }
+		return true;
+	}
 }

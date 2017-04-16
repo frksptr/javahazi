@@ -1,12 +1,18 @@
 package szoftechtutor;
 
+import javax.swing.JButton;
+
 import javafx.scene.Parent;
 
-public class Ship extends Parent {
+public class Ship {
     public int type;
     public boolean vertical = true;
 
     private int health;
+    
+    // TODO: eltárolni hogy melyik gomb tartozik hozzá kattintáskor
+    
+    private JButton button;
 
     public Ship(int type, boolean vertical) {
         this.type = type;

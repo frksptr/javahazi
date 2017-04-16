@@ -47,6 +47,17 @@ class Control {
 	void clickReceived(Point p) {
 		if (gui == null)
 			return;
-		gui.addPoint(p);
+		gui.shootPos(p);
+		// TODO: visszaküldeni hogy milyen hajó (gui.getShotType valami)
 	}
+	
+	// beállítani hogy hol mit lõttünk ki az ellenfél térfelén
+//	void typeReceived(pos, type) {
+//		gui.setEnemyShotType(pos, type);
+//	}
+	// elküldnei hogy az ellenfél nálunk mit lõtt ki
+//	void sendShipType(pos, tpye) {
+//		net.sendType(type)
+//	}
+	
 }
