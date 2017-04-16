@@ -9,6 +9,12 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import Messages.GameMessage;
+import Messages.PositionMessage;
+import Messages.ReadyMessage;
+import Messages.TypeMessage;
+import util.CellType;
+
 public class SerialServer extends Network {
 
 	private ServerSocket serverSocket = null;
@@ -45,8 +51,20 @@ public class SerialServer extends Network {
 
 			try {
 				while (true) {
-					Point received = (Point) in.readObject();
-					ctrl.clickReceived(received);
+					GameMessage msg = (GameMessage) in.readObject();
+					System.out.println(msg.getClass());
+					if (msg instanceof PositionMessage){
+						Point received = ((PositionMessage) msg).getPosition();
+						ctrl.clickReceived(received);
+					}
+					else if(msg instanceof ReadyMessage) {
+						ctrl.enemyReady();
+					}
+					else if(msg instanceof TypeMessage) {
+						Point p = ((TypeMessage)msg).getPosition();
+						CellType t = ((TypeMessage)msg).getType();
+						ctrl.typeReceived(p,t);
+					}
 				}
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
@@ -71,15 +89,16 @@ public class SerialServer extends Network {
 	}
 
 	@Override
-	void send(Point p) {
+	void send(GameMessage msg) {
 		if (out == null)
 			return;
-		System.out.println("Sending point: " + p + " to Client");
+//		System.out.println("Sending point: " + p + " to Client");
 		try {
-			out.writeObject(p);
+			out.writeObject(msg);
 			out.flush();
 		} catch (IOException ex) {
 			System.err.println("Send error.");
+			System.err.println(ex.getMessage());
 		}
 	}
 

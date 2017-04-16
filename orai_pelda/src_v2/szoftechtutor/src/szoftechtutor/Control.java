@@ -7,6 +7,9 @@ package szoftechtutor;
 
 import java.awt.Point;
 
+import Messages.PositionMessage;
+import util.CellType;
+
 /**
  *
  * @author Predi
@@ -41,7 +44,7 @@ class Control {
 		// gui.addPoint(p); //for drawing locally
 		if (net == null)
 			return;
-		net.send(p);
+		net.send(new PositionMessage(p));
 	}
 
 	void clickReceived(Point p) {
@@ -51,13 +54,17 @@ class Control {
 		// TODO: visszaküldeni hogy milyen hajó (gui.getShotType valami)
 	}
 	
+	void enemyReady() {
+		// set ready flag
+	}
+	
 	// beállítani hogy hol mit lõttünk ki az ellenfél térfelén
-//	void typeReceived(pos, type) {
+	void typeReceived(Point p, CellType t) {
 //		gui.setEnemyShotType(pos, type);
-//	}
+	}
 	// elküldnei hogy az ellenfél nálunk mit lõtt ki
-//	void sendShipType(pos, tpye) {
+	void sendShipType(Point p, CellType t) {
 //		net.sendType(type)
-//	}
+	}
 	
 }

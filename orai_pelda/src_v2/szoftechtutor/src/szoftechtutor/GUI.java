@@ -157,7 +157,6 @@ public class GUI extends JFrame {
 			}
 		});
 		
-//		JPanel asd =
 		
 		add(playerBoard);
 		
@@ -196,6 +195,7 @@ public class GUI extends JFrame {
 	
 	public void shootPos(Point p){
 		playerBoard.checkShoot(p);
+		//ctrl.sendClick(p);
 		//playerBoard.placeShip(null, playerBoard.getButton(p));
 	}
 }
