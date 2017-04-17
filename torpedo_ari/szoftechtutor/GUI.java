@@ -4,6 +4,7 @@
  */
 package szoftechtutor;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -11,12 +12,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+
 
 /**
  *
@@ -148,8 +150,10 @@ public class GUI extends JFrame {
 				g.drawLine(0, i, 200, i);
 			}
 			for (Point p : points) {
-				g.fill3DRect(p.x-p.x%20, p.y-p.y%20, 20, 20, false);
-				//g.drawOval(p.x-p.x%20, p.y-p.y%20, 20, 20);
+				//g.fill3DRect(p.x-p.x%20, p.y-p.y%20, 20, 20, false);
+				g.setColor(Color.RED);
+
+				g.drawOval(p.x-p.x%20+1, p.y-p.y%20+1, 18, 18);
 			}
 		}
 	}

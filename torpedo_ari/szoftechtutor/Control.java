@@ -11,6 +11,7 @@ import java.awt.Point;
  *
  * @author Predi
  */
+
 class Control {
 
 	private GUI gui;
