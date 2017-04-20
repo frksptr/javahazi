@@ -3,3 +3,5 @@ http://learngitbranching.js.org/
 
 TODO list:
 https://docs.google.com/document/d/1I4TOb9EuBxOZPhh428tChlneSD32oqTguikeHN8BZWM/edit?usp=sharing
+
+https://docs.google.com/document/d/1w-JrjXN0D8Uo5B2tAf7kUQf4UF_zN0NL3s4IMA5mShg/edit?usp=sharing
