@@ -1,11 +1,20 @@
-1) start/connect ablak ip c�mmel
+Amíg át nem írom interfacesre:
+ha nem vagy biztos benne, hogy hogyan kapja meg a dolgokat, vagy ő hogyan fog bármit átadani, de van elképzelésed a logikájáról, akkor írj csak egy void függvényt, esetleg az elejére vegyél fel belső változókat, hogy kb mikre számítanál, hogy jöjjön és kezd el megírni a logikát, aztán ha majd megvan az áttérés akkor kikalapáljuk
 
-2) mez� ber�csoz�sa, leellen�rz�s a r�csn�l, kattint�sra sat�roz
+áttérés az interfaces megoldásra:
+* msg osztályok törlése, nem lesz rá szükség, ahogy konzin magyarázta
+* meg minden más
 
-3) kliens -> szerver valaki kattintott, ellen�rizz�k a m�trixot (control)
+bele lehet kezdeni:
+* start/connect ablak ip címmel
+* hajó lerakó meg kilövő UI elem
+* hajó osztály tárolja el a hozzá tartozó mezőket (gombokat)
+* gamestate osztályban tárolni minden lófaszt, mint ahogy a konzin mondta, ez kerül majd küldözgetésre
+* control osztályt is lehet csinálni ahogy a konzin mondta
+* ellenőrizni, hogy tényleg meghalt-e egy teljes hajó
+* ha minden hajó meghalt, akkor jelezni
+* állapotgép ami a megkapott gamestate alapján eldönti, hogy lepakolás fázis van-e, illetve amikor megy a játék rakhat-e az adott játékos
 
-4) haj� lerak� meg kil�v�
 
-5) �tgondolni a p�ly�n val� haj�k ellen�rz�s�t, a haj� oszt�lyok fel�p�t�s�t
-
-6) Gitbe egy Link.txt google docs linkekkel �s ezent�l azokba �rk�ljunk TODO-kat
+az interfaces megoldásra áttérés után inkább:
+* ellenőrizni, hogy ténylegesen hova lőttünk - msg osztály törlődni fog, gamestate oszály lesz
