@@ -22,11 +22,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.text.Position;
 
+import szoftechtutor.Command.CommandType;
+
 /**
  *
  * @author Predi
  */
-public class GUI extends JFrame {
+public class GUI extends JFrame implements IGameState {
 
 	private static final long serialVersionUID = 1L;
 	private Control ctrl;
@@ -65,7 +67,10 @@ public class GUI extends JFrame {
 						}
 						else {
 							Point pos = enemyBoard.getPosition(button);
-							ctrl.sendClick(pos);
+							Command c = new Command();
+							c.positionShot = pos;
+							c.CommandType = CommandType.Shot;
+							ctrl.onCommand(c);
 							enemyBoard.showShot(button);
 						}
 					}
@@ -166,5 +171,12 @@ public class GUI extends JFrame {
 		playerBoard.checkShoot(p);
 		//ctrl.sendClick(p);
 		//playerBoard.placeShip(null, playerBoard.getButton(p));
+	}
+
+	@Override
+	public void onNewGameState(GameState gs) {
+		// TODO dolgok történnek
+		// gsbõl kiolvasnimi változott és bejelölni a pályákon
+		
 	}
 }

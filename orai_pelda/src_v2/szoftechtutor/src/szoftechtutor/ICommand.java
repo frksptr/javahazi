@@ -1,5 +1,5 @@
 package szoftechtutor;
 
 public interface ICommand {
-	public void onCommand();
+	public void onCommand(Command c);
 }

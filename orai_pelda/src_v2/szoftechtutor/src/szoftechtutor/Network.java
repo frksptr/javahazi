@@ -5,9 +5,6 @@
 package szoftechtutor;
 
 import java.awt.Point;
-
-import Messages.GameMessage;
-
 /**
  *
  * @author Predi
@@ -24,5 +21,4 @@ abstract class Network {
 
 	abstract void disconnect();
 
-	abstract void send(GameMessage msg);
 }

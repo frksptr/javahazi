@@ -5,17 +5,14 @@ import java.io.*;
 import java.net.*;
 import javax.swing.JOptionPane;
 
-import Messages.GameMessage;
-import Messages.PositionMessage;
-import Messages.ReadyMessage;
-import Messages.TypeMessage;
 import util.CellType;
 
-public class SerialClient extends Network {
+public class SerialClient extends Network implements ICommand {
 
 	private Socket socket = null;
 	private ObjectOutputStream out = null;
 	private ObjectInputStream in = null;
+	private GUI gui = ctrl.gui;
 
 	SerialClient(Control c) {
 		super(c);
@@ -26,19 +23,14 @@ public class SerialClient extends Network {
 			System.out.println("Waiting for points...");
 			try {
 				while (true) {
-					GameMessage msg = (GameMessage) in.readObject();
-					if (msg instanceof PositionMessage){
-						Point received = ((PositionMessage) msg).getPosition();
-						ctrl.clickReceived(received);
-					}
-					else if(msg instanceof ReadyMessage) {
-						ctrl.enemyReady();
-					}
-					else if(msg instanceof TypeMessage) {
-						Point p = ((TypeMessage)msg).getPosition();
-						CellType t = ((TypeMessage)msg).getType();
-						ctrl.typeReceived(p,t);
-					}
+					/*
+					 * a kliens csak gamestatet kap, majd ha valami történik
+					 * azt command formájában továbbküldi a szerónak
+					 * ami kiszámolja hogy mi is történt és visszaküld
+					 * egy új gamestatet
+					 */
+					GameState gs = (GameState) in.readObject();
+					gui.onNewGameState(gs);
 				}
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
@@ -69,13 +61,12 @@ public class SerialClient extends Network {
 		}
 	}
 
-	@Override
-	void send(GameMessage msg) {
+	void send(Command c) {
 		if (out == null)
 			return;
 //		System.out.println("Sending point: " + ns + " to Server");
 		try {
-			out.writeObject(msg);
+			out.writeObject(c);
 			out.flush();
 		} catch (IOException ex) {
 			System.err.println("Send error.");
@@ -95,5 +86,14 @@ public class SerialClient extends Network {
 		} catch (IOException ex) {
 			System.err.println("Error while closing conn.");
 		}
+	}
+
+	@Override
+	public void onCommand(Command c) {
+		// TODO Auto-generated method stub
+		// valami történt a guiban, ahonnan ezt meghívták
+		// eküldeni a szevernek aki kiszámolja miafaszvan és
+		// visszaküld egy új gamestatet
+		send(c);
 	}
 }

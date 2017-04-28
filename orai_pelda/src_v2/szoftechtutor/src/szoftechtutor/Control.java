@@ -7,17 +7,20 @@ package szoftechtutor;
 
 import java.awt.Point;
 
-import Messages.PositionMessage;
+import szoftechtutor.Command.CommandType;
 import util.CellType;
 
 /**
  *
  * @author Predi
  */
-class Control {
+class Control implements ICommand {
 
-	private GUI gui;
+	public GUI gui;
 	private Network net = null;
+	private GameState gameState = new GameState();
+	private SerialServer server = null;
+	private SerialClient client = null;
 
 	Control() {
 	}
@@ -31,6 +34,7 @@ class Control {
 			net.disconnect();
 		net = new SerialServer(this);
 		net.connect("localhost");
+		server = (SerialServer) net;
 	}
 
 	void startClient() {
@@ -38,14 +42,17 @@ class Control {
 			net.disconnect();
 		net = new SerialClient(this);
 		net.connect("localhost");
+		client = (SerialClient) net;
 	}
 
 	void sendClick(Point p) {
 		// gui.addPoint(p); //for drawing locally
 		if (net == null)
 			return;
-		net.send(new PositionMessage(p));
+
 	}
+
+
 
 	void clickReceived(Point p) {
 		if (gui == null)
@@ -65,6 +72,25 @@ class Control {
 	// elküldnei hogy az ellenfél nálunk mit lõtt ki
 	void sendShipType(Point p, CellType t) {
 //		net.sendType(type)
+
+	}
+	
+	@Override
+	public void onCommand(Command c) {
+		if (c.CommandType == CommandType.Shot){
+			doShotStuff(c.positionShot);
+		}
+	}
+
+	private void doShotStuff(Point position) {
+		GameState gs = gameState;
+		/* megnézni, hogy ahova lõttek ott mivan
+		 * ennek megfelelõen megváltoztatni az eltárolt dolgokat
+		 * (hajót kilõni, jelezni hogy miafaszvan
+		 * egyszóval frissíteni a KÉT pályát (a gamestateben van 
+		 * letárolva mindkét mezõ)
+		 */
+		gui.onNewGameState(gs);
 	}
 	
 }

@@ -9,13 +9,9 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import Messages.GameMessage;
-import Messages.PositionMessage;
-import Messages.ReadyMessage;
-import Messages.TypeMessage;
 import util.CellType;
 
-public class SerialServer extends Network {
+public class SerialServer extends Network implements IGameState{
 
 	private ServerSocket serverSocket = null;
 	private Socket clientSocket = null;
@@ -51,20 +47,11 @@ public class SerialServer extends Network {
 
 			try {
 				while (true) {
-					GameMessage msg = (GameMessage) in.readObject();
-					System.out.println(msg.getClass());
-					if (msg instanceof PositionMessage){
-						Point received = ((PositionMessage) msg).getPosition();
-						ctrl.clickReceived(received);
-					}
-					else if(msg instanceof ReadyMessage) {
-						ctrl.enemyReady();
-					}
-					else if(msg instanceof TypeMessage) {
-						Point p = ((TypeMessage)msg).getPosition();
-						CellType t = ((TypeMessage)msg).getType();
-						ctrl.typeReceived(p,t);
-					}
+					/* a szerver csak parancsot kap ami alapján számol
+					 * és visszaküld új gamestatet
+					 */
+					Command c = (Command) in.readObject();
+					ctrl.onCommand(c);
 				}
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
@@ -88,13 +75,12 @@ public class SerialServer extends Network {
 		}
 	}
 
-	@Override
-	void send(GameMessage msg) {
+	void send(GameState gs) {
 		if (out == null)
 			return;
 //		System.out.println("Sending point: " + p + " to Client");
 		try {
-			out.writeObject(msg);
+			out.writeObject(gs);
 			out.flush();
 		} catch (IOException ex) {
 			System.err.println("Send error.");
@@ -117,5 +103,11 @@ public class SerialServer extends Network {
 			Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE,
 					null, ex);
 		}
+	}
+
+	@Override
+	public void onNewGameState(GameState gs) {
+		// TODO Auto-generated method stub
+		send(gs);
 	}
 }
