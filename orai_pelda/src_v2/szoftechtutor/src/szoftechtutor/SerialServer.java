@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.smartcardio.CommandAPDU;
+
 import util.CellType;
 
 public class SerialServer extends Network implements IGameState{
@@ -17,6 +19,7 @@ public class SerialServer extends Network implements IGameState{
 	private Socket clientSocket = null;
 	private ObjectOutputStream out = null;
 	private ObjectInputStream in = null;
+	public Logic logic = null; 
 
 	SerialServer(Control c) {
 		super(c);
@@ -51,7 +54,7 @@ public class SerialServer extends Network implements IGameState{
 					 * és visszaküld új gamestatet
 					 */
 					Command c = (Command) in.readObject();
-					ctrl.onCommand(c);
+					logic.onCommand(c);
 				}
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());

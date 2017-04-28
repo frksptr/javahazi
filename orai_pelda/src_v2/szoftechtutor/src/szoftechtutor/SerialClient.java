@@ -1,11 +1,9 @@
 package szoftechtutor;
 
-import java.awt.Point;
 import java.io.*;
 import java.net.*;
 import javax.swing.JOptionPane;
 
-import util.CellType;
 
 public class SerialClient extends Network implements ICommand {
 

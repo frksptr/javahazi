@@ -32,11 +32,18 @@ public class GUI extends JFrame implements IGameState {
 
 	private static final long serialVersionUID = 1L;
 	private Control ctrl;
-	private boolean running = false;
+	/*commandProessor:
+	 * Ez vagy a szerveroldali Logic, vagy a kliensoldali Client
+	 * A Controlban dõl el, hogy mivan
+	 */
+	public ICommand commandProcessor; 
+	
     private Board enemyBoard, playerBoard;
     
+    // ezalatt tipikusan olyanok amik valszeg majd átkerülnek 
+    // GameStatebe
     private boolean placement = true; // rakunk-e, vagy lövünk 
-
+    private boolean running = false;
     private int shipsToPlace = 5;
 
     private boolean enemyTurn = false;
@@ -70,7 +77,7 @@ public class GUI extends JFrame implements IGameState {
 							Command c = new Command();
 							c.positionShot = pos;
 							c.CommandType = CommandType.Shot;
-							ctrl.onCommand(c);
+							commandProcessor.onCommand(c);
 							enemyBoard.showShot(button);
 						}
 					}
@@ -138,32 +145,10 @@ public class GUI extends JFrame implements IGameState {
 
 		setJMenuBar(menuBar);
 
-		JPanel inputPanel = new JPanel();
-		
-		inputPanel.setBounds(30, 30, 200, 200);
-		inputPanel.setBorder(BorderFactory.createTitledBorder("Input"));
-		inputPanel.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// System.out.println("X:" + e.getX() + " Y:" + e.getY());
-				ctrl.sendClick(new Point(e.getX(), e.getY()));
-			}
-		});
-		
-		
 		add(playerBoard);
 		
 		add(enemyBoard);
-		
-		
-		//add(inputPanel);
-
-//		drawPanel = new DrawPanel();
-//		drawPanel.setBounds(230, 30, 200, 200);
-//		drawPanel.setBorder(BorderFactory.createTitledBorder("Draw"));
-//		add(drawPanel);
-		
+			
 		setVisible(true);
 	}
 
