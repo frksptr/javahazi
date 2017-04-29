@@ -49,6 +49,8 @@ public class GUI extends JFrame implements IGameState {
     private boolean enemyTurn = false;
 
     private Random random = new Random();
+    
+    private GameState gameState = new GameState();
 
 	GUI(Control c) {
 		super("SzoftechTutor");
