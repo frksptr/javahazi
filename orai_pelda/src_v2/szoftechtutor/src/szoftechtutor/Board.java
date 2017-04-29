@@ -115,13 +115,19 @@ public class Board extends JPanel {
 		
 	}
 	
-	public void checkShoot(Point p) {
+	public CellType checkShoot(Point p) {
 		JButton button = buttonGrid[p.x][p.y];
+		CellType cellType = null;
+		
 		if (button.getBackground() == waterColor) {
 			button.setBackground(shotWaterColor);
+			cellType = CellType.WaterShot;
 		} else if (button.getBackground() == shipColor) {
 			button.setBackground(shotShipColor);
+			cellType = CellType.ShipShot;
 		}
+		
+		return cellType;
 	}
 	
 	public void showShot(JButton button) {

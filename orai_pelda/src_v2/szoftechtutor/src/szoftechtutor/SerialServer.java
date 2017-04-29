@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 import javax.smartcardio.CommandAPDU;
 
-import util.CellType;
 
 public class SerialServer extends Network implements IGameState{
 

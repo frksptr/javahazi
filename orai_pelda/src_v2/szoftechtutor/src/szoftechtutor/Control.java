@@ -8,8 +8,6 @@ package szoftechtutor;
 import java.awt.Point;
 
 import szoftechtutor.Command.CommandType;
-import util.CellType;
-
 /**
  *
  * @author Predi
@@ -20,7 +18,8 @@ class Control {
 	private SerialServer server = null;
 	private SerialClient client = null;
 	public GUI gui = null;
-	
+	// éppen szerver, vagy kliens üzemmódban megyünk-e
+	public NetworkType networkType = null;
 	/*
 	 * Igazából cska a szerver és a kliens indításáért felelõs,
 	 * majd a guinak megadja a megfelelõ ICommand interface-t
@@ -52,6 +51,10 @@ class Control {
 		gui.commandProcessor = client;
 	}
 	
-
+	public enum NetworkType {
+		Client, 
+		Server
+	}
+	
 	
 }

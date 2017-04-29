@@ -15,6 +15,15 @@ public class GameSpace implements Serializable {
 				enemyTable[i][j] = CellType.Unknown;
 			}
 		}
+		
+		/*
+		 * Saját mezeinken elõször víz van
+		 */
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; i++) {
+				enemyTable[i][j] = CellType.Water;
+			}
+		}
 	}
 
 }

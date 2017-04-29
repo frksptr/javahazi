@@ -22,7 +22,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.text.Position;
 
+import com.sun.org.apache.xerces.internal.impl.XMLScanner.NameType;
+
+import szoftechtutor.Command.CommandOrigin;
 import szoftechtutor.Command.CommandType;
+import szoftechtutor.Control.NetworkType;
 
 /**
  *
@@ -67,7 +71,6 @@ public class GUI extends JFrame implements IGameState {
 				200,
 				200,
 				true, new ActionListener() {
-					// TODO: megfleelõen menjen :D
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						JButton button = (JButton) e.getSource();
@@ -77,8 +80,9 @@ public class GUI extends JFrame implements IGameState {
 						else {
 							Point pos = enemyBoard.getPosition(button);
 							Command c = new Command();
-							c.positionShot = pos;
-							c.CommandType = CommandType.Shot;
+							c.position = pos;
+							c.commandType = CommandType.Shot;
+							c.commandOrigin = getCommandOriginFromNetworkType(ctrl.networkType);
 							commandProcessor.onCommand(c);
 							enemyBoard.showShot(button);
 						}
@@ -96,11 +100,23 @@ public class GUI extends JFrame implements IGameState {
 					public void actionPerformed(ActionEvent e) {
 						if (placement) {
 							Object asd = e.getSource();
+							/*
+							 * TODO: felvenni GameState/GameSpace-be
+							 */
+							Command c = new Command();
+							c.position = playerBoard.getPosition((JButton)asd);
+							c.commandType = CommandType.PlacedShip;
+							c.commandOrigin = getCommandOriginFromNetworkType(ctrl.networkType);
+							commandProcessor.onCommand(c);
+							
+							/* TODO
+							 *  ezt lehet, hogy itt nem is kéne hanem inkább majd
+							 *  ha visszaküldi a gamestatet a logic/client  
+							 */
 							playerBoard.placeShip(null, (JButton)asd);
 						} else {
 							
 						}
-
 					}
 				});
 
@@ -164,6 +180,15 @@ public class GUI extends JFrame implements IGameState {
 	public void onNewGameState(GameState gs) {
 		// TODO dolgok történnek
 		// gsbõl kiolvasnimi változott és bejelölni a pályákon
-		
+	}
+	
+	private CommandOrigin getCommandOriginFromNetworkType(NetworkType networkType) {
+		CommandOrigin commandOrigin = null;
+		if (ctrl.networkType == NetworkType.Client) {
+			commandOrigin = CommandOrigin.Client;
+		} else {
+			commandOrigin = CommandOrigin.Server;
+		}
+		return commandOrigin; 
 	}
 }
