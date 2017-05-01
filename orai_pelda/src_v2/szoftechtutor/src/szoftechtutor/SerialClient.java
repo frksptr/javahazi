@@ -10,9 +10,10 @@ public class SerialClient extends Network implements ICommand {
 	private Socket socket = null;
 	private ObjectOutputStream out = null;
 	private ObjectInputStream in = null;
-	private GUI gui = ctrl.gui;
+	public GUI gui = null;
 
 	SerialClient(Control c) {
+		
 		super(c);
 	}
 

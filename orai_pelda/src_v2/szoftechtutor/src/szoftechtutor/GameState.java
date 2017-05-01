@@ -19,7 +19,7 @@ public class GameState implements Serializable {
 	public GameSpace serverGameSpace = new GameSpace();
 	
 	// amit a kliens lát a játékterekbõl
-	public GameSpace clientGameSPace = new GameSpace();
+	public GameSpace clientGameSpace = new GameSpace();
 	
 	public enum GamePhase {
 		PlacingShips, HÁBORÚÚÚÚÚÚ

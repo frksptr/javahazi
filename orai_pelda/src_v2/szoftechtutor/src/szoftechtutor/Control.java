@@ -51,6 +51,7 @@ class Control {
 		net.connect("localhost");
 		client = (SerialClient) net;
 		gui.commandProcessor = client;
+		client.ctrl.gui = gui;
 		networkType = NetworkType.Client;
 		
 	}

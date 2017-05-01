@@ -4,6 +4,7 @@
  */
 package szoftechtutor;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -55,6 +56,8 @@ public class GUI extends JFrame implements IGameState {
     private Random random = new Random();
     
     private GameState gameState = new GameState();
+    
+    
 
 	GUI(Control c) {
 		super("SzoftechTutor");
@@ -144,6 +147,31 @@ public class GUI extends JFrame implements IGameState {
 
 		menuBar.add(menu);
 
+		
+		
+		menuItem = new JMenuItem("Ready!");
+		menuItem.setBackground(Color.RED);
+		
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JMenuItem item = (JMenuItem) e.getSource();
+				if(placement) item.setBackground(Color.GREEN);
+				else item.setBackground(Color.RED);
+				placement = !placement;
+			}
+		});
+		menuBar.add(menuItem);
+
+		menuItem = new JMenuItem("Reset");
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		menuBar.add(menuItem);
+		
 		menuItem = new JMenuItem("Exit");
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -153,15 +181,6 @@ public class GUI extends JFrame implements IGameState {
 		});
 		menuBar.add(menuItem);
 		
-		menuItem = new JMenuItem("SwitchMode");
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				placement = !placement;
-			}
-		});
-		menuBar.add(menuItem);
-
 		setJMenuBar(menuBar);
 
 		add(playerBoard);
@@ -180,9 +199,9 @@ public class GUI extends JFrame implements IGameState {
 	@Override
 	public void onNewGameState(GameState gs) {
 		// TODO dolgok történnek
-		// gsbõl kiolvasnimi változott és bejelölni a pályákon
+		// gsbõl kiolvasni mi változott és bejelölni a pályákon
 		System.out.print("Drawing nem gamestate");
-		GameSpace clientGameSpace = gs.clientGameSPace;
+		GameSpace clientGameSpace = gs.clientGameSpace;
 		GameSpace serverGameSpace = gs.serverGameSpace;
 		
 		
