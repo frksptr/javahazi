@@ -107,6 +107,7 @@ public class GUI extends JFrame implements IGameState {
 							c.position = playerBoard.getPosition((JButton)asd);
 							c.commandType = CommandType.PlacedShip;
 							c.commandOrigin = getCommandOriginFromNetworkType(ctrl.networkType);
+							System.out.print(c.commandOrigin + "sending " + c.commandType + " command...");
 							commandProcessor.onCommand(c);
 							
 							/* TODO
@@ -180,6 +181,11 @@ public class GUI extends JFrame implements IGameState {
 	public void onNewGameState(GameState gs) {
 		// TODO dolgok történnek
 		// gsbõl kiolvasnimi változott és bejelölni a pályákon
+		System.out.print("Drawing nem gamestate");
+		GameSpace clientGameSpace = gs.clientGameSPace;
+		GameSpace serverGameSpace = gs.serverGameSpace;
+		
+		
 	}
 	
 	private CommandOrigin getCommandOriginFromNetworkType(NetworkType networkType) {

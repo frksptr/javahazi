@@ -16,10 +16,10 @@ public class GameState implements Serializable {
 	public GamePhase gamePhase;
 	
 	// amit a szerver lát a játékterekbõl
-	public GameSpace serverGameSpace;
+	public GameSpace serverGameSpace = new GameSpace();
 	
 	// amit a kliens lát a játékterekbõl
-	public GameSpace clientGameSPace;
+	public GameSpace clientGameSPace = new GameSpace();
 	
 	public enum GamePhase {
 		PlacingShips, HÁBORÚÚÚÚÚÚ

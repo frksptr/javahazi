@@ -11,6 +11,7 @@ public class Logic implements ICommand {
 	public GUI gui;
 	@Override
 	public void onCommand(Command c) {
+		System.out.println("Command '" + c.commandType + "arrived from " + c.commandOrigin);
 		if (c.commandType == CommandType.Shot){
 			doShotStuff(c.position, c.commandOrigin);
 		} if (c.commandType == CommandType.PlacedShip) {

@@ -3,15 +3,15 @@ package szoftechtutor;
 import java.io.Serializable;
 
 public class GameSpace implements Serializable {
-	public CellType[][] ownTable;
-	public CellType[][] enemyTable;
+	public CellType[][] ownTable = new CellType[10][10];
+	public CellType[][] enemyTable = new CellType[10][10];
 	
 	public GameSpace() {
 		/* elõször nem tudjuk, hogy az ellenfél térfelén milyen
 		 * mezõk vannak
 		 */
 		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; i++) {
+			for (int j = 0; j < 10; j++) {
 				enemyTable[i][j] = CellType.Unknown;
 			}
 		}
@@ -20,8 +20,8 @@ public class GameSpace implements Serializable {
 		 * Saját mezeinken elõször víz van
 		 */
 		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; i++) {
-				enemyTable[i][j] = CellType.Water;
+			for (int j = 0; j < 10; j++) {
+				ownTable[i][j] = CellType.Water;
 			}
 		}
 	}
