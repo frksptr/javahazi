@@ -33,8 +33,8 @@ public class Logic implements ICommand {
 		 * ha a szerver lõtt, akkor a kliens saját táblájában állítjuk a cellát
 		 */
 		else {
-			CellType newType = checkShot(gameState.clientGameSPace.ownTable, position);
-			gameState.clientGameSPace.ownTable[position.x][position.y] = newType;
+			CellType newType = checkShot(gameState.clientGameSpace.ownTable, position);
+			gameState.clientGameSpace.ownTable[position.x][position.y] = newType;
 		}
 		
 		gui.onNewGameState(gameState);
@@ -57,7 +57,7 @@ public class Logic implements ICommand {
 		 */
 		if (commandOrigin == CommandOrigin.Client) {
 			// TODO: ellenõrizni, hogy lehet-e oda rakni
-			gameState.clientGameSPace.ownTable[position.x][position.y] = CellType.Ship;
+			gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
 		}
 		if (commandOrigin == CommandOrigin.Server) {
 			gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;

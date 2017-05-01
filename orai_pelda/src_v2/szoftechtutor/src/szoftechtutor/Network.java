@@ -22,3 +22,4 @@ abstract class Network {
 	abstract void disconnect();
 
 }
+

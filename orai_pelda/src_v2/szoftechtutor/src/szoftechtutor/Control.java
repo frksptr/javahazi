@@ -40,6 +40,7 @@ class Control {
 		server = (SerialServer) net;
 		server.logic = new Logic();
 		gui.commandProcessor = server.logic;
+		networkType = NetworkType.Server;   //Nem tudom hogy ez jó így?
 	}
 
 	void startClient() {
@@ -49,6 +50,7 @@ class Control {
 		net.connect("localhost");
 		client = (SerialClient) net;
 		gui.commandProcessor = client;
+		networkType = NetworkType.Client;  //Nem tudom hogy ez jó így?
 	}
 	
 	public enum NetworkType {
