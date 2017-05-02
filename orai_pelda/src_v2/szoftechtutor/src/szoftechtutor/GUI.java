@@ -144,15 +144,12 @@ public class GUI extends JFrame implements IGameState {
 			}
 		});
 		menu.add(menuItem);
-
 		menuBar.add(menu);
-
 		
+		JMenuItem menuItemReady = new JMenuItem("Ready!");
+		menuItemReady.setBackground(Color.RED);
 		
-		menuItem = new JMenuItem("Ready!");
-		menuItem.setBackground(Color.RED);
-		
-		menuItem.addActionListener(new ActionListener() {
+		menuItemReady.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JMenuItem item = (JMenuItem) e.getSource();
@@ -161,12 +158,19 @@ public class GUI extends JFrame implements IGameState {
 				placement = !placement;
 			}
 		});
-		menuBar.add(menuItem);
+		menuBar.add(menuItemReady);
 
 		menuItem = new JMenuItem("Reset");
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(ctrl.networkType == NetworkType.Server)
+					ctrl.startServer();
+				if(ctrl.networkType == NetworkType.Client)
+					ctrl.startClient();
+				placement = true;
+				menuItemReady.setBackground(Color.RED);
+				
 				
 			}
 		});
