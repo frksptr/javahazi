@@ -95,4 +95,9 @@ public class SerialClient extends Network implements ICommand {
 		// visszaküld egy új gamestatet
 		send(c);
 	}
+
+	public void setGui(GUI gui) {
+		this.gui = gui;
+		this.ctrl.gui = gui;
+	}
 }

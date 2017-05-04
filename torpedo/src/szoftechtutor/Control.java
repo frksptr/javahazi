@@ -38,10 +38,8 @@ class Control {
 		net = new SerialServer(this);
 		net.connect("localhost");
 		server = (SerialServer) net;
-		server.logic = new Logic();
+		server.logic = new Logic(server, gui);
 		gui.commandProcessor = server.logic;
-		server.logic.gui = gui;
-		server.logic.server = server;
 		networkType = NetworkType.Server;
 	}
 
@@ -52,7 +50,7 @@ class Control {
 		net.connect("localhost");
 		client = (SerialClient) net;
 		gui.commandProcessor = client;
-		client.ctrl.gui = gui;
+		client.setGui(gui);
 		networkType = NetworkType.Client;
 		
 	}

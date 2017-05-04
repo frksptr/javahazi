@@ -10,6 +10,11 @@ public class Logic implements ICommand {
 	private GameState gameState = new GameState();
 	public IGameState gui;
 	public SerialServer server;
+	public Logic(SerialServer server, GUI gui) {
+		this.gui = gui;
+		this.server = server;
+	}
+
 	@Override
 	public void onCommand(Command c) {
 		System.out.println("Command '" + c.commandType + "arrived from " + c.commandOrigin);
@@ -43,7 +48,7 @@ public class Logic implements ICommand {
 		}
 		
 		gui.onNewGameState(gameState);
-		// server.onNewGameState(gameState);
+		server.onNewGameState(gameState);
 		// TODO: kliensnek visszaküldeni
 	}
 	
