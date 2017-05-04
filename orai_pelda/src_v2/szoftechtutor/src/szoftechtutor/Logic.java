@@ -8,7 +8,8 @@ import szoftechtutor.Command.CommandType;
 public class Logic implements ICommand {
 
 	private GameState gameState = new GameState();
-	public GUI gui;
+	public IGameState gui;
+	public SerialServer server;
 	@Override
 	public void onCommand(Command c) {
 		System.out.println("Command '" + c.commandType + "arrived from " + c.commandOrigin);
@@ -17,6 +18,7 @@ public class Logic implements ICommand {
 		} if (c.commandType == CommandType.PlacedShip) {
 			doPlaceShipStuff(c.position, c.commandOrigin);
 		}
+		// TODO: ready ellenõrzés
 	}
 
 	private void doShotStuff(Point position, CommandOrigin origin) {
@@ -28,6 +30,7 @@ public class Logic implements ICommand {
 		 */
 		if (origin == CommandOrigin.Client) {
 			CellType newType = checkShot(gameState.serverGameSpace.ownTable, position);
+			gameState.clientGameSpace.enemyTable[position.x][position.y] = newType;
 			gameState.serverGameSpace.ownTable[position.x][position.y] = newType;
 		}
 		/*
@@ -36,9 +39,12 @@ public class Logic implements ICommand {
 		else {
 			CellType newType = checkShot(gameState.clientGameSpace.ownTable, position);
 			gameState.clientGameSpace.ownTable[position.x][position.y] = newType;
+			gameState.serverGameSpace.enemyTable[position.x][position.y] = newType;
 		}
 		
 		gui.onNewGameState(gameState);
+		// server.onNewGameState(gameState);
+		// TODO: kliensnek visszaküldeni
 	}
 	
 	private CellType checkShot(CellType[][] cells, Point pos) {
@@ -61,7 +67,10 @@ public class Logic implements ICommand {
 			gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
 		}
 		if (commandOrigin == CommandOrigin.Server) {
+			
 			gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
+			// TODO: ehelyett megnézni, hogy lehet-e
+			// TODO: ha hajóhoz tartozik akkor ahhoz hozzáadni
 		}
 	}
 

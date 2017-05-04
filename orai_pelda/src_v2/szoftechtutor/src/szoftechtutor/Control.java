@@ -41,6 +41,7 @@ class Control {
 		server.logic = new Logic();
 		gui.commandProcessor = server.logic;
 		server.logic.gui = gui;
+		server.logic.server = server;
 		networkType = NetworkType.Server;
 	}
 

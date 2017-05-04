@@ -57,6 +57,8 @@ public class GUI extends JFrame implements IGameState {
     
     private GameState gameState = new GameState();
     
+    private JMenuItem menuItemReady;
+    
     
 
 	GUI(Control c) {
@@ -87,7 +89,6 @@ public class GUI extends JFrame implements IGameState {
 							c.commandType = CommandType.Shot;
 							c.commandOrigin = getCommandOriginFromNetworkType(ctrl.networkType);
 							commandProcessor.onCommand(c);
-							enemyBoard.showShot(button);
 						}
 					}
 				});
@@ -109,6 +110,7 @@ public class GUI extends JFrame implements IGameState {
 							Command c = new Command();
 							c.position = playerBoard.getPosition((JButton)asd);
 							c.commandType = CommandType.PlacedShip;
+
 							c.commandOrigin = getCommandOriginFromNetworkType(ctrl.networkType);
 							System.out.print(c.commandOrigin + "sending " + c.commandType + " command...");
 							commandProcessor.onCommand(c);
@@ -146,7 +148,7 @@ public class GUI extends JFrame implements IGameState {
 		menu.add(menuItem);
 		menuBar.add(menu);
 		
-		JMenuItem menuItemReady = new JMenuItem("Ready!");
+		menuItemReady = new JMenuItem("Ready!");
 		menuItemReady.setBackground(Color.RED);
 		
 		menuItemReady.addActionListener(new ActionListener() {
@@ -156,6 +158,15 @@ public class GUI extends JFrame implements IGameState {
 				if(placement) item.setBackground(Color.GREEN);
 				else item.setBackground(Color.RED);
 				placement = !placement;
+				
+				//TODO: ez itt
+//				Command c = new Command();
+//				c.position = playerBoard.getPosition((JButton)asd);
+//				c.commandType = CommandType.PlacedShip;
+//
+//				c.commandOrigin = getCommandOriginFromNetworkType(ctrl.networkType);
+//				System.out.print(c.commandOrigin + "sending " + c.commandType + " command...");
+//				commandProcessor.onCommand(c);
 			}
 		});
 		menuBar.add(menuItemReady);
@@ -209,6 +220,8 @@ public class GUI extends JFrame implements IGameState {
 		GameSpace serverGameSpace = gs.serverGameSpace;
 		
 		
+		// TODO: gamespace-bõl felrajzolni újra a táblát
+		menuItemReady.setBackground(Color.MAGENTA);
 	}
 	
 	private CommandOrigin getCommandOriginFromNetworkType(NetworkType networkType) {

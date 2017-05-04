@@ -80,7 +80,7 @@ public class SerialServer extends Network implements IGameState{
 	void send(GameState gs) {
 		if (out == null)
 			return;
-		System.out.println("Sending point: " + gs + " to Client");
+		System.out.println("\nSending point: " + gs + " to Client");
 		try {
 			out.writeObject(gs);
 			out.flush();

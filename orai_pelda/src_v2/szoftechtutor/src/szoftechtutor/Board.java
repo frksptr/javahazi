@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class Board extends JPanel {
 
@@ -33,9 +34,19 @@ public class Board extends JPanel {
 		c.ipady = 0;
 
 		setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-
-		for (int col = 0; col < 10; col++) {
-			for (int row = 0; row < 10; row++) {
+		/*for
+		JTextArea j;
+		.
+		.
+		.
+		.
+		c.gridx = valami
+		c.gridy = vlami
+		this.add(j,c);
+		*/
+		
+		for (int col = 1; col < 11; col++) {
+			for (int row = 1; row < 11; row++) {
 				JButton button = new JButton();
 				
 
@@ -131,6 +142,7 @@ public class Board extends JPanel {
 	}
 	
 	public void showShot(JButton button) {
+		// TODO: GameState alapján kirajzolni megint az egészet
 		button.setText(".");		
 	}
 

@@ -10,7 +10,7 @@ public class Ship {
 
     private int health;
     
-    // TODO: eltárolni hogy melyik gomb tartozik hozzá kattintáskor
+    // TODO: eltárolni hogy melyik gomb tartozik hozzá kattintáskor, vagy inkább koordinátákat
     
     private JButton button;
 
