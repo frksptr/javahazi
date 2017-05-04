@@ -7,8 +7,20 @@ ha nem vagy biztos benne, hogy hogyan kapja meg a dolgokat, vagy ő hogyan fog b
 
 bele lehet kezdeni:
 * start/connect ablak ip címmel
+
 * hajó lerakó meg kilövő UI elem
+
+* ABCD - Laci
+* miből mennyit lehet még lerakni képernyő - Laci
+* háború állapotban az ellenféltől kilövendő hajók száma - Laci
+
+* hajó lerakás vizsgálata - Áron
+* állapot váltása ready-re - Áron
+* több állapot felvétele - Áron
+
+
 * hajó osztály tárolja el a hozzá tartozó mezőket (gombokat)
+
 * gamestate osztályban tárolni minden lófaszt, mint ahogy a konzin mondta, ez kerül majd küldözgetésre
 * control osztályt is lehet csinálni ahogy a konzin mondta
 * ellenőrizni, hogy tényleg meghalt-e egy teljes hajó
