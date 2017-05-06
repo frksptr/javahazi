@@ -213,15 +213,19 @@ public class GUI extends JFrame implements IGameState {
 
 	@Override
 	public void onNewGameState(GameState gs) {
-		// TODO dolgok történnek
-		// gsbõl kiolvasni mi változott és bejelölni a pályákon
 		System.out.print("Drawing nem gamestate");
 		GameSpace clientGameSpace = gs.clientGameSpace;
 		GameSpace serverGameSpace = gs.serverGameSpace;
 		
-		
-		// TODO: gamespace-bõl felrajzolni újra a táblát
-		menuItemReady.setBackground(Color.MAGENTA);
+		GameSpace ownGameSpace;
+		if (ctrl.networkType == NetworkType.Client) {
+			ownGameSpace = clientGameSpace;
+		} else {
+			ownGameSpace = serverGameSpace;
+		}
+
+		playerBoard.redrawFromNewGameState(ownGameSpace.ownTable);
+		enemyBoard.redrawFromNewGameState(ownGameSpace.enemyTable);
 	}
 	
 	private CommandOrigin getCommandOriginFromNetworkType(NetworkType networkType) {

@@ -89,10 +89,6 @@ public class SerialClient extends Network implements ICommand {
 
 	@Override
 	public void onCommand(Command c) {
-		// TODO Auto-generated method stub
-		// valami történt a guiban, ahonnan ezt meghívták
-		// eküldeni a szevernek aki kiszámolja miafaszvan és
-		// visszaküld egy új gamestatet
 		send(c);
 	}
 

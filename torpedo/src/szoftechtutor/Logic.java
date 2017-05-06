@@ -48,7 +48,14 @@ public class Logic implements ICommand {
 		}
 		
 		gui.onNewGameState(gameState);
-		server.onNewGameState(gameState);
+		
+		GameState gs = new GameState();
+		gs.clientGameSpace = gameState.clientGameSpace;
+		gs.gamePhase = gameState.gamePhase;
+		gs.serverGameSpace = gameState.serverGameSpace;
+		gs.serversTurn = gameState.serversTurn;
+		
+		server.onNewGameState(gs);
 		// TODO: kliensnek visszaküldeni
 	}
 	
