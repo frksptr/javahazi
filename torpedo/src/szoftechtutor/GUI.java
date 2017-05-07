@@ -22,6 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.text.Position;
+import javax.swing.JTextArea;
 
 import com.sun.org.apache.xerces.internal.impl.XMLScanner.NameType;
 
@@ -59,16 +60,17 @@ public class GUI extends JFrame implements IGameState {
     
     private JMenuItem menuItemReady;
     
-    
+    private String status_text;
 
 	GUI(Control c) {
 		super("SzoftechTutor");
 		ctrl = c;
-		setSize(500, 350);
+		setSize(700, 350);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(null);
-
+		
 		JMenuBar menuBar = new JMenuBar();
+		JTextArea textArea = new JTextArea();
 		
 		enemyBoard = new Board(
 				260,
@@ -126,7 +128,11 @@ public class GUI extends JFrame implements IGameState {
 					}
 				});
 
-
+		textArea.setSize(160, 200);
+		textArea.setLocation(500, 30);
+		textArea.setBorder(BorderFactory.createLineBorder(Color.black));
+		textArea.setEditable(false);	
+		
 		JMenu menu = new JMenu("Start");
 
 		JMenuItem menuItem = new JMenuItem("Client");
@@ -195,14 +201,48 @@ public class GUI extends JFrame implements IGameState {
 			}
 		});
 		menuBar.add(menuItem);
-		
+				
 		setJMenuBar(menuBar);
 
 		add(playerBoard);
 		
 		add(enemyBoard);
-			
+		
+	    if(placement) {
+	        status_text = String.format("Még lepakolható hajóid:\n"
+	        		+ "1 elemû: %d darab\n"
+	        		+ "2 elemû: %d darab\n"
+	        		+ "3 elemû: %d darab\n"
+	        		+ "4 elemû: %d darab\n"
+	        		+ "5 elemû: %d darab\n"
+	        		,2,3,5,1,5);
+	    }
+	    else {
+	        status_text = String.format("Kilõtt hajóid száma:\n"
+	        		+ "1 elemû: %d darab\n"
+	        		+ "2 elemû: %d darab\n"
+	        		+ "3 elemû: %d darab\n"
+	        		+ "4 elemû: %d darab\n"
+	        		+ "5 elemû: %d darab\n"
+	        		+ "\n"
+	        		+ "Ellenfél elsüllyesztendõ hajói:\n"
+	        		+ "1 elemû: %d darab\n"
+	        		+ "2 elemû: %d darab\n"
+	        		+ "3 elemû: %d darab\n"
+	        		+ "4 elemû: %d darab\n"
+	        		+ "5 elemû: %d darab\n"
+	        		,2,3,5,1,5,1,1,1,1,1);   	
+	    }
+		
+		textArea.append(status_text);
+		add(textArea);
+		
 		setVisible(true);
+	}
+    
+	private String sprintf(String string, boolean placement2) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public void shootPos(Point p){
