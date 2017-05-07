@@ -6,6 +6,8 @@
 package szoftechtutor;
 
 import java.awt.Point;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import szoftechtutor.Command.CommandType;
 /**
@@ -13,7 +15,7 @@ import szoftechtutor.Command.CommandType;
  * @author Predi
  */
 class Control {
-	
+    private String currentIp = null;
 	private Network net = null;
 	private SerialServer server = null;
 	private SerialClient client = null;
@@ -32,22 +34,30 @@ class Control {
 		gui = g;
 	}
 
-	void startServer() {
+	public String startServer() {
+		String currentIp = null;
 		if (net != null)
 			net.disconnect();
-		net = new SerialServer(this);
-		net.connect("localhost");
-		server = (SerialServer) net;
-		server.logic = new Logic(server, gui);
-		gui.commandProcessor = server.logic;
-		networkType = NetworkType.Server;
+		try {
+		    InetAddress iAddress = InetAddress.getLocalHost();  
+			currentIp = iAddress.getHostAddress();
+			net = new SerialServer(this);
+			net.connect(currentIp+":10007");
+			server = (SerialServer) net;
+			server.logic = new Logic(server, gui);
+			gui.commandProcessor = server.logic;
+			networkType = NetworkType.Server;
+		    System.out.println("Current IP Address : " +currentIp);
+			} catch (UnknownHostException e) {
+			}
+		return currentIp;
 	}
 
-	void startClient() {
+	void startClient(String ip) {
 		if (net != null)
 			net.disconnect();
 		net = new SerialClient(this);
-		net.connect("localhost");
+		net.connect(ip);
 		client = (SerialClient) net;
 		gui.commandProcessor = client;
 		client.setGui(gui);

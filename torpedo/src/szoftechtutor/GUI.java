@@ -20,9 +20,11 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.text.Position;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import com.sun.org.apache.xerces.internal.impl.XMLScanner.NameType;
 
@@ -62,6 +64,8 @@ public class GUI extends JFrame implements IGameState {
     
     private String status_text;
     private String status_text_1;
+    private String serverIP;
+    private String currentIP;
 
 	GUI(Control c) {
 		super("SzoftechTutor");
@@ -69,6 +73,7 @@ public class GUI extends JFrame implements IGameState {
 		setSize(700, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(null);
+		setName("SzoftechTutor");
 		
 		JMenuBar menuBar = new JMenuBar();
 		JTextArea textArea = new JTextArea();
@@ -146,7 +151,8 @@ public class GUI extends JFrame implements IGameState {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ctrl.startClient();
+				serverIP = JOptionPane.showInputDialog("What is the Server's IP Address?");
+				ctrl.startClient(serverIP); 
 			}
 		});
 		menu.add(menuItem);
@@ -155,7 +161,8 @@ public class GUI extends JFrame implements IGameState {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ctrl.startServer();
+				currentIP = ctrl.startServer();
+				JOptionPane.showMessageDialog(null,"Your IP Address is: "+currentIP);
 			}
 		});
 		menu.add(menuItem);
@@ -191,7 +198,7 @@ public class GUI extends JFrame implements IGameState {
 				if(ctrl.networkType == NetworkType.Server)
 					ctrl.startServer();
 				if(ctrl.networkType == NetworkType.Client)
-					ctrl.startClient();
+					ctrl.startClient(serverIP);
 				placement = true;
 				menuItemReady.setBackground(Color.RED);
 				
