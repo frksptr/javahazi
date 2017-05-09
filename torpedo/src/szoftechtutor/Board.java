@@ -12,17 +12,20 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
+
+import java.awt.Font;
 
 public class Board extends JPanel {
 
 	private boolean enemy = false;
 	public int ships = 5;
-	private JButton[][] buttonGrid = new JButton[10][10];
+	private JButton[][] buttonGrid = new JButton[11][11];
 	private Color waterColor = Color.CYAN;
 	private Color shipColor = Color.BLACK;
 	private Color shotShipColor = Color.RED;
 	private Color shotWaterColor = Color.blue;
-	private Color unknownColor = Color.LIGHT_GRAY; 
+	private Color unknownColor = Color.LIGHT_GRAY;
 
 	public Board(int posx, int posy, int width, int height, boolean enemy, ActionListener handler) {
 
@@ -36,27 +39,32 @@ public class Board extends JPanel {
 		c.ipady = 0;
 
 		setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-		/*for
-		JTextArea j;
-		.
-		.
-		.
-		.
-		c.gridx = valami
-		c.gridy = vlami
-		this.add(j,c);
-		*/
 		
-		for (int col = 1; col < 11; col++) {
-			for (int row = 1; row < 11; row++) {
+		char a = 'A';
+
+		for (int col = 1; col < 12; col++) {
+			for (int row = 1; row < 12; row++) {
 				JButton button = new JButton();
-				
-				button.setBackground(waterColor);
-
-				button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				button.setPreferredSize(new java.awt.Dimension(height / 10, width / 10));
-				button.addActionListener(handler);
-
+				if((col > 10) || (row > 10)){
+					button.setEnabled(false);
+					button.setPreferredSize(new java.awt.Dimension(height / 11, width / 11));
+					if(col > 10 && row <= 10){
+						button.setText(""+a);
+						a +=1;
+					}
+					if(row > 10 && col <= 10){
+						button.setText(""+col);
+					}
+					
+					button.setFont(new Font("Arial", Font.PLAIN, 12));
+					button.setBorder(null);
+				}
+				else{
+					button.setBackground(waterColor);
+					button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					button.setPreferredSize(new java.awt.Dimension(height / 11, width / 11));
+					button.addActionListener(handler);
+				}
 				c.gridx = col;
 				c.gridy = row;
 
@@ -68,7 +76,11 @@ public class Board extends JPanel {
 	}
 
 	public boolean placeShip(Ship ship, JButton button) {
-		button.setBackground(shipColor);
+		if(button.getBackground() == waterColor)
+			button.setBackground(shipColor);
+		else
+			button.setBackground(waterColor);
+
 		int x = 0;
 		int y = 0;
 		for (int row = 0; row < 10; row++) {

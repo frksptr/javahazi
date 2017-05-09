@@ -42,15 +42,15 @@ public class GUI extends JFrame implements IGameState {
 	private Control ctrl;
 	/*commandProessor:
 	 * Ez vagy a szerveroldali Logic, vagy a kliensoldali Client
-	 * A Controlban dől el, hogy mivan
+	 * A Controlban dĹ‘l el, hogy mivan
 	 */
 	public ICommand commandProcessor; 
 	
     private Board enemyBoard, playerBoard;
     
-    // ezalatt tipikusan olyanok amik valszeg majd átkerülnek 
+    // ezalatt tipikusan olyanok amik valszeg majd ĂˇtkerĂĽlnek 
     // GameStatebe
-    private boolean placement = true; // rakunk-e, vagy lövünk 
+    private boolean placement = true; // rakunk-e, vagy lĂ¶vĂĽnk 
     private boolean running = false;
     private int shipsToPlace = 5;
 
@@ -82,8 +82,8 @@ public class GUI extends JFrame implements IGameState {
 		enemyBoard = new Board(
 				260,
 				30,
-				200,
-				200,
+				220,
+				220,
 				true, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -105,8 +105,8 @@ public class GUI extends JFrame implements IGameState {
 		playerBoard = new Board(
 				30,
 				30,
-				200,
-				200,
+				220,
+				220,
 				true, new ActionListener() {
 					
 					@Override
@@ -125,8 +125,8 @@ public class GUI extends JFrame implements IGameState {
 							commandProcessor.onCommand(c);
 							
 							/* TODO
-							 *  ezt lehet, hogy itt nem is kéne hanem inkább majd
-							 *  ha visszaküldi a gamestatet a logic/client  
+							 *  ezt lehet, hogy itt nem is kĂ©ne hanem inkĂˇbb majd
+							 *  ha visszakĂĽldi a gamestatet a logic/client  
 							 */
 							playerBoard.placeShip(null, (JButton)asd);
 						} else {
@@ -202,7 +202,6 @@ public class GUI extends JFrame implements IGameState {
 				placement = true;
 				menuItemReady.setBackground(Color.RED);
 				
-				
 			}
 		});
 		menuBar.add(menuItem);
@@ -223,28 +222,28 @@ public class GUI extends JFrame implements IGameState {
 		add(enemyBoard);
 		
 	    if(!placement) {
-	        status_text = String.format("Még lepakolható hajóid:\n"
-	        		+ "█ %d darab\n"
-	        		+ "██ %d darab\n"
-	        		+ "███ %d darab\n"
-	        		+ "████ %d darab\n"
-	        		+ "█████ %d darab\n"
+	        status_text = String.format("MĂ©g lepakolhatĂł hajĂłid:\n"
+	        		+ "â–� %d darab\n"
+	        		+ "â–�â–� %d darab\n"
+	        		+ "â–�â–�â–� %d darab\n"
+	        		+ "â–�â–�â–�â–� %d darab\n"
+	        		+ "â–�â–�â–�â–�â–� %d darab\n"
 	        		,2,3,5,1,5);
 	    }
 	    else {
-	        status_text = String.format("Kilőtt hajóid száma:\n"
-	        		+ "█ %d darab\n"
-	        		+ "██ %d darab\n"
-	        		+ "███ %d darab\n"
-	        		+ "████ %d darab\n"
-	        		+ "█████ %d darab\n",2,3,5,1,5);
+	        status_text = String.format("Shooted ship number:\n"
+	        		+ "â–� %d darab\n"
+	        		+ "â–�â–� %d darab\n"
+	        		+ "â–�â–�â–� %d darab\n"
+	        		+ "â–�â–�â–�â–� %d darab\n"
+	        		+ "â–�â–�â–�â–�â–� %d darab\n",2,3,5,1,5);
 	        		status_text_1 = String.format(
-	        		"Ellenfél elsüllyesztendő hajói:\n"
-	        		+ "  █ %d  -  "
-	        		+ "██ %d  -  " 
-	        		+ "███ %d  -  "
-	        		+ "████ %d  -  "
-	        		+ "█████ %d"
+	        		"EllenfĂ©l elsĂĽllyesztendĹ‘ hajĂłi:\n"
+	        		+ "  â–� %d  -  "
+	        		+ "â–�â–� %d  -  " 
+	        		+ "â–�â–�â–� %d  -  "
+	        		+ "â–�â–�â–�â–� %d  -  "
+	        		+ "â–�â–�â–�â–�â–� %d"
 	        		,1,1,1,1,1);   	
 	    }
 		
