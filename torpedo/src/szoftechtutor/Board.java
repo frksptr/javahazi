@@ -22,7 +22,8 @@ public class Board extends JPanel {
 
 	private boolean enemy = false;
 	public int ships = 35;
-	public int hipsToPlace = 15;
+	public int shipToPlace = 15;
+	public int shootedShip = 35;
 	private JButton[][] buttonGrid = new JButton[11][11];
 	private Color waterColor = Color.CYAN;
 	private Color shipColor = Color.BLACK;
@@ -81,11 +82,22 @@ public class Board extends JPanel {
 	}
 
 	public boolean placeShip(Ship ship, JButton button) {
-		if(button.getBackground() == waterColor)
-			button.setBackground(shipColor);
-		else
+		if(button.getBackground() == waterColor){
+			if(ships == 0)
+				System.out.println("Nem rakhatsz le több hajót!!!\n");
+				//TODO: Le kell kérdeznie a GUI-nak, hogy milyen értékekkel vannak.
+				//TODO: Át kell adni commandba. A "Ready" csak az összes hajó lerakása után mehet.
+			else
+				{
+					button.setBackground(shipColor);
+					ships--;
+				}
+			}
+		else{
 			button.setBackground(waterColor);
-
+			ships++;
+		}
+		System.out.println("Még " + (ships) +" hajót kell leraknod!\n");
 		int x = 0;
 		int y = 0;
 		for (int row = 0; row < 10; row++) {
@@ -118,6 +130,8 @@ public class Board extends JPanel {
 		
 	}
 	
+	///////////////////////////Ez a függvény nem hívódik meg a Logicban már lekezelõdik. Kell-e akkor
+	//ill gondoljuk át hogy hol kéne lennie
 	public CellType checkShoot(Point p) {
 		JButton button = buttonGrid[p.x][p.y];
 		CellType cellType = null;
@@ -128,6 +142,10 @@ public class Board extends JPanel {
 		} else if (button.getBackground() == shipColor) {
 			button.setBackground(shotShipColor);
 			cellType = CellType.ShipShot;
+			shootedShip--;
+			System.out.println("Blablabla!\n");
+			if (shootedShip == 0) System.out.println("Nyertél\n");
+			else System.out.println("Még " + shootedShip + " darab hajót kell kilõnöd!\n");
 		}
 		
 		return cellType;
