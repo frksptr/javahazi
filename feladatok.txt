@@ -1,4 +1,4 @@
-Amíg át nem írom interfacesre:
+﻿Amíg át nem írom interfacesre:
 ha nem vagy biztos benne, hogy hogyan kapja meg a dolgokat, vagy ő hogyan fog bármit átadani, de van elképzelésed a logikájáról, akkor írj csak egy void függvényt, esetleg az elejére vegyél fel belső változókat, hogy kb mikre számítanál, hogy jöjjön és kezd el megírni a logikát, aztán ha majd megvan az áttérés akkor kikalapáljuk
 
 áttérés az interfaces megoldásra:
@@ -6,11 +6,11 @@ ha nem vagy biztos benne, hogy hogyan kapja meg a dolgokat, vagy ő hogyan fog b
 * meg minden más
 
 bele lehet kezdeni:
-* start/connect ablak ip címmel
+* start/connect ablak ip címmel - PIPA (Laci, bár nem szép)
 
 * hajó lerakó meg kilövő UI elem
 
-* ABCD - Laci
+* ABCD - Laci - PIPA (Áron által)
 * miből mennyit lehet még lerakni képernyő - Laci
 * háború állapotban az ellenféltől kilövendő hajók száma - Laci
 

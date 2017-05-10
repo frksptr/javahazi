@@ -30,7 +30,7 @@ public class Board extends JPanel {
 	private Color shotShipColor = Color.RED;
 	private Color shotWaterColor = Color.blue;
 	private Color unknownColor = Color.LIGHT_GRAY;
-
+			
 	public Board(int posx, int posy, int width, int height, boolean enemy, ActionListener handler) {
 
 		this.setBounds(posx, posy, width, height);
@@ -80,13 +80,14 @@ public class Board extends JPanel {
 		}
 
 	}
+	
 
 	public boolean placeShip(Ship ship, JButton button) {
 		if(button.getBackground() == waterColor){
 			if(ships == 0)
-				System.out.println("Nem rakhatsz le tˆbb hajÛt!!!\n");
-				//TODO: Le kell kÈrdeznie a GUI-nak, hogy milyen ÈrtÈkekkel vannak.
-				//TODO: ¡t kell adni commandba. A "Ready" csak az ˆsszes hajÛ lerak·sa ut·n mehet.
+				System.out.println("Nem rakhatsz le t√∂bb haj√≥t!!!\n");
+				//TODO: Le kell k√©rdeznie a GUI-nak, hogy milyen √©rt√©kekkel vannak.
+				//TODO: √Åt kell adni commandba. A "Ready" csak az √∂sszes haj√≥ lerak√°sa ut√°n mehet.
 			else
 				{
 					button.setBackground(shipColor);
@@ -97,7 +98,7 @@ public class Board extends JPanel {
 			button.setBackground(waterColor);
 			ships++;
 		}
-		System.out.println("MÈg " + (ships) +" hajÛt kell leraknod!\n");
+		System.out.println("M√©g " + (ships) +" haj√≥t kell leraknod!\n");
 		int x = 0;
 		int y = 0;
 		for (int row = 0; row < 10; row++) {
@@ -130,8 +131,8 @@ public class Board extends JPanel {
 		
 	}
 	
-	///////////////////////////Ez a f¸ggvÈny nem hÌvÛdik meg a Logicban m·r lekezelıdik. Kell-e akkor
-	//ill gondoljuk ·t hogy hol kÈne lennie
+	///////////////////////////Ez a f√ºggv√©ny nem h√≠v√≥dik meg a Logicban m√°r lekezel≈ëdik. Kell-e akkor
+	//ill gondoljuk √°t hogy hol k√©ne lennie
 	public CellType checkShoot(Point p) {
 		JButton button = buttonGrid[p.x][p.y];
 		CellType cellType = null;
@@ -144,8 +145,8 @@ public class Board extends JPanel {
 			cellType = CellType.ShipShot;
 			shootedShip--;
 			System.out.println("Blablabla!\n");
-			if (shootedShip == 0) System.out.println("NyertÈl\n");
-			else System.out.println("MÈg " + shootedShip + " darab hajÛt kell kilınˆd!\n");
+			if (shootedShip == 0) System.out.println("Nyert√©l\n");
+			else System.out.println("M√©g " + shootedShip + " darab haj√≥t kell kil≈ën√∂d!\n");
 		}
 		
 		return cellType;

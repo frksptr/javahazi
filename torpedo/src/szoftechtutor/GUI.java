@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 
 import com.sun.org.apache.xerces.internal.impl.XMLScanner.NameType;
 
+import szoftechtutor.TextBox;
 import szoftechtutor.Command.CommandOrigin;
 import szoftechtutor.Command.CommandType;
 import szoftechtutor.Control.NetworkType;
@@ -47,12 +48,12 @@ public class GUI extends JFrame implements IGameState {
 	public ICommand commandProcessor; 
 	
     private Board enemyBoard, playerBoard;
+    private TextBox textArea, statusBar;
     
     // ezalatt tipikusan olyanok amik valszeg majd átkerülnek 
     // GameStatebe
     private boolean placement = true; // rakunk-e, vagy lövünk 
     private boolean running = false;
-    public int shipsToPlace = 15;
 
     private boolean enemyTurn = false;
 
@@ -62,8 +63,6 @@ public class GUI extends JFrame implements IGameState {
     
     private JMenuItem menuItemReady;
     
-    private String status_text;
-    private String status_text_1;
     private String serverIP;
     private String currentIP;
 
@@ -74,10 +73,8 @@ public class GUI extends JFrame implements IGameState {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(null);
 		setName("SzoftechTutor");
-		
+				
 		JMenuBar menuBar = new JMenuBar();
-		JTextArea textArea = new JTextArea();
-		JTextArea statusBar = new JTextArea();
 		
 		enemyBoard = new Board(
 				260,
@@ -85,8 +82,11 @@ public class GUI extends JFrame implements IGameState {
 				220,
 				220,
 				true, new ActionListener() {
+					
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
+						statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
 						JButton button = (JButton) e.getSource();
 						if (placement) {
 							
@@ -111,6 +111,8 @@ public class GUI extends JFrame implements IGameState {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
+						statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
 						if (placement) {
 							Object asd = e.getSource();
 							/*
@@ -135,16 +137,8 @@ public class GUI extends JFrame implements IGameState {
 					}
 				});
 
-		textArea.setSize(160, 200);
-		textArea.setLocation(500, 30);
-		textArea.setBorder(BorderFactory.createLineBorder(Color.black));
-		textArea.setEditable(false);	
-		
-		statusBar.setSize(630, 50);
-		statusBar.setLocation(30, 260);
-		statusBar.setBorder(BorderFactory.createLineBorder(Color.black));
-		statusBar.setEditable(false);
-		
+		textArea = new TextBox(500,30,160,200);
+		statusBar = new TextBox(30,260,630,50);
 		JMenu menu = new JMenu("Start");
 
 		JMenuItem menuItem = new JMenuItem("Client");
@@ -175,9 +169,14 @@ public class GUI extends JFrame implements IGameState {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JMenuItem item = (JMenuItem) e.getSource();
-				if(placement) item.setBackground(Color.GREEN);
+				if(playerBoard.ships == 0){
+					if(placement) item.setBackground(Color.GREEN);
+					else item.setBackground(Color.RED);
+					placement = !placement;
+					textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
+					statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
+				}
 				else item.setBackground(Color.RED);
-				placement = !placement;
 				
 				//TODO: ez itt
 //				Command c = new Command();
@@ -201,7 +200,8 @@ public class GUI extends JFrame implements IGameState {
 					ctrl.startClient(serverIP);
 				placement = true;
 				menuItemReady.setBackground(Color.RED);
-				
+				textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
+				statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));				
 			}
 		});
 		menuBar.add(menuItem);
@@ -217,45 +217,12 @@ public class GUI extends JFrame implements IGameState {
 				
 		setJMenuBar(menuBar);
 
+		textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
+		statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
 		add(playerBoard);
-		
 		add(enemyBoard);
-		
-	    if(!placement) {
-	        status_text = String.format("Még lepakolható hajóid:\n"
-	        		+ "█ %d darab\n"
-	        		+ "██ %d darab\n"
-	        		+ "███ %d darab\n"
-	        		+ "████ %d darab\n"
-	        		+ "█████ %d darab\n"
-	        		+ "[%d] darad hajóelem eddig"
-	        		+ "[%d] össz lerakott hajóid"
-	        		,2,3,5,1,5,10,shipsToPlace);
-	    }
-	    else {
-	        status_text = String.format("Kilőtt hajóid száma:\n"
-	        		+ "█ %d darab\n"
-	        		+ "██ %d darab\n"
-	        		+ "███ %d darab\n"
-	        		+ "████ %d darab\n"
-	        		+ "█████ %d darab\n\n"
-	        		+ "[%d] darad hajóelem eddig"
-	        		+ "[%d] össz lerakott hajóid"
-	        		,2,3,5,1,5,1,shipsToPlace);
-	        status_text_1 = String.format(
-	        		"Ellenfél elsüllyesztendő hajói:\n"
-	        		+ "  █ %d  -  "
-	        		+ "██ %d  -  " 
-	        		+ "███ %d  -  "
-	        		+ "████ %d  -  "
-	        		+ "█████ %d"
-	        		,1,1,1,1,1);   	
-	    }
-		
-		textArea.append(status_text);
-		statusBar.append(status_text_1);
-		add(textArea);
 		add(statusBar);
+		add(textArea);
 		setVisible(true);
 	}
     
