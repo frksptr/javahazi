@@ -52,7 +52,7 @@ public class GUI extends JFrame implements IGameState {
     // GameStatebe
     private boolean placement = true; // rakunk-e, vagy lövünk 
     private boolean running = false;
-    private int shipsToPlace = 5;
+    public int shipsToPlace = 15;
 
     private boolean enemyTurn = false;
 
@@ -121,7 +121,7 @@ public class GUI extends JFrame implements IGameState {
 							c.commandType = CommandType.PlacedShip;
 
 							c.commandOrigin = getCommandOriginFromNetworkType(ctrl.networkType);
-							System.out.print(c.commandOrigin + "sending " + c.commandType + " command...");
+							System.out.print("\n" + c.commandOrigin + " sending " + c.commandType + " command...");
 							commandProcessor.onCommand(c);
 							
 							/* TODO
@@ -151,7 +151,7 @@ public class GUI extends JFrame implements IGameState {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				serverIP = JOptionPane.showInputDialog("What is the Server's IP Address?");
+				serverIP = JOptionPane.showInputDialog("What is the Server's IP Address?","192.168.56.1");
 				ctrl.startClient(serverIP); 
 			}
 		});
@@ -228,7 +228,9 @@ public class GUI extends JFrame implements IGameState {
 	        		+ "███ %d darab\n"
 	        		+ "████ %d darab\n"
 	        		+ "█████ %d darab\n"
-	        		,2,3,5,1,5);
+	        		+ "[%d] darad hajóelem eddig"
+	        		+ "[%d] össz lerakott hajóid"
+	        		,2,3,5,1,5,10,shipsToPlace);
 	    }
 	    else {
 	        status_text = String.format("Kilőtt hajóid száma:\n"
@@ -236,8 +238,11 @@ public class GUI extends JFrame implements IGameState {
 	        		+ "██ %d darab\n"
 	        		+ "███ %d darab\n"
 	        		+ "████ %d darab\n"
-	        		+ "█████ %d darab\n",2,3,5,1,5);
-	        		status_text_1 = String.format(
+	        		+ "█████ %d darab\n\n"
+	        		+ "[%d] darad hajóelem eddig"
+	        		+ "[%d] össz lerakott hajóid"
+	        		,2,3,5,1,5,1,shipsToPlace);
+	        status_text_1 = String.format(
 	        		"Ellenfél elsüllyesztendő hajói:\n"
 	        		+ "  █ %d  -  "
 	        		+ "██ %d  -  " 
@@ -267,7 +272,7 @@ public class GUI extends JFrame implements IGameState {
 
 	@Override
 	public void onNewGameState(GameState gs) {
-		System.out.print("Drawing nem gamestate");
+		System.out.print("Drawing new gamestate\n");
 		GameSpace clientGameSpace = gs.clientGameSpace;
 		GameSpace serverGameSpace = gs.serverGameSpace;
 		

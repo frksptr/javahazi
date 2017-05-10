@@ -19,6 +19,7 @@ public class Logic implements ICommand {
 	public void onCommand(Command c) {
 		System.out.println("Command '" + c.commandType + "arrived from " + c.commandOrigin);
 		if (c.commandType == CommandType.Shot){
+			//checkShot(gameState.serverGameSpace.ownTable, c.position);
 			doShotStuff(c.position, c.commandOrigin);
 		} if (c.commandType == CommandType.PlacedShip) {
 			doPlaceShipStuff(c.position, c.commandOrigin);
@@ -35,6 +36,10 @@ public class Logic implements ICommand {
 		 */
 		if (origin == CommandOrigin.Client) {
 			CellType newType = checkShot(gameState.serverGameSpace.ownTable, position);
+			System.out.println("\nCelltype " + newType + "\n");
+			if(newType == null)
+				return; //Védelem a dupla kattintáshoz. Nem a legjobb de mûködik
+			else
 			gameState.clientGameSpace.enemyTable[position.x][position.y] = newType;
 			gameState.serverGameSpace.ownTable[position.x][position.y] = newType;
 		}
@@ -43,12 +48,14 @@ public class Logic implements ICommand {
 		 */
 		else {
 			CellType newType = checkShot(gameState.clientGameSpace.ownTable, position);
+			if(newType  == null)
+				return; //Védelem a dupla kattintáshoz. Nem a legjobb de mûködik
+			else
 			gameState.clientGameSpace.ownTable[position.x][position.y] = newType;
 			gameState.serverGameSpace.enemyTable[position.x][position.y] = newType;
 		}
 		
 		gui.onNewGameState(gameState);
-		
 		GameState gs = new GameState();
 		gs.clientGameSpace = gameState.clientGameSpace;
 		gs.gamePhase = gameState.gamePhase;

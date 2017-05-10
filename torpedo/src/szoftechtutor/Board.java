@@ -9,17 +9,20 @@ import java.awt.Point;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 import java.awt.Font;
 
 public class Board extends JPanel {
 
 	private boolean enemy = false;
-	public int ships = 5;
+	public int ships = 35;
+	public int hipsToPlace = 15;
 	private JButton[][] buttonGrid = new JButton[11][11];
 	private Color waterColor = Color.CYAN;
 	private Color shipColor = Color.BLACK;
@@ -56,6 +59,7 @@ public class Board extends JPanel {
 						button.setText(""+col);
 					}
 					
+					
 					button.setFont(new Font("Arial", Font.PLAIN, 12));
 					button.setBorder(null);
 				}
@@ -64,6 +68,7 @@ public class Board extends JPanel {
 					button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 					button.setPreferredSize(new java.awt.Dimension(height / 11, width / 11));
 					button.addActionListener(handler);
+					//button.setBorder(new LineBorder(Color.BLACK));
 				}
 				c.gridx = col;
 				c.gridy = row;
