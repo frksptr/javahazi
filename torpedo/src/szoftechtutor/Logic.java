@@ -2,6 +2,8 @@ package szoftechtutor;
 
 import java.awt.Point;
 
+import javax.swing.JTextArea;
+
 import szoftechtutor.Command.CommandOrigin;
 import szoftechtutor.Command.CommandType;
 
@@ -81,16 +83,61 @@ public class Logic implements ICommand {
 		/*
 		 * Rakó játékosnak megfelelõ helyen frissítjük az értéket
 		 */
+		boolean free = true;
+		int e_0i = 0, e_0j=0, e_10i=1, e_10j=1;
+		// TODO: ha hajóhoz tartozik akkor ahhoz hozzáadni
 		if (commandOrigin == CommandOrigin.Client) {
-			// TODO: ellenõrizni, hogy lehet-e oda rakni
-			gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
+			if(position.x==9) e_10i=0;
+			if(position.y==9) e_10j=0;
+			for(int i=-1+e_0i; i<=e_10i; i++){
+				for(int j=-1+e_0j; j<=e_10j; j++){
+					try{
+						if(gameState.clientGameSpace.ownTable[position.x+i][position.y+j] == CellType.Ship){
+							free = false;
+						}
+					}
+					catch(Exception ex){
+						if(i==-1 && position.x==0) e_0i = 1;
+						if(j==-1 && position.y==0) e_0j = 1;
+					}
+				}
+			}
+			if(free){
+				gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
+			}
+			else{
+				gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Water;
+				gui.toString("Oda nem rakhatsz!");
+				free = true;
+			}
 		}
+		e_0j=0; e_0i=0; e_10i=1; e_10j=1;
 		if (commandOrigin == CommandOrigin.Server) {
-			
-			gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
-			// TODO: ehelyett megnézni, hogy lehet-e
-			// TODO: ha hajóhoz tartozik akkor ahhoz hozzáadni
+			if(position.x==9) e_10i=0;
+			if(position.y==9) e_10j=0;
+			for(int i=-1+e_0i; i<=e_10i;i++){
+				for(int j=-1+e_0j; j<=e_10j;j++){
+					try{
+						if(gameState.serverGameSpace.ownTable[position.x+i][position.y+j] == CellType.Ship){
+							free = false;
+						}
+					}
+					catch(Exception ex){
+						if(i==-1 && position.x==0) e_0i = 1;
+						if(j==-1 && position.y==0) e_0j = 1;
+					}
+				}
+			}
+			if(free){
+				gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
+			}
+			else{
+				gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
+				gui.toString("Oda nem rakhatsz!");
+				free = true;
+			}
 		}
+		gui.onNewGameState(gameState);
 	}
 
 }

@@ -85,9 +85,8 @@ public class Board extends JPanel {
 	public boolean placeShip(Ship ship, JButton button) {
 		if(button.getBackground() == waterColor){
 			if(ships == 0)
-				System.out.println("Nem rakhatsz le több hajót!!!\n");
-				//TODO: Le kell kérdeznie a GUI-nak, hogy milyen értékekkel vannak.
-				//TODO: Át kell adni commandba. A "Ready" csak az összes hajó lerakása után mehet.
+				System.out.println("Nem rakhatsz le több hajót!!!\n");	
+			//TODO: Át kell adni commandba.
 			else
 				{
 					button.setBackground(shipColor);
@@ -155,23 +154,23 @@ public class Board extends JPanel {
 	public void redrawFromNewGameState(CellType[][] cellTypes) {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				CellType cellType = cellTypes[i][j];
-				JButton button = buttonGrid[i][j];
-				switch (cellType){
+			//	CellType cellType = cellTypes[i][j];
+			//	JButton button = buttonGrid[i][j];
+				switch (cellTypes[i][j]){
 					case Ship:
-						button.setBackground(shipColor);
+						buttonGrid[i][j].setBackground(shipColor);
 						break;
 					case ShipShot:
-						button.setBackground(shotShipColor);
+						buttonGrid[i][j].setBackground(shotShipColor);
 						break;
 					case Water:
-						button.setBackground(waterColor);
+						buttonGrid[i][j].setBackground(waterColor);
 						break;
 					case WaterShot:
-						button.setBackground(shotWaterColor);
+						buttonGrid[i][j].setBackground(shotWaterColor);
 						break;
 					case Unknown:
-						button.setBackground(unknownColor);
+						buttonGrid[i][j].setBackground(unknownColor);
 						break;
 				}
 			}

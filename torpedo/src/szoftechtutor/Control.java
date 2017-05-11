@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package szoftechtutor;
 
 import java.awt.Point;
@@ -12,7 +7,6 @@ import java.net.UnknownHostException;
 import szoftechtutor.Command.CommandType;
 /**
  *
- * @author Predi
  */
 class Control {
     private String currentIp = null;
@@ -69,6 +63,4 @@ class Control {
 		Client, 
 		Server
 	}
-	
-	
 }

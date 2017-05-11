@@ -11,8 +11,8 @@ bele lehet kezdeni:
 * hajó lerakó meg kilövő UI elem
 
 * ABCD - Laci - PIPA (Áron által)
-* miből mennyit lehet még lerakni képernyő - Laci
-* háború állapotban az ellenféltől kilövendő hajók száma - Laci
+* miből mennyit lehet még lerakni képernyő - Laci - Halad
+* háború állapotban az ellenféltől kilövendő hajók száma - Laci - Halad
 
 * hajó lerakás vizsgálata - Áron
 * állapot váltása ready-re - Áron

@@ -35,7 +35,6 @@ import szoftechtutor.Control.NetworkType;
 
 /**
  *
- * @author Predi
  */
 public class GUI extends JFrame implements IGameState {
 
@@ -121,16 +120,9 @@ public class GUI extends JFrame implements IGameState {
 							Command c = new Command();
 							c.position = playerBoard.getPosition((JButton)asd);
 							c.commandType = CommandType.PlacedShip;
-
 							c.commandOrigin = getCommandOriginFromNetworkType(ctrl.networkType);
 							System.out.print("\n" + c.commandOrigin + " sending " + c.commandType + " command...");
 							commandProcessor.onCommand(c);
-							
-							/* TODO
-							 *  ezt lehet, hogy itt nem is kéne hanem inkább majd
-							 *  ha visszaküldi a gamestatet a logic/client  
-							 */
-							playerBoard.placeShip(null, (JButton)asd);
 						} else {
 							
 						}
@@ -219,6 +211,8 @@ public class GUI extends JFrame implements IGameState {
 
 		textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
 		statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
+		
+		
 		add(playerBoard);
 		add(enemyBoard);
 		add(statusBar);
@@ -226,9 +220,9 @@ public class GUI extends JFrame implements IGameState {
 		setVisible(true);
 	}
     
-	private String sprintf(String string, boolean placement2) {
-		// TODO Auto-generated method stub
-		return null;
+	public void toString(String string) {
+		statusBar.setText(string);
+		add(statusBar);
 	}
 
 	public void shootPos(Point p){
@@ -249,7 +243,6 @@ public class GUI extends JFrame implements IGameState {
 		} else {
 			ownGameSpace = serverGameSpace;
 		}
-
 		playerBoard.redrawFromNewGameState(ownGameSpace.ownTable);
 		enemyBoard.redrawFromNewGameState(ownGameSpace.enemyTable);
 	}
