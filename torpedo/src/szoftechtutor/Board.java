@@ -130,7 +130,7 @@ public class Board extends JPanel {
 		
 	}
 	
-	///////////////////////////Ez a függvény nem hívódik meg a Logicban már lekezelődik. Kell-e akkor
+	//Ez a függvény nem hívódik meg a Logicban már lekezelődik. Kell-e akkor
 	//ill gondoljuk át hogy hol kéne lennie
 	public CellType checkShoot(Point p) {
 		JButton button = buttonGrid[p.x][p.y];

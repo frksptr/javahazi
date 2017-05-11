@@ -16,6 +16,7 @@ public class Logic implements ICommand {
 		this.gui = gui;
 		this.server = server;
 	}
+	public int ship=10;
 
 	@Override
 	public void onCommand(Command c) {
@@ -65,6 +66,7 @@ public class Logic implements ICommand {
 		gs.serversTurn = gameState.serversTurn;
 		
 		server.onNewGameState(gs);
+		server.send(gs);
 		// TODO: kliensnek visszaküldeni
 	}
 	
@@ -102,8 +104,9 @@ public class Logic implements ICommand {
 					}
 				}
 			}
-			if(free){
+			if(free && ship>=0){
 				gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
+				ship--;
 			}
 			else{
 				gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Water;
@@ -128,8 +131,9 @@ public class Logic implements ICommand {
 					}
 				}
 			}
-			if(free){
+			if(free && gameState.serverGameSpace.onwShip>=0){
 				gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
+				gameState.serverGameSpace.onwShip--;
 			}
 			else{
 				gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
@@ -138,6 +142,7 @@ public class Logic implements ICommand {
 			}
 		}
 		gui.onNewGameState(gameState);
+		server.send(gameState);
 	}
 
 }

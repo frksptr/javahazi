@@ -243,6 +243,8 @@ public class GUI extends JFrame implements IGameState {
 		} else {
 			ownGameSpace = serverGameSpace;
 		}
+		playerBoard.ships = ownGameSpace.onwShip;
+		enemyBoard.ships = ownGameSpace.enemyShip;
 		playerBoard.redrawFromNewGameState(ownGameSpace.ownTable);
 		enemyBoard.redrawFromNewGameState(ownGameSpace.enemyTable);
 	}
