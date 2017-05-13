@@ -42,16 +42,16 @@ public class GUI extends JFrame implements IGameState {
 	private Control ctrl;
 	/*commandProessor:
 	 * Ez vagy a szerveroldali Logic, vagy a kliensoldali Client
-	 * A Controlban dől el, hogy mivan
+	 * A Controlban dĹ‘l el, hogy mivan
 	 */
 	public ICommand commandProcessor; 
 	
     private Board enemyBoard, playerBoard;
     private TextBox textArea, statusBar;
     
-    // ezalatt tipikusan olyanok amik valszeg majd átkerülnek 
+    // ezalatt tipikusan olyanok amik valszeg majd ĂˇtkerĂĽlnek 
     // GameStatebe
-    private boolean placement = true; // rakunk-e, vagy lövünk 
+    private boolean placement = true; // rakunk-e, vagy lĂ¶vĂĽnk 
     private boolean running = false;
 
     private boolean enemyTurn = false;
@@ -91,6 +91,9 @@ public class GUI extends JFrame implements IGameState {
 							
 						}
 						else {
+							if (enemyTurn) {
+								return;
+							}
 							Point pos = enemyBoard.getPosition(button);
 							Command c = new Command();
 							c.position = pos;
@@ -240,8 +243,10 @@ public class GUI extends JFrame implements IGameState {
 		GameSpace ownGameSpace;
 		if (ctrl.networkType == NetworkType.Client) {
 			ownGameSpace = clientGameSpace;
+			enemyTurn = gs.serversTurn;
 		} else {
 			ownGameSpace = serverGameSpace;
+			enemyTurn = !gs.serversTurn;
 		}
 		playerBoard.ships = ownGameSpace.onwShip;
 		enemyBoard.ships = ownGameSpace.enemyShip;

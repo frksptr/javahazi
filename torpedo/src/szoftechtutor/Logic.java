@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import javax.swing.JTextArea;
 
+import sun.security.jgss.GSSCaller;
 import szoftechtutor.Command.CommandOrigin;
 import szoftechtutor.Command.CommandType;
 
@@ -22,6 +23,7 @@ public class Logic implements ICommand {
 	public void onCommand(Command c) {
 		System.out.println("Command '" + c.commandType + "arrived from " + c.commandOrigin);
 		if (c.commandType == CommandType.Shot){
+			gameState.serversTurn = !gameState.serversTurn;
 			//checkShot(gameState.serverGameSpace.ownTable, c.position);
 			doShotStuff(c.position, c.commandOrigin);
 		} if (c.commandType == CommandType.PlacedShip) {

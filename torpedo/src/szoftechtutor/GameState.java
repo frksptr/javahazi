@@ -15,7 +15,7 @@ public class GameState implements Serializable {
 	/* ki jön épp
 	 * TODO: ez alapján letiltaná rakást
 	 */
-	public boolean serversTurn;
+	public boolean serversTurn = true;
 	
 	// milyen állapot
 	public GamePhase gamePhase;
@@ -27,6 +27,6 @@ public class GameState implements Serializable {
 	public GameSpace clientGameSpace = new GameSpace();
 	
 	public enum GamePhase {
-		PlacingShips, HÁBORÚÚÚÚÚÚ
+		PlacingShips, ShootingShips
 	}
 }
