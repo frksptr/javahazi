@@ -7,8 +7,6 @@ import javax.swing.JTextArea;
 import sun.security.jgss.GSSCaller;
 import szoftechtutor.Command.CommandOrigin;
 import szoftechtutor.Command.CommandType;
-import szoftechtutor.Control.NetworkType;
-import szoftechtutor.GameState.GamePhase;
 
 public class Logic implements ICommand {
 
@@ -27,47 +25,20 @@ public class Logic implements ICommand {
 			gameState.serversTurn = !gameState.serversTurn;
 			//checkShot(gameState.serverGameSpace.ownTable, c.position);
 			doShotStuff(c.position, c.commandOrigin);
-		} else if (c.commandType == CommandType.PlacedShip) {
+		} if (c.commandType == CommandType.PlacedShip) {
 			doPlaceShipStuff(c.position, c.commandOrigin);
-		} else if (c.commandType == CommandType.Ready) {
-			doReadyStuff(c.ready, c.commandOrigin);
-		} else if (c.commandType == CommandType.Ready) {
-			doResetStuff();
 		}
-	}
-	
-	private void doResetStuff(){
-		gameState = new GameState();
-		gui.onNewGameState(gameState);		
-		server.onNewGameState(gameState);
-	}
-	
-	private void doReadyStuff(boolean ready, NetworkType commandOrigin) {
-		if (commandOrigin == NetworkType.Client) {
-			gameState.clientReady = ready;
-		} else {
-			gameState.serverReady = ready;
-		}
-		
-		if (gameState.clientReady & gameState.serverReady) {
-			if (gameState.gamePhase == GamePhase.PlacingShips) {
-				gameState.gamePhase = GamePhase.ShootingShips;
-			}
-		}
-		
-		gui.onNewGameState(gameState);
-		server.onNewGameState(gameState);
-		
+		// TODO: ready ellenõrzés
 	}
 
-	private void doShotStuff(Point position, NetworkType origin) {
+	private void doShotStuff(Point position, CommandOrigin origin) {
 		/*
 		 * A logic a szerveren van
 		 * 
 		 * ha a kliens lõtt, akkor a szerver saját táblájában megnézzük mit
 		 * talált el és átállítjuk
 		 */
-		if (origin == NetworkType.Client) {
+		if (origin == CommandOrigin.Client) {
 			CellType newType = checkShot(gameState.serverGameSpace.ownTable, position);
 			System.out.println("\nCelltype " + newType + "\n");
 			if(newType == null)
@@ -88,8 +59,16 @@ public class Logic implements ICommand {
 			gameState.serverGameSpace.enemyTable[position.x][position.y] = newType;
 		}
 		
-		gui.onNewGameState(gameState);		
-		server.onNewGameState(gameState);
+		gui.onNewGameState(gameState);
+		GameState gs = new GameState();
+		gs.clientGameSpace = gameState.clientGameSpace;
+		gs.gamePhase = gameState.gamePhase;
+		gs.serverGameSpace = gameState.serverGameSpace;
+		gs.serversTurn = gameState.serversTurn;
+		
+		server.onNewGameState(gs);
+		server.send(gs);
+		// TODO: kliensnek visszaküldeni
 	}
 	
 	private CellType checkShot(CellType[][] cells, Point pos) {
@@ -103,14 +82,14 @@ public class Logic implements ICommand {
 		return null;
 	}
 	
-	private void doPlaceShipStuff(Point position, NetworkType commandOrigin) {
+	private void doPlaceShipStuff(Point position, CommandOrigin commandOrigin) {
 		/*
 		 * Rakó játékosnak megfelelõ helyen frissítjük az értéket
 		 */
 		boolean free = true;
 		int e_0i = 0, e_0j=0, e_10i=1, e_10j=1;
 		// TODO: ha hajóhoz tartozik akkor ahhoz hozzáadni
-		if (commandOrigin == NetworkType.Client) {
+		if (commandOrigin == CommandOrigin.Client) {
 			if(position.x==9) e_10i=0;
 			if(position.y==9) e_10j=0;
 			for(int i=-1+e_0i; i<=e_10i; i++){
@@ -143,7 +122,7 @@ public class Logic implements ICommand {
 			}
 		}
 		e_0j=0; e_0i=0; e_10i=1; e_10j=1;
-		if (commandOrigin == NetworkType.Server) {
+		if (commandOrigin == CommandOrigin.Server) {
 			if(position.x==9) e_10i=0;
 			if(position.y==9) e_10j=0;
 			for(int i=-1+e_0i; i<=e_10i;i++){

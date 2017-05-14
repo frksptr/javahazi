@@ -3,20 +3,17 @@ package szoftechtutor;
 import java.awt.Point;
 import java.io.Serializable;
 
-import szoftechtutor.Control.NetworkType;
-
 public class Command implements Serializable {
 	public Point position;
 	public CommandType commandType;
-	public NetworkType commandOrigin;
-	public boolean ready = false;
+	public CommandOrigin commandOrigin;
 	
 	// Mi történt
 	public enum CommandType {
 		Shot,
 		PlacedShip,
-		Ready,
-		Reset
+		Nemtommi,
+		Ready
 	}
 	
 	// Ki küldi

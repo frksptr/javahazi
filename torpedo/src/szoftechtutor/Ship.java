@@ -4,35 +4,17 @@ import javax.swing.JButton;
 import javafx.scene.Parent;
 
 public class Ship {
-    public int size;
-    public int elements_no;
-    public int id;
-    public boolean shooted = false;
-    public boolean complete = false;
-    private int health;
+    public int size; 
+    public int elements_no; //mennyi elemu az adott azonositoju hajo
+    public int id; // 1-15-ig azonositja a shipeket
+    public boolean scuttled = false;
+    public boolean completed = false;
+	public Ship[][] cellsIsShipArray = new Ship[10][10];
     
-    // TODO: eltárolni hogy melyik gomb tartozik hozzá kattintáskor, vagy inkább koordinátákat
-    
-    public Ship(int type) {
-       // this.type =0;
-        health = type;
-
-        /*VBox vbox = new VBox();
-        for (int i = 0; i < type; i++) {
-            Rectangle square = new Rectangle(30, 30);
-            square.setFill(null);
-            square.setStroke(Color.BLACK);
-            vbox.getChildren().add(square);
-        }
-
-        getChildren().add(vbox);*/
+    public Ship(int posx, int posy, boolean isNew) {
+    		if(isNew)
+    		{
+    			cellsIsShipArray[posx][posy]=null;
+    		}
+    	}
     }
-
-    public void hit() {
-        health--;
-    }
-
-    public boolean isAlive() {
-        return health > 0;
-    }
-}

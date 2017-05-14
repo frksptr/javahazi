@@ -18,16 +18,13 @@ public class GameState implements Serializable {
 	public boolean serversTurn = true;
 	
 	// milyen állapot
-	public GamePhase gamePhase = GamePhase.PlacingShips;
+	public GamePhase gamePhase;
 	
 	// amit a szerver lát a játékterekbõl
 	public GameSpace serverGameSpace = new GameSpace();
 	
 	// amit a kliens lát a játékterekbõl
 	public GameSpace clientGameSpace = new GameSpace();
-	
-	public boolean serverReady;
-	public boolean clientReady;
 	
 	public enum GamePhase {
 		PlacingShips, ShootingShips
