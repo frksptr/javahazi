@@ -112,13 +112,11 @@ public class SerialServer extends Network implements IGameState{
 
 	@Override
 	public void onNewGameState(GameState gs) {
-		// TODO Auto-generated method stub
 		send(gs);
 	}
 
 	@Override
 	public void toString(String string) {
-		// TODO Auto-generated method stub
 		
 	}
 }
