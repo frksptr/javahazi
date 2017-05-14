@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.text.Position;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import com.sun.org.apache.xerces.internal.impl.XMLScanner.NameType;
 
@@ -223,8 +224,15 @@ public class GUI extends JFrame implements IGameState {
     
 	public void setStatusBarText(String string) {
 		System.out.print(string);
-		statusBar.setText(string);
-		add(statusBar);
+		SwingUtilities.invokeLater(new Runnable(){
+
+			@Override
+			public void run() {
+				statusBar.setText(string);
+			}
+			
+		});
+		
 	}
 
 	@Override
