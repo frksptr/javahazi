@@ -53,7 +53,7 @@ public class SerialClient extends Network implements ICommand {
 			Thread rec = new Thread(new ReceiverThread());
 			rec.start();
 		} catch (UnknownHostException e) {
-			System.err.println("Don't know about host");
+			System.err.println("Dons't know about host");
 		} catch (IOException e) {
 			System.err.println("Couldn't get I/O for the connection. ");
 			JOptionPane.showMessageDialog(null, "Cannot connect to server!");
