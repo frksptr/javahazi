@@ -84,8 +84,6 @@ public class GUI extends JFrame implements IGameState {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
-						statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
 						JButton button = (JButton) e.getSource();
 						if (placement) {
 							
@@ -100,6 +98,8 @@ public class GUI extends JFrame implements IGameState {
 							c.commandType = CommandType.Shot;
 							c.commandOrigin = getCommandOriginFromNetworkType(ctrl.networkType);
 							commandProcessor.onCommand(c);
+							textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
+							statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
 						}
 					}
 				});
@@ -113,8 +113,6 @@ public class GUI extends JFrame implements IGameState {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
-						statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
 						if (placement) {
 							Object asd = e.getSource();
 							/*
@@ -129,6 +127,8 @@ public class GUI extends JFrame implements IGameState {
 						} else {
 							
 						}
+						textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
+						statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
 					}
 				});
 
@@ -228,12 +228,6 @@ public class GUI extends JFrame implements IGameState {
 		add(statusBar);
 	}
 
-	public void shootPos(Point p){
-		playerBoard.checkShoot(p);
-		//ctrl.sendClick(p);
-		//playerBoard.placeShip(null, playerBoard.getButton(p));
-	}
-
 	@Override
 	public void onNewGameState(GameState gs) {
 		System.out.print("Drawing new gamestate\n");
@@ -248,7 +242,7 @@ public class GUI extends JFrame implements IGameState {
 			ownGameSpace = serverGameSpace;
 			enemyTurn = !gs.serversTurn;
 		}
-		playerBoard.ships = ownGameSpace.onwShip;
+		playerBoard.ships = ownGameSpace.ownShip;
 		enemyBoard.ships = ownGameSpace.enemyShip;
 		playerBoard.redrawFromNewGameState(ownGameSpace.ownTable);
 		enemyBoard.redrawFromNewGameState(ownGameSpace.enemyTable);

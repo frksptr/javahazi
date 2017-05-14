@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class GameSpace implements Serializable {
 	public CellType[][] ownTable = new CellType[10][10];
 	public CellType[][] enemyTable = new CellType[10][10];
-	public int onwShip = 10;
+	public int ownShip = 10;
 	public int enemyShip = 10;
-	
+
 	public GameSpace() {
 		/* elõször nem tudjuk, hogy az ellenfél térfelén milyen
 		 * mezõk vannak

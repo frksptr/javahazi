@@ -1,22 +1,20 @@
 package szoftechtutor;
 
 import javax.swing.JButton;
-
 import javafx.scene.Parent;
 
 public class Ship {
-    public int type;
-    public boolean vertical = true;
-
+    public int size;
+    public int elements_no;
+    public int id;
+    public boolean shooted = false;
+    public boolean complete = false;
     private int health;
     
     // TODO: eltárolni hogy melyik gomb tartozik hozzá kattintáskor, vagy inkább koordinátákat
     
-    private JButton button;
-
-    public Ship(int type, boolean vertical) {
-        this.type = type;
-        this.vertical = vertical;
+    public Ship(int type) {
+       // this.type =0;
         health = type;
 
         /*VBox vbox = new VBox();

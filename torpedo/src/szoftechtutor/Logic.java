@@ -17,7 +17,6 @@ public class Logic implements ICommand {
 		this.gui = gui;
 		this.server = server;
 	}
-	public int ship=10;
 
 	@Override
 	public void onCommand(Command c) {
@@ -106,13 +105,19 @@ public class Logic implements ICommand {
 					}
 				}
 			}
-			if(free && ship>=0){
+			if(free && gameState.clientGameSpace.ownShip>0){
 				gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
-				ship--;
-			}
+				gameState.clientGameSpace.ownShip--;
+				}
 			else{
-				gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Water;
-				gui.toString("Oda nem rakhatsz!");
+				if(gameState.clientGameSpace.ownTable[position.x][position.y] == CellType.Ship){
+					gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Water;
+					gameState.clientGameSpace.ownShip++;
+				}
+				else {
+					gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Water;
+					gui.toString("Oda nem rakhatsz!");
+				}
 				free = true;
 			}
 		}
@@ -133,13 +138,19 @@ public class Logic implements ICommand {
 					}
 				}
 			}
-			if(free && gameState.serverGameSpace.onwShip>=0){
+			if(free && gameState.serverGameSpace.ownShip>0){
 				gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
-				gameState.serverGameSpace.onwShip--;
+				gameState.serverGameSpace.ownShip--;
 			}
 			else{
-				gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
-				gui.toString("Oda nem rakhatsz!");
+				if(gameState.serverGameSpace.ownTable[position.x][position.y] == CellType.Ship){
+					gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
+					gameState.serverGameSpace.ownShip++;
+				}
+				else {
+					gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
+					gui.toString("Oda nem rakhatsz!");
+				}
 				free = true;
 			}
 		}

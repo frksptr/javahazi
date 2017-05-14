@@ -81,36 +81,6 @@ public class Board extends JPanel {
 
 	}
 	
-
-	public boolean placeShip(Ship ship, JButton button) {
-		if(button.getBackground() == waterColor){
-			if(ships == 0)
-				System.out.println("Nem rakhatsz le több hajót!!!\n");	
-			//TODO: Át kell adni commandba.
-			else
-				{
-					button.setBackground(shipColor);
-					ships--;
-				}
-			}
-		else{
-			button.setBackground(waterColor);
-			ships++;
-		}
-		System.out.println("Még " + (ships) +" hajót kell leraknod!\n");
-		int x = 0;
-		int y = 0;
-		for (int row = 0; row < 10; row++) {
-			for (int col = 0; col < 10; col++) {
-				if (buttonGrid[row][col] == button) {
-					x = row;
-					y = col;
-				}
-			}
-		}
-		return false;
-	}
-
 	public Point getPosition(JButton button) {
 		int x = 0;
 		int y = 0;
@@ -129,33 +99,10 @@ public class Board extends JPanel {
 		return buttonGrid[p.x][p.y];
 		
 	}
-	
-	//Ez a függvény nem hívódik meg a Logicban már lekezelődik. Kell-e akkor
-	//ill gondoljuk át hogy hol kéne lennie
-	public CellType checkShoot(Point p) {
-		JButton button = buttonGrid[p.x][p.y];
-		CellType cellType = null;
 		
-		if (button.getBackground() == waterColor) {
-			button.setBackground(shotWaterColor);
-			cellType = CellType.WaterShot;
-		} else if (button.getBackground() == shipColor) {
-			button.setBackground(shotShipColor);
-			cellType = CellType.ShipShot;
-			shootedShip--;
-			System.out.println("Blablabla!\n");
-			if (shootedShip == 0) System.out.println("Nyertél\n");
-			else System.out.println("Még " + shootedShip + " darab hajót kell kilőnöd!\n");
-		}
-		
-		return cellType;
-	}
-	
 	public void redrawFromNewGameState(CellType[][] cellTypes) {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-			//	CellType cellType = cellTypes[i][j];
-			//	JButton button = buttonGrid[i][j];
 				switch (cellTypes[i][j]){
 					case Ship:
 						buttonGrid[i][j].setBackground(shipColor);

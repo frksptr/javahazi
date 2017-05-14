@@ -1,4 +1,16 @@
-﻿Amíg át nem írom interfacesre:
+﻿- Ready gomb feltételei -> ha mind2 fél ready-ben van és a játék elkezdődik, akkor Ne engedjen vissza pakoló módba 😕  
+
+- Tényleg csak akkor lehessen lőni, ha mind2 fél ready
+
++új display elem a menüsávra: virítson a képébe a parasztnak (játékosnak) hogy tejössz ember 😀
+
+textArea-k most akkor váltanak ha ready-t nyomunk, és kiírja hogy mennyit lehet kilőni a másiknál. Ezt is be kellene vinni feltételbe, hogy akkor vált, ha mind2 fél ready
+
+- Reset gomb -> a gamestate-et nem nullázza, vagyhát a gui-t nem frissíti, teszi alapállapotra
+
+
+
+Amíg át nem írom interfacesre:
 ha nem vagy biztos benne, hogy hogyan kapja meg a dolgokat, vagy ő hogyan fog bármit átadani, de van elképzelésed a logikájáról, akkor írj csak egy void függvényt, esetleg az elejére vegyél fel belső változókat, hogy kb mikre számítanál, hogy jöjjön és kezd el megírni a logikát, aztán ha majd megvan az áttérés akkor kikalapáljuk
 
 áttérés az interfaces megoldásra:
