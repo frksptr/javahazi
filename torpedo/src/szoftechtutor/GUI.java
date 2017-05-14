@@ -28,10 +28,12 @@ import javax.swing.JTextField;
 
 import com.sun.org.apache.xerces.internal.impl.XMLScanner.NameType;
 
+import sun.security.jgss.GSSCaller;
 import szoftechtutor.TextBox;
 import szoftechtutor.Command.CommandOrigin;
 import szoftechtutor.Command.CommandType;
 import szoftechtutor.Control.NetworkType;
+import szoftechtutor.GameState.GamePhase;
 
 /**
  *
@@ -53,6 +55,7 @@ public class GUI extends JFrame implements IGameState {
     // GameStatebe
     private boolean placement = true; // rakunk-e, vagy lĂ¶vĂĽnk 
     private boolean running = false;
+    private boolean ready = false;
 
     private boolean enemyTurn = false;
 
@@ -84,11 +87,8 @@ public class GUI extends JFrame implements IGameState {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						JButton button = (JButton) e.getSource();
-						if (placement) {
-							
-						}
-						else {
+						if (gameState.gamePhase == GamePhase.ShootingShips) {
+							JButton button = (JButton) e.getSource();
 							if (enemyTurn) {
 								return;
 							}
@@ -96,10 +96,10 @@ public class GUI extends JFrame implements IGameState {
 							Command c = new Command();
 							c.position = pos;
 							c.commandType = CommandType.Shot;
-							c.commandOrigin = getCommandOriginFromNetworkType(ctrl.networkType);
+							c.commandOrigin = ctrl.networkType;
 							commandProcessor.onCommand(c);
-							textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
-							statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
+							textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
+							statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
 						}
 					}
 				});
@@ -113,7 +113,7 @@ public class GUI extends JFrame implements IGameState {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						if (placement) {
+						if (gameState.gamePhase == GamePhase.PlacingShips) {
 							Object asd = e.getSource();
 							/*
 							 * TODO: felvenni GameState/GameSpace-be
@@ -121,14 +121,12 @@ public class GUI extends JFrame implements IGameState {
 							Command c = new Command();
 							c.position = playerBoard.getPosition((JButton)asd);
 							c.commandType = CommandType.PlacedShip;
-							c.commandOrigin = getCommandOriginFromNetworkType(ctrl.networkType);
+							c.commandOrigin = ctrl.networkType;
 							System.out.print("\n" + c.commandOrigin + " sending " + c.commandType + " command...");
 							commandProcessor.onCommand(c);
-						} else {
-							
-						}
-						textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
-						statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
+						} 
+						textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
+						statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
 					}
 				});
 
@@ -163,15 +161,16 @@ public class GUI extends JFrame implements IGameState {
 		menuItemReady.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JMenuItem item = (JMenuItem) e.getSource();
-				if(playerBoard.ships == 0){
-					if(placement) item.setBackground(Color.GREEN);
-					else item.setBackground(Color.RED);
-					placement = !placement;
-					textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
-					statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
+				if (playerBoard.ships == 0){
+					if (gameState.gamePhase == GamePhase.PlacingShips) {								
+						Command c = new Command();
+						c.commandOrigin = ctrl.networkType;
+						c.commandType = CommandType.Ready;
+						c.ready = !ready;
+						commandProcessor.onCommand(c);
+					}
 				}
-				else item.setBackground(Color.RED);
+				
 				
 				//TODO: ez itt
 //				Command c = new Command();
@@ -193,10 +192,12 @@ public class GUI extends JFrame implements IGameState {
 					ctrl.startServer();
 				if(ctrl.networkType == NetworkType.Client)
 					ctrl.startClient(serverIP);
-				placement = true;
-				menuItemReady.setBackground(Color.RED);
-				textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
-				statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));				
+				textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
+				statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+				gameState = new GameState();
+				Command c = new Command();
+				c.commandType = CommandType.Reset;
+				commandProcessor.onCommand(c);
 			}
 		});
 		menuBar.add(menuItem);
@@ -212,8 +213,9 @@ public class GUI extends JFrame implements IGameState {
 				
 		setJMenuBar(menuBar);
 
-		textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
-		statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
+		textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
+		statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+		
 		
 		add(playerBoard);
 		add(enemyBoard);
@@ -222,38 +224,45 @@ public class GUI extends JFrame implements IGameState {
 		setVisible(true);
 	}
     
-	public void toString(String string) {
+	public void setStatusBarText(String string) {
 		statusBar.setText(string);
-		add(statusBar);
 	}
 
 	@Override
 	public void onNewGameState(GameState gs) {
 		System.out.print("Drawing new gamestate\n");
+		gameState = gs;
 		GameSpace clientGameSpace = gs.clientGameSpace;
 		GameSpace serverGameSpace = gs.serverGameSpace;
 		
+	
 		GameSpace ownGameSpace;
 		if (ctrl.networkType == NetworkType.Client) {
 			ownGameSpace = clientGameSpace;
 			enemyTurn = gs.serversTurn;
+			ready = gs.clientReady;
 		} else {
 			ownGameSpace = serverGameSpace;
 			enemyTurn = !gs.serversTurn;
+			ready = gs.serverReady;
 		}
+		
+		menuItemReady.setBackground(ready ? Color.GREEN : Color.RED);
+		
+		if (gs.gamePhase == GamePhase.ShootingShips) {
+			textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
+			statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+		}
+			
 		playerBoard.ships = ownGameSpace.ownShip;
 		enemyBoard.ships = ownGameSpace.enemyShip;
 		playerBoard.redrawFromNewGameState(ownGameSpace.ownTable);
 		enemyBoard.redrawFromNewGameState(ownGameSpace.enemyTable);
 	}
-	
-	private CommandOrigin getCommandOriginFromNetworkType(NetworkType networkType) {
-		CommandOrigin commandOrigin = null;
-		if (ctrl.networkType == NetworkType.Client) {
-			commandOrigin = CommandOrigin.Client;
-		} else {
-			commandOrigin = CommandOrigin.Server;
-		}
-		return commandOrigin; 
+
+	@Override
+	public void toString(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 }
