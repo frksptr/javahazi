@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -87,19 +88,24 @@ public class GUI extends JFrame implements IGameState {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						if (gameState.gamePhase == GamePhase.ShootingShips) {
-							JButton button = (JButton) e.getSource();
-							if (enemyTurn) {
-								return;
+						try{
+							if (gameState.gamePhase == GamePhase.ShootingShips) {
+								JButton button = (JButton) e.getSource();
+								if (enemyTurn) {
+									return;
+								}
+								Point pos = enemyBoard.getPosition(button);
+								Command c = new Command();
+								c.position = pos;
+								c.commandType = CommandType.Shot;
+								c.commandOrigin = ctrl.networkType;
+								commandProcessor.onCommand(c);
+								textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
+								statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
 							}
-							Point pos = enemyBoard.getPosition(button);
-							Command c = new Command();
-							c.position = pos;
-							c.commandType = CommandType.Shot;
-							c.commandOrigin = ctrl.networkType;
-							commandProcessor.onCommand(c);
-							textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
-							statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+						}
+						catch(Exception ex){
+							System.out.print("Elobb pakoljátok le a hajóitokat!");
 						}
 					}
 				});
@@ -113,20 +119,25 @@ public class GUI extends JFrame implements IGameState {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						if (gameState.gamePhase == GamePhase.PlacingShips) {
-							Object asd = e.getSource();
-							/*
-							 * TODO: felvenni GameState/GameSpace-be
-							 */
-							Command c = new Command();
-							c.position = playerBoard.getPosition((JButton)asd);
-							c.commandType = CommandType.PlacedShip;
-							c.commandOrigin = ctrl.networkType;
-							System.out.print("\n" + c.commandOrigin + " sending " + c.commandType + " command...");
-							commandProcessor.onCommand(c);
-						} 
-						textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
-						statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+						try{
+							if (gameState.gamePhase == GamePhase.PlacingShips) {
+								Object asd = e.getSource();
+								/*
+								 * TODO: felvenni GameState/GameSpace-be
+								 */
+								Command c = new Command();
+								c.position = playerBoard.getPosition((JButton)asd);
+								c.commandType = CommandType.PlacedShip;
+								c.commandOrigin = ctrl.networkType;
+								System.out.print("\n" + c.commandOrigin + " sending " + c.commandType + " command...");
+								commandProcessor.onCommand(c);
+							} 
+							textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
+							statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+						}
+						catch(Exception ex){
+							setStatusBarText("Csatlakozz az ellenfélhez a játék elkezdéséhez!");
+						}
 					}
 				});
 
@@ -188,16 +199,21 @@ public class GUI extends JFrame implements IGameState {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(ctrl.networkType == NetworkType.Server)
-					ctrl.startServer();
-				if(ctrl.networkType == NetworkType.Client)
-					ctrl.startClient(serverIP);
-				textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
-				statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
-				gameState = new GameState();
-				Command c = new Command();
-				c.commandType = CommandType.Reset;
-				commandProcessor.onCommand(c);
+				try{
+					if(ctrl.networkType == NetworkType.Server)
+						ctrl.startServer();
+					if(ctrl.networkType == NetworkType.Client)
+						ctrl.startClient(serverIP);
+					textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
+					statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+					gameState = new GameState();
+					Command c = new Command();
+					c.commandType = CommandType.Reset;
+					commandProcessor.onCommand(c);
+				}
+				catch(Exception ex){
+					setStatusBarText("Csatlakozz az ellenfélhez a játék elkezdéséhez!");
+				}
 			}
 		});
 		menuBar.add(menuItem);
@@ -237,29 +253,37 @@ public class GUI extends JFrame implements IGameState {
 
 	@Override
 	public void onNewGameState(GameState gs) {
+		String temp=null;
 		System.out.print("Drawing new gamestate\n");
 		gameState = gs;
 		GameSpace clientGameSpace = gs.clientGameSpace;
 		GameSpace serverGameSpace = gs.serverGameSpace;
-		
-	
+			
 		GameSpace ownGameSpace;
 		if (ctrl.networkType == NetworkType.Client) {
 			ownGameSpace = clientGameSpace;
 			enemyTurn = gs.serversTurn;
 			ready = gs.clientReady;
+			if(ownGameSpace.ownText_f){
+				setStatusBarText(ownGameSpace.ownText);
+				ownGameSpace.ownText_f = false;
+			}
 		} else {
 			ownGameSpace = serverGameSpace;
 			enemyTurn = !gs.serversTurn;
 			ready = gs.serverReady;
+			if(ownGameSpace.ownText_f){
+				setStatusBarText(ownGameSpace.ownText);
+				ownGameSpace.ownText_f = false;
+			}
 		}
 		
 		menuItemReady.setBackground(ready ? Color.GREEN : Color.RED);
 		
-//		if (gs.gamePhase == GamePhase.ShootingShips) {
-//			textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
-//			statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
-//		}
+		if (gs.gamePhase == GamePhase.ShootingShips) {
+			textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
+			statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+		}
 			
 		playerBoard.ships = ownGameSpace.ownShip;
 		enemyBoard.ships = ownGameSpace.enemyShip;

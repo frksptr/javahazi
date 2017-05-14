@@ -108,6 +108,8 @@ public class Logic implements ICommand {
 		 * Rakó játékosnak megfelelõ helyen frissítjük az értéket
 		 */
 		boolean free = true;
+		gameState.serverGameSpace.ownText_f = false;
+		gameState.clientGameSpace.ownText_f = false;
 		int e_0i = 0, e_0j=0, e_10i=1, e_10j=1;
 		// TODO: ha hajóhoz tartozik akkor ahhoz hozzáadni
 		if (commandOrigin == NetworkType.Client) {
@@ -137,7 +139,8 @@ public class Logic implements ICommand {
 				}
 				else {
 					gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Water;
-					gui.setStatusBarText("Oda nem rakhatsz!");
+					gameState.clientGameSpace.ownText_f = true;
+					gameState.clientGameSpace.ownText = "Oda nem rakhatsz!";
 				}
 				free = true;
 			}
@@ -170,13 +173,16 @@ public class Logic implements ICommand {
 				}
 				else {
 					gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
-					gui.setStatusBarText("Oda nem rakhatsz!");
+					gameState.serverGameSpace.ownText_f = true;
+					gameState.serverGameSpace.ownText = "Oda nem rakhatsz!";
 				}
 				free = true;
 			}
 		}
 		gui.onNewGameState(gameState);
 		server.send(gameState);
+		gameState.serverGameSpace.ownText_f = false;
+		gameState.clientGameSpace.ownText_f = false;
 	}
 
 }

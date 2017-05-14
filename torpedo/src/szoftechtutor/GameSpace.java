@@ -7,6 +7,10 @@ public class GameSpace implements Serializable {
 	public CellType[][] enemyTable = new CellType[10][10];
 	public int ownShip = 10;
 	public int enemyShip = 10;
+	String ownText = null;
+	String enemyText = null;
+	boolean ownText_f = false;
+	boolean enemyText_f = false;
 
 	public GameSpace() {
 		/* elõször nem tudjuk, hogy az ellenfél térfelén milyen
