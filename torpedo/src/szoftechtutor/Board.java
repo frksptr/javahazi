@@ -24,6 +24,7 @@ public class Board extends JPanel {
 	public int ships = 35;
 	public int shipToPlace = 15;
 	public int shootedShip = 35;
+	public Ship[][] cellsIsShipArray = new Ship[10][10];
 	private JButton[][] buttonGrid = new JButton[11][11];
 	private Color waterColor = Color.CYAN;
 	private Color shipColor = Color.BLACK;

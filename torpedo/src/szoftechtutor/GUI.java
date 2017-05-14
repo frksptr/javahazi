@@ -215,7 +215,6 @@ public class GUI extends JFrame implements IGameState {
 		textArea.setText(textArea.textCreator(true,placement, playerBoard, playerBoard.shipToPlace, playerBoard.shootedShip));
 		statusBar.setText(statusBar.textCreator(false,placement, enemyBoard, enemyBoard.shipToPlace, enemyBoard.shootedShip));
 		
-		
 		add(playerBoard);
 		add(enemyBoard);
 		add(statusBar);
