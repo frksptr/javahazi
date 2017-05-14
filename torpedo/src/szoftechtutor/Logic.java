@@ -137,7 +137,7 @@ public class Logic implements ICommand {
 				}
 				else {
 					gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Water;
-					gui.toString("Oda nem rakhatsz!");
+					gui.setStatusBarText("Oda nem rakhatsz!");
 				}
 				free = true;
 			}
@@ -170,7 +170,7 @@ public class Logic implements ICommand {
 				}
 				else {
 					gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
-					gui.toString("Oda nem rakhatsz!");
+					gui.setStatusBarText("Oda nem rakhatsz!");
 				}
 				free = true;
 			}

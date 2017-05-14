@@ -117,6 +117,14 @@ public class SerialServer extends Network implements IGameState{
 
 	@Override
 	public void toString(String string) {
+		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void setStatusBarText(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
