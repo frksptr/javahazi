@@ -52,8 +52,7 @@ public class GUI extends JFrame implements IGameState {
     private TextBox textArea, statusBar;
     
     // ezalatt tipikusan olyanok amik valszeg majd ĂˇtkerĂĽlnek 
-    // GameStatebe
-    private boolean placement = true; // rakunk-e, vagy lĂ¶vĂĽnk 
+
     private boolean running = false;
     private boolean ready = false;
 
