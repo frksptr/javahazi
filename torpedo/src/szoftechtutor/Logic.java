@@ -207,7 +207,6 @@ public class Logic implements ICommand {
 					
 					break;
 				case 2:
-				case 2:
 					int tempInt = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
 					if(gameState.clientGameSpace.ownTable[position.x][position.y] == CellType.Ship){
 						gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Water;

@@ -18,6 +18,7 @@ public class TextBox extends JTextArea{
 	int[] placedShips;
 	int[] shotShips;
 	int[] enemyShotShips;
+	int shipElements, shotElements;
 	
 	public TextBox(int x,int y,int w,int h) {
 		
@@ -31,11 +32,15 @@ public class TextBox extends JTextArea{
 		if(ctrl.networkType == NetworkType.Server){
 			placedShips = gs.serverGameSpace.ownShips.placedShips;
 			shotShips = gs.serverGameSpace.ownShips.shotShips;
+			shipElements = gs.serverGameSpace.ownShips.shipElements;
+			shotElements = gs.serverGameSpace.ownShips.shotShipElements;
 			enemyShotShips = gs.clientGameSpace.enemyShips.shotShips;
 		}
 		else{
 			placedShips = gs.clientGameSpace.ownShips.placedShips;
 			shotShips = gs.clientGameSpace.ownShips.shotShips;
+			shipElements = gs.clientGameSpace.ownShips.shipElements;
+			shotElements = gs.clientGameSpace.ownShips.shotShipElements;
 			enemyShotShips = gs.serverGameSpace.enemyShips.shotShips;
 		}
 		if(form==true){ //format == 1 -> textarea
@@ -48,7 +53,7 @@ public class TextBox extends JTextArea{
 		        		+ "█████ %d darab\n\n"
 		        		+ "[%d] darab hajóelem\n"
 		        		+ "[%d] össz lerakott hajód"
-		        		,placedShips[1],placedShips[2],placedShips[3],placedShips[4],placedShips[5],10,23,34);
+		        		,placedShips[1],placedShips[2],placedShips[3],placedShips[4],placedShips[5],shipElements,34);
 		    }
 		    else {
 		        status_text = String.format("Kilőtt hajóid száma:\n"
@@ -57,9 +62,9 @@ public class TextBox extends JTextArea{
 		        		+ "███ %d darab\n"
 		        		+ "████ %d darab\n"
 		        		+ "█████ %d darab\n\n"
-		        		+ "azaz [%d] darab hajóelem\n"
-		        		+ "[%d] a(a) 15-ből."
-		        		,enemyShotShips[1],enemyShotShips[2],enemyShotShips[3],enemyShotShips[4],enemyShotShips[5],10,23,34);  	
+		        		+ "azaz [%d] darab hajóelem és\n"
+		        		+ "[%d] hajó a 15-ből."
+		        		,shotShips[1],shotShips[2],shotShips[3],shotShips[4],shotShips[5],shotElements,23);  	
 		    }
 		}
 		else if(form == false){ //format == 0 -> textbar
@@ -75,7 +80,7 @@ public class TextBox extends JTextArea{
 		        		+ "████ %d  -  "
 		        		+ "█████ %d - "
 		        		+ "[%d] darab hajóelemet kell elsüllyesztened még"
-		        		,shotShips[1],shotShips[2],shotShips[3],shotShips[4],shotShips[5], 34);   	
+		        		,enemyShotShips[1],enemyShotShips[2],enemyShotShips[3],enemyShotShips[4],enemyShotShips[5], 34);   	
 		    }
 		}
 		return status_text;
