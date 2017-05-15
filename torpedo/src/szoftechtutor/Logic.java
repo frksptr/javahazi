@@ -66,6 +66,8 @@ public class Logic implements ICommand {
 		 */
 		gameState.serverGameSpace.ownText_f = false;
 		gameState.clientGameSpace.ownText_f = false;
+		gameState.serverGameSpace.enemyText_f = false;
+		gameState.clientGameSpace.enemyText_f = false;
 		if (origin == NetworkType.Client) {
 			CellType newType = checkShot(gameState.serverGameSpace.ownTable, position);
 			System.out.println("\nCelltype " + newType + "\n");
@@ -94,8 +96,8 @@ public class Logic implements ICommand {
 			if(IntStream.of(gameState.serverGameSpace.ownShips.shotShips).sum() == gameState.serverGameSpace.allShips){
 				gameState.clientGameSpace.ownText_f = true;
 				gameState.clientGameSpace.ownText = "Gratulálok! Nyertél! Új játék indításához nyomd meg a Reset gombot.";
-				gameState.clientGameSpace.enemyText_f = true;
-				gameState.clientGameSpace.enemyText = "Sajnálom! Vesztettél! Új játék indításához nyomd meg a Reset gombot.";
+				gameState.serverGameSpace.enemyText_f = true;
+				gameState.serverGameSpace.enemyText = "Sajnálom! Vesztettél! Új játék indításához nyomd meg a Reset gombot.";
 			}
 		}
 		/*
@@ -128,8 +130,8 @@ public class Logic implements ICommand {
 			if(IntStream.of(gameState.clientGameSpace.ownShips.shotShips).sum() == gameState.clientGameSpace.allShips){
 				gameState.serverGameSpace.ownText_f = true;
 				gameState.serverGameSpace.ownText = "Gratulálok! Nyertél! Új játék indításához nyomd meg a Reset gombot.";
-				gameState.serverGameSpace.enemyText_f = true;
-				gameState.serverGameSpace.enemyText = "Sajnálom! Vesztettél! Új játék indításához nyomd meg a Reset gombot.";
+				gameState.clientGameSpace.enemyText_f = true;
+				gameState.clientGameSpace.enemyText = "Sajnálom! Vesztettél! Új játék indításához nyomd meg a Reset gombot.";
 			}
 		}
 		
@@ -137,6 +139,8 @@ public class Logic implements ICommand {
 		server.onNewGameState(gameState);
 		gameState.serverGameSpace.ownText_f = false;
 		gameState.clientGameSpace.ownText_f = false;
+		gameState.serverGameSpace.enemyText_f = false;
+		gameState.clientGameSpace.enemyText_f = false;
 	}
 	
 	private CellType checkShot(CellType[][] cells, Point pos) {
