@@ -66,8 +66,8 @@ public class GUI extends JFrame implements IGameState {
     
     private JMenuItem menuItemReady;
     
-    private String serverIP;
-    private String currentIP;
+    private String serverIP = null;
+    private String currentIP = null;
 
 	GUI(Control c) {
 		super("SzoftechTutor");
@@ -100,8 +100,8 @@ public class GUI extends JFrame implements IGameState {
 								c.commandType = CommandType.Shot;
 								c.commandOrigin = ctrl.networkType;
 								commandProcessor.onCommand(c);
-								textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
-								statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+								textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
+								statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
 							}
 						}
 						catch(Exception ex){
@@ -132,11 +132,12 @@ public class GUI extends JFrame implements IGameState {
 								System.out.print("\n" + c.commandOrigin + " sending " + c.commandType + " command...");
 								commandProcessor.onCommand(c);
 							} 
-							textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
-							statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+							textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
+							statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
 						}
 						catch(Exception ex){
-							setStatusBarText("Csatlakozz az ellenfélhez a játék elkezdéséhez!");
+							if(currentIP == null) setStatusBarText("Csatlakozz az ellenfélhez a játék elkezdéséhez!");
+							else System.out.print("Gáz van\n");
 						}
 					}
 				});
@@ -149,7 +150,7 @@ public class GUI extends JFrame implements IGameState {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				serverIP = JOptionPane.showInputDialog("What is the Server's IP Address?","192.168.56.1");
+				serverIP = JOptionPane.showInputDialog("Mi az ellenfeled IPv4 címe?","192.168.56.1");
 				ctrl.startClient(serverIP); 
 			}
 		});
@@ -160,7 +161,7 @@ public class GUI extends JFrame implements IGameState {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				currentIP = ctrl.startServer();
-				JOptionPane.showMessageDialog(null,"Your IP Address is: "+currentIP);
+				JOptionPane.showMessageDialog(null,"Az IPv4 címed: "+currentIP);
 			}
 		});
 		menu.add(menuItem);
@@ -204,8 +205,8 @@ public class GUI extends JFrame implements IGameState {
 						ctrl.startServer();
 					if(ctrl.networkType == NetworkType.Client)
 						ctrl.startClient(serverIP);
-					textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
-					statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+					textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
+					statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
 					gameState = new GameState();
 					Command c = new Command();
 					c.commandType = CommandType.Reset;
@@ -228,8 +229,8 @@ public class GUI extends JFrame implements IGameState {
 		menuBar.add(menuItem);
 				
 		setJMenuBar(menuBar);
-		textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
-		statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+		textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
+		statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
 		
 		add(playerBoard);
 		add(enemyBoard);
@@ -281,8 +282,8 @@ public class GUI extends JFrame implements IGameState {
 		menuItemReady.setBackground(ready ? Color.GREEN : Color.RED);
 		
 		if (gs.gamePhase == GamePhase.ShootingShips) {
-			textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), playerBoard, playerBoard.shipToPlace, playerBoard.shotShip));
-			statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), enemyBoard, enemyBoard.shipToPlace, enemyBoard.shotShip));
+			textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),gameState));
+			statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
 		}
 			
 		playerBoard.ships = ownGameSpace.ownShip;

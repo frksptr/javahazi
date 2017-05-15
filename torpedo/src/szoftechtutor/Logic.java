@@ -11,7 +11,7 @@ import szoftechtutor.Control.NetworkType;
 import szoftechtutor.GameState.GamePhase;
 
 public class Logic implements ICommand {
-
+	
 	private GameState gameState = new GameState();
 	public IGameState gui;
 	public SerialServer server;
@@ -108,8 +108,11 @@ public class Logic implements ICommand {
 		 * Rakó játékosnak megfelelõ helyen frissítjük az értéket
 		 */
 		boolean free = true;
+		boolean hajo = false;
+				
 		gameState.serverGameSpace.ownText_f = false;
 		gameState.clientGameSpace.ownText_f = false;
+		
 		int e_0i = 0, e_0j=0, e_10i=1, e_10j=1;
 		// TODO: ha hajóhoz tartozik akkor ahhoz hozzáadni
 		if (commandOrigin == NetworkType.Client) {
@@ -145,7 +148,24 @@ public class Logic implements ICommand {
 				free = true;
 			}
 		}
+		
+		/*
+		 * Server Logic
+		 */
 		e_0j=0; e_0i=0; e_10i=1; e_10j=1;
+		class Szomszed{
+			int x=0,y=0;
+			void set(int xx, int yy)
+			{
+				x = xx;
+				y = yy;
+			}
+		};
+		Szomszed[] szomszed = new Szomszed[2];
+		szomszed[0] = new Szomszed();
+		szomszed[1] = new Szomszed();
+		int foglalt=0;
+		int[] maximumShips = {0,5,4,3,2,1}; 
 		if (commandOrigin == NetworkType.Server) {
 			if(position.x==9) e_10i=0;
 			if(position.y==9) e_10j=0;
@@ -153,7 +173,9 @@ public class Logic implements ICommand {
 				for(int j=-1+e_0j; j<=e_10j;j++){
 					try{
 						if(gameState.serverGameSpace.ownTable[position.x+i][position.y+j] == CellType.Ship){
-							free = false;
+							foglalt++;
+							if(foglalt==1) szomszed[0].set((position.x+i), (position.y+j));
+							if(foglalt==2) szomszed[1].set(position.x+i, position.y+j);
 						}
 					}
 					catch(Exception ex){
@@ -162,27 +184,80 @@ public class Logic implements ICommand {
 					}
 				}
 			}
-			if(free && gameState.serverGameSpace.ownShip>0){
-				gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
-				gameState.serverGameSpace.ownShip--;
-			}
-			else{
-				if(gameState.serverGameSpace.ownTable[position.x][position.y] == CellType.Ship){
-					gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
-					gameState.serverGameSpace.ownShip++;
-				}
-				else {
-					gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
+			
+			switch(foglalt){
+				case 0:
+					if(gameState.serverGameSpace.ownShips.placedShips[1]>0)
+					{
+							gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id = 1 + gameState.serverGameSpace.ownShips.id;
+							gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no++;
+							gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].size++;
+							gameState.serverGameSpace.ownShips.placedShips[1]--;
+							gameState.serverGameSpace.ownShips.id++;
+							gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
+							gameState.serverGameSpace.ownShip--;
+					}
+					else {
+						gameState.serverGameSpace.ownText_f = true;
+						gameState.serverGameSpace.ownText = "Nem rakhatsz le több 1 elemû hajót!";
+					}
+					break;
+				case 1:
+					if(gameState.serverGameSpace.ownTable[position.x][position.y] == CellType.Ship){
+						gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
+						gameState.serverGameSpace.ownShip++;
+						gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no--;
+						if(gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no==0){
+							gameState.serverGameSpace.ownShips.placedShips[1]++;
+						}
+					}
+					else
+					{
+						int tempInt = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+						if(gameState.serverGameSpace.ownShips.placedShips[tempInt+1] > 0){
+							gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
+							gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].id;
+							gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].elements_no;
+							gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].size = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+							for (int col = 0; col < 10; col++) {
+								for (int row = 0; row < 10; row++) {
+									if(gameState.serverGameSpace.ownCellsIsShip[col][row].id == gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id){
+										gameState.serverGameSpace.ownCellsIsShip[col][row].elements_no++;
+										gameState.serverGameSpace.ownCellsIsShip[col][row].size++;
+									}
+								}
+							}
+							gameState.serverGameSpace.ownShips.placedShips[tempInt+1]--;
+							if(maximumShips[tempInt]>gameState.serverGameSpace.ownShips.placedShips[tempInt]){
+									gameState.serverGameSpace.ownShips.placedShips[tempInt]++;
+							}
+						}
+						else{
+							gameState.serverGameSpace.ownText_f = true;
+							gameState.serverGameSpace.ownText = printf("%d elemû hajóból nem rakhatsz már le többet",tempInt+1);
+						}
+					}
+					break;
+				case 2:
+					gameState.serverGameSpace.ownText_f = true;
+					gameState.serverGameSpace.ownText = "Két hajót nem köthetsz össze!";
+					break;
+				default: 
 					gameState.serverGameSpace.ownText_f = true;
 					gameState.serverGameSpace.ownText = "Oda nem rakhatsz!";
-				}
-				free = true;
+					break;
 			}
 		}
+		
 		gui.onNewGameState(gameState);
 		server.send(gameState);
 		gameState.serverGameSpace.ownText_f = false;
 		gameState.clientGameSpace.ownText_f = false;
+	}
+
+	private String printf(String string, int tempInt) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
