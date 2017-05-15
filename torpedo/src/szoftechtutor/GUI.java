@@ -5,34 +5,20 @@
 package szoftechtutor;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
-
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.text.Position;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+
 import javax.swing.SwingUtilities;
 
-import com.sun.org.apache.xerces.internal.impl.XMLScanner.NameType;
-
-import sun.security.jgss.GSSCaller;
 import szoftechtutor.TextBox;
-import szoftechtutor.Command.CommandOrigin;
+
 import szoftechtutor.Command.CommandType;
 import szoftechtutor.Control.NetworkType;
 import szoftechtutor.GameState.GamePhase;
@@ -55,13 +41,10 @@ public class GUI extends JFrame implements IGameState {
     
     // ezalatt tipikusan olyanok amik valszeg majd átkerülnek
 
-    private boolean running = false;
     private boolean ready = false;
 
     private boolean enemyTurn = false;
 
-    private Random random = new Random();
-    
     private GameState gameState = new GameState();
     
     private JMenuItem menuItemReady;
@@ -84,7 +67,7 @@ public class GUI extends JFrame implements IGameState {
 				30,
 				220,
 				220,
-				true, new ActionListener() {
+				new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -100,8 +83,8 @@ public class GUI extends JFrame implements IGameState {
 								c.commandType = CommandType.Shot;
 								c.commandOrigin = ctrl.networkType;
 								commandProcessor.onCommand(c);
-								textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
-								statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
+								textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
+								statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
 							}
 						}
 						catch(Exception ex){
@@ -115,7 +98,7 @@ public class GUI extends JFrame implements IGameState {
 				30,
 				220,
 				220,
-				true, new ActionListener() {
+				new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -132,8 +115,8 @@ public class GUI extends JFrame implements IGameState {
 								System.out.print("\n" + c.commandOrigin + " sending " + c.commandType + " command...");
 								commandProcessor.onCommand(c);
 							} 
-							textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
-							statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
+							textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
+							statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
 						}
 						catch(Exception ex){
 							if(currentIP == null) setStatusBarText("Csatlakozz az ellenfélhez a játék elkezdéséhez!");
@@ -173,17 +156,28 @@ public class GUI extends JFrame implements IGameState {
 		menuItemReady.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (playerBoard.ships == 0){
-					if (gameState.gamePhase == GamePhase.PlacingShips) {								
-						Command c = new Command();
-						c.commandOrigin = ctrl.networkType;
-						c.commandType = CommandType.Ready;
-						c.ready = !ready;
-						commandProcessor.onCommand(c);
+				if(ctrl.networkType == NetworkType.Server){
+					if (gameState.serverGameSpace.ownShips.shipElements == 0){
+						if (gameState.gamePhase == GamePhase.PlacingShips) {								
+							Command c = new Command();
+							c.commandOrigin = ctrl.networkType;
+							c.commandType = CommandType.Ready;
+							c.ready = !ready;
+							commandProcessor.onCommand(c);
+						}
 					}
 				}
-				
-				
+				if(ctrl.networkType == NetworkType.Client){
+					if (gameState.clientGameSpace.ownShips.shipElements == 0){
+						if (gameState.gamePhase == GamePhase.PlacingShips) {								
+							Command c = new Command();
+							c.commandOrigin = ctrl.networkType;
+							c.commandType = CommandType.Ready;
+							c.ready = !ready;
+							commandProcessor.onCommand(c);
+						}
+					}
+				}
 				//TODO: ez itt
 //				Command c = new Command();
 //				c.position = playerBoard.getPosition((JButton)asd);
@@ -205,8 +199,8 @@ public class GUI extends JFrame implements IGameState {
 						ctrl.startServer();
 					if(ctrl.networkType == NetworkType.Client)
 						ctrl.startClient(serverIP);
-					textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
-					statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
+					textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
+					statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
 					gameState = new GameState();
 					Command c = new Command();
 					c.commandType = CommandType.Reset;
@@ -229,8 +223,8 @@ public class GUI extends JFrame implements IGameState {
 		menuBar.add(menuItem);
 				
 		setJMenuBar(menuBar);
-		textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
-		statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
+		textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
+		statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
 		
 		add(playerBoard);
 		add(enemyBoard);
@@ -254,7 +248,6 @@ public class GUI extends JFrame implements IGameState {
 
 	@Override
 	public void onNewGameState(GameState gs) {
-		String temp=null;
 		System.out.print("Drawing new gamestate\n");
 		gameState = gs;
 		GameSpace clientGameSpace = gs.clientGameSpace;
@@ -282,12 +275,10 @@ public class GUI extends JFrame implements IGameState {
 		menuItemReady.setBackground(ready ? Color.GREEN : Color.RED);
 		
 		if (gs.gamePhase == GamePhase.ShootingShips) {
-			textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),gameState));
-			statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips), gameState));
+			textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
+			statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips),ctrl, gameState));
 		}
 			
-		playerBoard.ships = ownGameSpace.ownShip;
-		enemyBoard.ships = ownGameSpace.enemyShip;
 		playerBoard.redrawFromNewGameState(ownGameSpace.ownTable);
 		enemyBoard.redrawFromNewGameState(ownGameSpace.enemyTable);
 	}

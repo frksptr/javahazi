@@ -1,29 +1,23 @@
 package szoftechtutor;
 
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Point;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 
 import java.awt.Font;
 
 public class Board extends JPanel {
 
-	private boolean enemy = false;
-	public int ships = 35;
-	public int shipToPlace = 15;
-	public int shotShip = 35;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JButton[][] buttonGrid = new JButton[11][11];
 	private Color waterColor = Color.CYAN;
 	private Color shipColor = Color.BLACK;
@@ -31,10 +25,9 @@ public class Board extends JPanel {
 	private Color shotWaterColor = Color.blue;
 	private Color unknownColor = Color.LIGHT_GRAY;
 			
-	public Board(int posx, int posy, int width, int height, boolean enemy, ActionListener handler) {
+	public Board(int posx, int posy, int width, int height, ActionListener handler) {
 
 		this.setBounds(posx, posy, width, height);
-		this.enemy = enemy;
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;

@@ -1,15 +1,11 @@
 package szoftechtutor;
 
-import java.awt.Point;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
-import szoftechtutor.Command.CommandType;
 /**
  *
  */
 class Control {
-    private String currentIp = null;
 	private Network net = null;
 	private SerialServer server = null;
 	private SerialClient client = null;

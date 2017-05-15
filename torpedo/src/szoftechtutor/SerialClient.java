@@ -63,7 +63,7 @@ public class SerialClient extends Network implements ICommand {
 	void send(Command c) {
 		if (out == null)
 			return;
-//		System.out.println("Sending point: " + ns + " to Server");
+		System.out.println("Sending command: " + c + " to Server");
 		try {
 			out.writeObject(c);
 			out.flush();

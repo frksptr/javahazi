@@ -6,6 +6,11 @@ import java.io.Serializable;
 import szoftechtutor.Control.NetworkType;
 
 public class Command implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Point position;
 	public CommandType commandType;
 	public NetworkType commandOrigin;

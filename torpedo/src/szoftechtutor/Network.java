@@ -4,11 +4,6 @@
  */
 package szoftechtutor;
 
-import java.awt.Point;
-/**
- *
- * @author Predi
- */
 abstract class Network {
 
 	protected Control ctrl;

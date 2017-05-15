@@ -1,9 +1,12 @@
 package szoftechtutor;
 
-import javax.swing.JButton;
-import javafx.scene.Parent;
+import java.io.Serializable;
 
-public class Ship {
+public class Ship  implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
     public int size; 
     public int elements_no; //mennyi elemu az adott azonositoju hajo
     public int id; // 1-15-ig azonositja a shipeket
