@@ -262,6 +262,10 @@ public class GUI extends JFrame implements IGameState {
 				setStatusBarText(ownGameSpace.ownText);
 				ownGameSpace.ownText_f = false;
 			}
+			if(ownGameSpace.enemyText_f){
+				setStatusBarText(ownGameSpace.enemyText);
+				ownGameSpace.enemyText_f = false;
+			}
 		} else {
 			ownGameSpace = serverGameSpace;
 			enemyTurn = !gs.serversTurn;
@@ -269,6 +273,10 @@ public class GUI extends JFrame implements IGameState {
 			if(ownGameSpace.ownText_f){
 				setStatusBarText(ownGameSpace.ownText);
 				ownGameSpace.ownText_f = false;
+			}
+			if(ownGameSpace.enemyText_f){
+				setStatusBarText(ownGameSpace.enemyText);
+				ownGameSpace.enemyText_f = false;
 			}
 		}
 		

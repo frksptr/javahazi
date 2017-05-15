@@ -1,6 +1,8 @@
 package szoftechtutor;
 
 import java.awt.Point;
+import java.util.stream.IntStream;
+
 import szoftechtutor.Command.CommandType;
 import szoftechtutor.Control.NetworkType;
 import szoftechtutor.GameState.GamePhase;
@@ -62,6 +64,8 @@ public class Logic implements ICommand {
 		 * ha a kliens lõtt, akkor a szerver saját táblájában megnézzük mit
 		 * talált el és átállítjuk
 		 */
+		gameState.serverGameSpace.ownText_f = false;
+		gameState.clientGameSpace.ownText_f = false;
 		if (origin == NetworkType.Client) {
 			CellType newType = checkShot(gameState.serverGameSpace.ownTable, position);
 			System.out.println("\nCelltype " + newType + "\n");
@@ -70,6 +74,29 @@ public class Logic implements ICommand {
 			else
 			gameState.clientGameSpace.enemyTable[position.x][position.y] = newType;
 			gameState.serverGameSpace.ownTable[position.x][position.y] = newType;
+			int kilott = 0;
+			if(newType == CellType.ShipShot){
+				gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].scuttled=true;
+				gameState.serverGameSpace.ownShips.shotShipElements--;
+				for (int col = 0; col < 10; col++) {
+					for (int row = 0; row < 10; row++) {
+						if(gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id == gameState.serverGameSpace.ownCellsIsShip[col][row].id){
+							if(gameState.serverGameSpace.ownCellsIsShip[col][row].scuttled==true){
+								kilott++;
+								if(kilott==gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].size){
+									gameState.serverGameSpace.ownShips.shotShips[kilott]++;
+								}
+							}
+						}
+					}
+				}
+			}
+			if(IntStream.of(gameState.serverGameSpace.ownShips.shotShips).sum() == gameState.serverGameSpace.allShips){
+				gameState.clientGameSpace.ownText_f = true;
+				gameState.clientGameSpace.ownText = "Gratulálok! Nyertél! Új játék indításához nyomd meg a Reset gombot.";
+				gameState.clientGameSpace.enemyText_f = true;
+				gameState.clientGameSpace.enemyText = "Sajnálom! Vesztettél! Új játék indításához nyomd meg a Reset gombot.";
+			}
 		}
 		/*
 		 * ha a szerver lõtt, akkor a kliens saját táblájában állítjuk a cellát
@@ -81,10 +108,35 @@ public class Logic implements ICommand {
 			else
 			gameState.clientGameSpace.ownTable[position.x][position.y] = newType;
 			gameState.serverGameSpace.enemyTable[position.x][position.y] = newType;
+			int kilott = 0;
+			if(newType == CellType.ShipShot){
+				gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].scuttled=true;
+				gameState.clientGameSpace.ownShips.shotShipElements--;
+				for (int col = 0; col < 10; col++) {
+					for (int row = 0; row < 10; row++) {
+						if(gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id == gameState.clientGameSpace.ownCellsIsShip[col][row].id){
+							if(gameState.clientGameSpace.ownCellsIsShip[col][row].scuttled==true){
+								kilott++;
+								if(kilott==gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].size){
+									gameState.clientGameSpace.ownShips.shotShips[kilott]++;
+								}
+							}
+						}
+					}
+				}
+			}
+			if(IntStream.of(gameState.clientGameSpace.ownShips.shotShips).sum() == gameState.clientGameSpace.allShips){
+				gameState.serverGameSpace.ownText_f = true;
+				gameState.serverGameSpace.ownText = "Gratulálok! Nyertél! Új játék indításához nyomd meg a Reset gombot.";
+				gameState.serverGameSpace.enemyText_f = true;
+				gameState.serverGameSpace.enemyText = "Sajnálom! Vesztettél! Új játék indításához nyomd meg a Reset gombot.";
+			}
 		}
 		
 		gui.onNewGameState(gameState);		
 		server.onNewGameState(gameState);
+		gameState.serverGameSpace.ownText_f = false;
+		gameState.clientGameSpace.ownText_f = false;
 	}
 	
 	private CellType checkShot(CellType[][] cells, Point pos) {

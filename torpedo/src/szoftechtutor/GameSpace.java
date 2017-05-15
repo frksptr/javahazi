@@ -18,6 +18,7 @@ public class GameSpace implements Serializable {
 	boolean enemyText_f = false;
 	public ShipFlags ownShips = new ShipFlags();
 	public ShipFlags enemyShips = new ShipFlags();
+	public int allShips = 15;
 	
 	public class ShipFlags implements Serializable{
 		/**
@@ -28,7 +29,7 @@ public class GameSpace implements Serializable {
 		public int shipElements = 35;
 		public int shotShipElements = 35;
 		public int[] placedShips = {0,5,4,3,2,1};  // index szerint: 1 elemu->5 db, stb
-		public int[] shotShips = {0,5,4,3,2,1};
+		public int[] shotShips = {0,0,0,0,0,0};
 	}
 	
 	public GameSpace() {

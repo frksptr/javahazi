@@ -12,9 +12,6 @@ public class GameState implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/* ki jön épp
-	 * TODO: ez alapján letiltaná rakást
-	 */
 	public boolean serversTurn = true;
 	
 	// milyen állapot
