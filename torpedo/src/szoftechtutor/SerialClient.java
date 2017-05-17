@@ -5,6 +5,9 @@ import java.net.*;
 import javax.swing.JOptionPane;
 
 
+/**
+ * A kliens hálózati kommunikációját írja le.
+ */
 public class SerialClient extends Network implements ICommand {
 
 	private Socket socket = null;
@@ -13,10 +16,12 @@ public class SerialClient extends Network implements ICommand {
 	public GUI gui = null;
 
 	SerialClient(Control c) {
-		
 		super(c);
 	}
 
+	/**
+	 * Adatok fogadása a másik féltõl.
+	 */
 	private class ReceiverThread implements Runnable {
 		public void run() {
 			System.out.println("Waiting for points...");
@@ -40,6 +45,9 @@ public class SerialClient extends Network implements ICommand {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see szoftechtutor.Network#connect(java.lang.String)
+	 */
 	@Override
 	void connect(String ip) {
 		disconnect();
@@ -60,6 +68,10 @@ public class SerialClient extends Network implements ICommand {
 		}
 	}
 
+	/**
+	 * Parancs küldése a szervernek.
+	 * @param c	A parancs tartalmát leíró osztály.
+	 */
 	void send(Command c) {
 		if (out == null)
 			return;
@@ -73,6 +85,9 @@ public class SerialClient extends Network implements ICommand {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see szoftechtutor.Network#disconnect()
+	 */
 	@Override
 	void disconnect() {
 		try {

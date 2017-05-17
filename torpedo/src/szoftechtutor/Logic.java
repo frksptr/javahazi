@@ -7,16 +7,37 @@ import szoftechtutor.Command.CommandType;
 import szoftechtutor.Control.NetworkType;
 import szoftechtutor.GameState.GamePhase;
 
+/**
+ * A játék logikáját kezelõ osztály.
+ */
+/**
+ * @author nempeter
+ *
+ */
 public class Logic implements ICommand {
 	
+	/**
+	 * A játék aktuális állapota.
+	 */
 	private GameState gameState = new GameState();
+	/**
+	 * Az alkalmazás GUI-ja.
+	 */
 	public IGameState gui;
+	
+	/**
+	 * A szervert megvalósító osztály. 
+	 */
 	public SerialServer server;
+	
 	public Logic(SerialServer server, GUI gui) {
 		this.gui = gui;
 		this.server = server;
 	}
 
+	/* (non-Javadoc)
+	 * @see szoftechtutor.ICommand#onCommand(szoftechtutor.Command)
+	 */
 	@Override
 	public void onCommand(Command c) {
 		System.out.println("Command '" + c.commandType + "arrived from " + c.commandOrigin);
@@ -32,12 +53,20 @@ public class Logic implements ICommand {
 		}
 	}
 	
+	/**
+	 * A játék alapállapotba helyezése.
+	 */
 	private void doResetStuff(){
 		gameState = new GameState();
 		gui.onNewGameState(gameState);		
 		server.onNewGameState(gameState);
 	}
 	
+	/**
+	 * A játékosok készenléti állapotának kezelése.
+	 * @param ready Készen áll-e a játékos.
+	 * @param commandOrigin Mely játékos adta a készenléti üzenetet.
+	 */
 	private void doReadyStuff(boolean ready, NetworkType commandOrigin) {
 		if (commandOrigin == NetworkType.Client) {
 			gameState.clientReady = ready;
@@ -56,10 +85,14 @@ public class Logic implements ICommand {
 		
 	}
 
+	/**
+	 * A táblán való lövés kezelése.
+	 * @param position	A lövés pozíciója.
+	 * @param origin	Mely játékos lõtt.
+	 */
 	private void doShotStuff(Point position, NetworkType origin) {
 		/*
 		 * A logic a szerveren van
-		 * 
 		 * ha a kliens lõtt, akkor a szerver saját táblájában megnézzük mit
 		 * talált el és átállítjuk
 		 */
@@ -70,20 +103,20 @@ public class Logic implements ICommand {
 			CellType newType = checkShot(gameState.serverGameSpace.ownTable, position);
 			System.out.println("\nCelltype " + newType + "\n");
 			if(newType == null)
-				return; //Védelem a dupla kattintáshoz. Nem a legjobb de mûködik
+				return;
 			else
 			gameState.clientGameSpace.enemyTable[position.x][position.y] = newType;
 			gameState.serverGameSpace.ownTable[position.x][position.y] = newType;
 			int kilott = 0;
 			if(newType == CellType.ShipShot){
-				gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].scuttled=true;
+				gameState.serverGameSpace.ownCellsToShip[position.x][position.y].scuttled=true;
 				gameState.serverGameSpace.ownShips.shotShipElements--;
 				for (int col = 0; col < 10; col++) {
 					for (int row = 0; row < 10; row++) {
-						if(gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id == gameState.serverGameSpace.ownCellsIsShip[col][row].id){
-							if(gameState.serverGameSpace.ownCellsIsShip[col][row].scuttled==true){
+						if(gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id == gameState.serverGameSpace.ownCellsToShip[col][row].id){
+							if(gameState.serverGameSpace.ownCellsToShip[col][row].scuttled==true){
 								kilott++;
-								if(kilott==gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].size){
+								if(kilott==gameState.serverGameSpace.ownCellsToShip[position.x][position.y].size){
 									gameState.serverGameSpace.ownShips.shotShips[kilott]++;
 								}
 							}
@@ -91,6 +124,7 @@ public class Logic implements ICommand {
 					}
 				}
 			}
+			
 			if(IntStream.of(gameState.serverGameSpace.ownShips.shotShips).sum() == gameState.serverGameSpace.allShips){
 				gameState.clientGameSpace.ownText_f = true;
 				gameState.clientGameSpace.ownText = "Gratulálok! Nyertél! Új játék indításához nyomd meg a Reset gombot.";
@@ -104,20 +138,20 @@ public class Logic implements ICommand {
 		else if (origin == NetworkType.Server && gameState.serverGameSpace.enemyTable[position.x][position.y] == CellType.Unknown)  {
 			CellType newType = checkShot(gameState.clientGameSpace.ownTable, position);
 			if(newType  == null)
-				return; //Védelem a dupla kattintáshoz. Nem a legjobb de mûködik
+				return;
 			else
 			gameState.clientGameSpace.ownTable[position.x][position.y] = newType;
 			gameState.serverGameSpace.enemyTable[position.x][position.y] = newType;
 			int kilott = 0;
 			if(newType == CellType.ShipShot){
-				gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].scuttled=true;
+				gameState.clientGameSpace.ownCellsToShip[position.x][position.y].scuttled=true;
 				gameState.clientGameSpace.ownShips.shotShipElements--;
 				for (int col = 0; col < 10; col++) {
 					for (int row = 0; row < 10; row++) {
-						if(gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id == gameState.clientGameSpace.ownCellsIsShip[col][row].id){
-							if(gameState.clientGameSpace.ownCellsIsShip[col][row].scuttled==true){
+						if(gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id == gameState.clientGameSpace.ownCellsToShip[col][row].id){
+							if(gameState.clientGameSpace.ownCellsToShip[col][row].scuttled==true){
 								kilott++;
-								if(kilott==gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].size){
+								if(kilott==gameState.clientGameSpace.ownCellsToShip[position.x][position.y].size){
 									gameState.clientGameSpace.ownShips.shotShips[kilott]++;
 								}
 							}
@@ -141,6 +175,12 @@ public class Logic implements ICommand {
 		gameState.clientGameSpace.enemyText_f = false;
 	}
 	
+	/**
+	 * A lõtt pozíción leellenõrzi a lõtt cella állapotát, azt megváltoztatja a lövés hatására.
+	 * @param cells	A lövéshez tartozó játéktér cellái.
+	 * @param pos	A lövés pozíciója.
+	 * @return	A lõtt cella új típusa.
+	 */
 	private CellType checkShot(CellType[][] cells, Point pos) {
 		CellType shotCell = cells[pos.x][pos.y];
 		switch (shotCell) {
@@ -154,11 +194,13 @@ public class Logic implements ICommand {
 		return null;
 	}
 	
+	/**
+	 * Hajók lerakását kezelõ függvény.
+	 * @param position	Hova rakunk hajót.
+	 * @param commandOrigin	Mely játékos rakta a hajót.
+	 */
 	private void doPlaceShipStuff(Point position, NetworkType commandOrigin) {
-		/*
-		 * Rakó játékosnak megfelelõ helyen frissítjük az értéket
-		 */
-		
+
 		gameState.serverGameSpace.ownText_f = false;
 		gameState.clientGameSpace.ownText_f = false;
 				
@@ -205,9 +247,9 @@ public class Logic implements ICommand {
 				case 0:
 					if(gameState.clientGameSpace.ownShips.placedShips[1]>0)
 					{
-							gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id = 1 + gameState.clientGameSpace.ownShips.id;
-							gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].elements_no++;
-							gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].size++;
+							gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id = 1 + gameState.clientGameSpace.ownShips.id;
+							gameState.clientGameSpace.ownCellsToShip[position.x][position.y].elements_no++;
+							gameState.clientGameSpace.ownCellsToShip[position.x][position.y].size++;
 							gameState.clientGameSpace.ownShips.placedShips[1]--;
 							gameState.clientGameSpace.ownShips.id++;
 							gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
@@ -222,8 +264,8 @@ public class Logic implements ICommand {
 					if(gameState.clientGameSpace.ownTable[position.x][position.y] == CellType.Ship){
 						gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Water;
 						gameState.clientGameSpace.ownShips.shipElements++;
-						gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].elements_no--;
-						if(gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].elements_no==0){
+						gameState.clientGameSpace.ownCellsToShip[position.x][position.y].elements_no--;
+						if(gameState.clientGameSpace.ownCellsToShip[position.x][position.y].elements_no==0){
 							gameState.clientGameSpace.ownShips.placedShips[1]++;
 						}
 					}
@@ -233,18 +275,18 @@ public class Logic implements ICommand {
 								gameState.clientGameSpace.ownText = "Átlósan nem építkezhetsz, a hajók sarkai nem érhetnek össze!";
 					}
 					else{			
-							int tempInt = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+							int tempInt = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 							if(tempInt<5 && gameState.clientGameSpace.ownShips.placedShips[tempInt+1] > 0){
 								gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
 								gameState.clientGameSpace.ownShips.shipElements--;
-								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].id;
-								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].elements_no = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].elements_no;
-								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].size = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+								gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].id;
+								gameState.clientGameSpace.ownCellsToShip[position.x][position.y].elements_no = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].elements_no;
+								gameState.clientGameSpace.ownCellsToShip[position.x][position.y].size = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 								for (int col = 0; col < 10; col++) {
 									for (int row = 0; row < 10; row++) {
-										if(gameState.clientGameSpace.ownCellsIsShip[col][row].id == gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id){
-											gameState.clientGameSpace.ownCellsIsShip[col][row].elements_no++;
-											gameState.clientGameSpace.ownCellsIsShip[col][row].size++;
+										if(gameState.clientGameSpace.ownCellsToShip[col][row].id == gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id){
+											gameState.clientGameSpace.ownCellsToShip[col][row].elements_no++;
+											gameState.clientGameSpace.ownCellsToShip[col][row].size++;
 										}
 									}
 								}
@@ -261,15 +303,15 @@ public class Logic implements ICommand {
 					
 					break;
 				case 2:
-					int tempInt = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+					int tempInt = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 					if(gameState.clientGameSpace.ownTable[position.x][position.y] == CellType.Ship){
 						gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Water;
 						gameState.clientGameSpace.ownShips.shipElements++;
 						for (int col = 0; col < 10; col++) {
 							for (int row = 0; row < 10; row++) {
-								if(gameState.clientGameSpace.ownCellsIsShip[col][row].id == gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id){
-									gameState.clientGameSpace.ownCellsIsShip[col][row].elements_no--;
-									gameState.clientGameSpace.ownCellsIsShip[col][row].size--;
+								if(gameState.clientGameSpace.ownCellsToShip[col][row].id == gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id){
+									gameState.clientGameSpace.ownCellsToShip[col][row].elements_no--;
+									gameState.clientGameSpace.ownCellsToShip[col][row].size--;
 								}
 							}
 						}
@@ -286,14 +328,14 @@ public class Logic implements ICommand {
 							if(gameState.clientGameSpace.ownShips.placedShips[tempInt+1] > 0){
 								gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
 								gameState.clientGameSpace.ownShips.shipElements--;
-								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].id;
-								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].elements_no = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].elements_no;
-								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].size = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+								gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].id;
+								gameState.clientGameSpace.ownCellsToShip[position.x][position.y].elements_no = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].elements_no;
+								gameState.clientGameSpace.ownCellsToShip[position.x][position.y].size = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 								for (int col = 0; col < 10; col++) {
 									for (int row = 0; row < 10; row++) {
-										if(gameState.clientGameSpace.ownCellsIsShip[col][row].id == gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id){
-											gameState.clientGameSpace.ownCellsIsShip[col][row].elements_no++;
-											gameState.clientGameSpace.ownCellsIsShip[col][row].size++;
+										if(gameState.clientGameSpace.ownCellsToShip[col][row].id == gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id){
+											gameState.clientGameSpace.ownCellsToShip[col][row].elements_no++;
+											gameState.clientGameSpace.ownCellsToShip[col][row].size++;
 										}
 									}
 								}
@@ -320,8 +362,8 @@ public class Logic implements ICommand {
 			}
 			for (int col = 0; col < 10; col++) {
 				for (int row = 0; row < 10; row++) {
-					if(gameState.clientGameSpace.ownTable[col][row] == CellType.Water && gameState.clientGameSpace.ownCellsIsShip[col][row].id>0){
-						gameState.clientGameSpace.ownCellsIsShip[col][row] = new Ship();
+					if(gameState.clientGameSpace.ownTable[col][row] == CellType.Water && gameState.clientGameSpace.ownCellsToShip[col][row].id>0){
+						gameState.clientGameSpace.ownCellsToShip[col][row] = new Ship();
 					}
 				}
 			}
@@ -367,9 +409,9 @@ public class Logic implements ICommand {
 				case 0:
 					if(gameState.serverGameSpace.ownShips.placedShips[1]>0)
 					{
-							gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id = 1 + gameState.serverGameSpace.ownShips.id;
-							gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no++;
-							gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].size++;
+							gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id = 1 + gameState.serverGameSpace.ownShips.id;
+							gameState.serverGameSpace.ownCellsToShip[position.x][position.y].elements_no++;
+							gameState.serverGameSpace.ownCellsToShip[position.x][position.y].size++;
 							gameState.serverGameSpace.ownShips.placedShips[1]--;
 							gameState.serverGameSpace.ownShips.id++;
 							gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
@@ -384,8 +426,8 @@ public class Logic implements ICommand {
 					if(gameState.serverGameSpace.ownTable[position.x][position.y] == CellType.Ship){
 						gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
 						gameState.serverGameSpace.ownShips.shipElements++;
-						gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no--;
-						if(gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no==0){
+						gameState.serverGameSpace.ownCellsToShip[position.x][position.y].elements_no--;
+						if(gameState.serverGameSpace.ownCellsToShip[position.x][position.y].elements_no==0){
 							gameState.serverGameSpace.ownShips.placedShips[1]++;
 						}
 					}
@@ -395,18 +437,18 @@ public class Logic implements ICommand {
 								gameState.serverGameSpace.ownText = "Átlósan nem építkezhetsz, a hajók sarkai nem érhetnek össze!";
 					}
 					else{			
-							int tempInt = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+							int tempInt = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 							if(tempInt<5 && gameState.serverGameSpace.ownShips.placedShips[tempInt+1] > 0){
 								gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
 								gameState.serverGameSpace.ownShips.shipElements--;
-								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].id;
-								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].elements_no;
-								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].size = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+								gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].id;
+								gameState.serverGameSpace.ownCellsToShip[position.x][position.y].elements_no = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].elements_no;
+								gameState.serverGameSpace.ownCellsToShip[position.x][position.y].size = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 								for (int col = 0; col < 10; col++) {
 									for (int row = 0; row < 10; row++) {
-										if(gameState.serverGameSpace.ownCellsIsShip[col][row].id == gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id){
-											gameState.serverGameSpace.ownCellsIsShip[col][row].elements_no++;
-											gameState.serverGameSpace.ownCellsIsShip[col][row].size++;
+										if(gameState.serverGameSpace.ownCellsToShip[col][row].id == gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id){
+											gameState.serverGameSpace.ownCellsToShip[col][row].elements_no++;
+											gameState.serverGameSpace.ownCellsToShip[col][row].size++;
 										}
 									}
 								}
@@ -423,15 +465,15 @@ public class Logic implements ICommand {
 					
 					break;
 				case 2:
-					int tempInt = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+					int tempInt = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 					if(gameState.serverGameSpace.ownTable[position.x][position.y] == CellType.Ship){
 						gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
 						gameState.serverGameSpace.ownShips.shipElements++;
 						for (int col = 0; col < 10; col++) {
 							for (int row = 0; row < 10; row++) {
-								if(gameState.serverGameSpace.ownCellsIsShip[col][row].id == gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id){
-									gameState.serverGameSpace.ownCellsIsShip[col][row].elements_no--;
-									gameState.serverGameSpace.ownCellsIsShip[col][row].size--;
+								if(gameState.serverGameSpace.ownCellsToShip[col][row].id == gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id){
+									gameState.serverGameSpace.ownCellsToShip[col][row].elements_no--;
+									gameState.serverGameSpace.ownCellsToShip[col][row].size--;
 								}
 							}
 						}
@@ -448,14 +490,14 @@ public class Logic implements ICommand {
 							if(gameState.serverGameSpace.ownShips.placedShips[tempInt+1] > 0){
 								gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
 								gameState.serverGameSpace.ownShips.shipElements--;
-								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].id;
-								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].elements_no;
-								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].size = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+								gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].id;
+								gameState.serverGameSpace.ownCellsToShip[position.x][position.y].elements_no = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].elements_no;
+								gameState.serverGameSpace.ownCellsToShip[position.x][position.y].size = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 								for (int col = 0; col < 10; col++) {
 									for (int row = 0; row < 10; row++) {
-										if(gameState.serverGameSpace.ownCellsIsShip[col][row].id == gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id){
-											gameState.serverGameSpace.ownCellsIsShip[col][row].elements_no++;
-											gameState.serverGameSpace.ownCellsIsShip[col][row].size++;
+										if(gameState.serverGameSpace.ownCellsToShip[col][row].id == gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id){
+											gameState.serverGameSpace.ownCellsToShip[col][row].elements_no++;
+											gameState.serverGameSpace.ownCellsToShip[col][row].size++;
 										}
 									}
 								}
@@ -482,8 +524,8 @@ public class Logic implements ICommand {
 			}
 			for (int col = 0; col < 10; col++) {
 				for (int row = 0; row < 10; row++) {
-					if(gameState.serverGameSpace.ownTable[col][row] == CellType.Water && gameState.serverGameSpace.ownCellsIsShip[col][row].id>0){
-						gameState.serverGameSpace.ownCellsIsShip[col][row] = new Ship();
+					if(gameState.serverGameSpace.ownTable[col][row] == CellType.Water && gameState.serverGameSpace.ownCellsToShip[col][row].id>0){
+						gameState.serverGameSpace.ownCellsToShip[col][row] = new Ship();
 					}
 				}
 			}

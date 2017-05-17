@@ -2,30 +2,47 @@ package szoftechtutor;
 
 import java.io.Serializable;
 
+/**
+ * A játék aktuális állapotát leíró osztály.
+ */
 public class GameState implements Serializable {
-	// ki jön
-	// játékterek állapota
-	// satöbbi
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Éppen a szerver jön-e, vagy a kliens.
+	 */
 	public boolean serversTurn = true;
 	
-	// milyen állapot
+	/**
+	 * A játék melyik állapotban tart.
+	 */
 	public GamePhase gamePhase = GamePhase.PlacingShips;
 	
-	// amit a szerver lát a játékterekbõl
+	
+	/**
+	 * A szerver által ismert játéktér.
+	 */
 	public GameSpace serverGameSpace = new GameSpace();
 	
-	// amit a kliens lát a játékterekbõl
+
+	/**
+	 * A kliens által ismert játéktér. 
+	 */
 	public GameSpace clientGameSpace = new GameSpace();
 	
+	/**
+	 * A szerver befejezte-e a hajók lerakását, készen áll-e a játék megkezdésére.
+	 */
 	public boolean serverReady;
+	
+	/**
+	 * A klien befejezte-e a hajók lerakását, készen áll-e a játék megkezdésére. 
+	 */
 	public boolean clientReady;
 	
+	/**
+	 * A játék lehetséges állapotai.
+	 */
 	public enum GamePhase {
 		PlacingShips, ShootingShips
 	}

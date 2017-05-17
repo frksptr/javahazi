@@ -12,6 +12,22 @@ import javax.swing.JPanel;
 
 import java.awt.Font;
 
+/**
+ * A játékteret leíró osztály, a lőhető cellák gombokként kerülnek megvalósításra
+ *
+ */
+/**
+ * @author nempeter
+ *
+ */
+/**
+ * @author nempeter
+ *
+ */
+/**
+ * @author nempeter
+ *
+ */
 public class Board extends JPanel {
 
 	/**
@@ -25,6 +41,14 @@ public class Board extends JPanel {
 	private Color shotWaterColor = Color.blue;
 	private Color unknownColor = Color.LIGHT_GRAY;
 			
+	/**
+	 * A játékteret felépíti és inicializálja a mezőket.
+	 * @param posx	A tartalmazó UI elemen belüli x koordináta
+	 * @param posy	A tartalmazó UI elemen belüli y koordináta
+	 * @param width	A játékteret tartalmazó elem szélessége
+	 * @param height	A játékteret tartalmazó elem magassága
+	 * @param handler	Az egyes mezőkön történő kattintáshoz tartozó event handler-e
+	 */
 	public Board(int posx, int posy, int width, int height, ActionListener handler) {
 
 		this.setBounds(posx, posy, width, height);
@@ -74,6 +98,12 @@ public class Board extends JPanel {
 
 	}
 	
+ 
+	/**
+	 * Megadja az adott cellának megfelelő gomb pozícióját,(sor,oszlop) formátumban.
+	 * @param button	A cellához tartozó gomb, melynek (sor,oszlop) pozíciójára kíváncsiak vagyunk.
+	 * @return	A cellának megfelelő (sor,oszlop) pozíció.
+	 */
 	public Point getPosition(JButton button) {
 		int x = 0;
 		int y = 0;
@@ -88,11 +118,20 @@ public class Board extends JPanel {
 		return new Point(x,y);
 	}
 	
+	
+	/**
+	 * Visszaadja a (sor,oszlop) formátumú pozícióhoz tartozó cellának megflelő gombot.
+	 * @param p	A keresett cella (sor,oszlop) pozíciója.
+	 * @return	A megadott pozícióban található cellának megfelelő gomb.
+	 */
 	public JButton getButton(Point p) {
 		return buttonGrid[p.x][p.y];
 		
 	}
 		
+	/** A játékteret frissíti az új állás alapján. A cellák új állapota alapján az azoknak megfelelő színezést alkalmazza.
+	 * @param A frissítendő cellák aktuális állapota mátrix formátumban.
+	 */
 	public void redrawFromNewGameState(CellType[][] cellTypes) {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
