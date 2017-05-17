@@ -9,6 +9,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+/**
+ * A szerver hálózati kommunikációját írja le.
+ */
 public class SerialServer extends Network implements IGameState{
 
 	private ServerSocket serverSocket = null;
@@ -21,6 +24,9 @@ public class SerialServer extends Network implements IGameState{
 		super(c);
 	}
 
+	/**
+	 * Fogadja a másik fél üzeneteit.
+	 */
 	private class ReceiverThread implements Runnable {
 
 		public void run() {
@@ -61,6 +67,9 @@ public class SerialServer extends Network implements IGameState{
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see szoftechtutor.Network#connect(java.lang.String)
+	 */
 	@Override
 	void connect(String ip) {
 		disconnect();
@@ -74,6 +83,10 @@ public class SerialServer extends Network implements IGameState{
 		}
 	}
 
+	/**
+	 * Elküldi az aktuális játék állapotát leíró osztályt.
+	 * @param gs A játék aktuális állapota.
+	 */
 	void send(GameState gs) {
 		if (out == null)
 			return;
@@ -88,6 +101,9 @@ public class SerialServer extends Network implements IGameState{
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see szoftechtutor.Network#disconnect()
+	 */
 	@Override
 	void disconnect() {
 		try {
@@ -105,6 +121,9 @@ public class SerialServer extends Network implements IGameState{
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see szoftechtutor.IGameState#onNewGameState(szoftechtutor.GameState)
+	 */
 	@Override
 	public void onNewGameState(GameState gs) {
 		send(gs);
@@ -112,12 +131,5 @@ public class SerialServer extends Network implements IGameState{
 
 	@Override
 	public void toString(String string) {
-		
-	}
-
-	@Override
-	public void setStatusBarText(String string) {
-		// TODO Auto-generated method stub
-		
 	}
 }

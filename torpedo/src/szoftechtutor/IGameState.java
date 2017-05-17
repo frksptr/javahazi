@@ -1,7 +1,13 @@
 package szoftechtutor;
 
+/**
+ * A játék új állapotára reagáló interface.
+ */
 public interface IGameState {
+	/**
+	 * A játék új állapotára adandó reakció.
+	 * @param gs	A játék új állapota.
+	 */
 	public void onNewGameState(GameState gs);
-	public void setStatusBarText(String string);
 	void toString(String string);
 }

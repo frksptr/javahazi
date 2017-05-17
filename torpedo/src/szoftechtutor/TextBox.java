@@ -8,11 +8,11 @@ import javax.swing.JTextArea;
 
 import szoftechtutor.Control.NetworkType;
 
-public class TextBox extends JTextArea{
+/**
+ * Szöveg kiírására szolgáló elem.
+ */
+public class TextBox extends JTextArea {
 	
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static String status_text;
 	JTextArea textArea = new JTextArea();
@@ -31,8 +31,16 @@ public class TextBox extends JTextArea{
 		this.setEditable(false);
 	}
 
-	public String textCreator(boolean form, boolean placement, Control ctrl, GameState gs){
-		if(ctrl.networkType == NetworkType.Server){
+	/**
+	 * Kiírja a lerakandó/kilövendő hajókhoz tartozó információt.
+	 * @param form Mely helyre írunk információt.
+	 * @param placement	Lerakás fázis van-e, vagy lövés.
+	 * @param ctrl	Az alkalmazás kliens-e, vagy szerver.
+	 * @param gs	A játék aktuális állapota.
+	 * @return
+	 */
+	public String textCreator(boolean form, boolean placement, NetworkType networkType, GameState gs){
+		if(networkType == NetworkType.Server){
 			placedShips = gs.serverGameSpace.ownShips.placedShips;
 			shotShips = gs.serverGameSpace.ownShips.shotShips;
 			shipElements = gs.serverGameSpace.ownShips.shipElements;

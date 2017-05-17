@@ -27,13 +27,33 @@ public class GameSpace implements Serializable {
 	 */
 	public Ship[][] enemyCellsToShip = new Ship[10][10];
 	
+	/**
+	 * Saját állapotot leíró üzenet.
+	 */
 	String ownText = null;
+	
+	/**
+	 * Az ellenfél állapotát leíró üzenet. 
+	 */
 	String enemyText = null;
 	
+	/**
+	 * ownText megjelenítendõ-e.
+	 */
 	boolean ownText_f = false;
+	/**
+	 * enemyText megjelenítendõ-e.
+	 */
 	boolean enemyText_f = false;
 	
+	
+	/**
+	 * Játékos hajóira vonatkozó információk.
+	 */
 	public ShipFlags ownShips = new ShipFlags();
+	/**
+	 * Az ellenfél hajóira vonatkozó információk.
+	 */
 	public ShipFlags enemyShips = new ShipFlags();
 	public int allShips = 15;
 	
@@ -49,6 +69,9 @@ public class GameSpace implements Serializable {
 		public int[] shotShips = {0,0,0,0,0,0};
 	}
 	
+	/**
+	 * A játéktér initcializációja. Az ellenfél mezõirõl alapesetben nem rendelkezünk információval, a játékos mezei pedig vízként szereplnek.
+	 */
 	public GameSpace() {
 		/* elõször nem tudjuk, hogy az ellenfél térfelén milyen
 		 * mezõk vannak
