@@ -22,13 +22,12 @@ public class Logic implements ICommand {
 		System.out.println("Command '" + c.commandType + "arrived from " + c.commandOrigin);
 		if (c.commandType == CommandType.Shot){
 			gameState.serversTurn = !gameState.serversTurn;
-			//checkShot(gameState.serverGameSpace.ownTable, c.position);
 			doShotStuff(c.position, c.commandOrigin);
 		} else if (c.commandType == CommandType.PlacedShip) {
 			doPlaceShipStuff(c.position, c.commandOrigin);
 		} else if (c.commandType == CommandType.Ready) {
 			doReadyStuff(c.ready, c.commandOrigin);
-		} else if (c.commandType == CommandType.Ready) {
+		} else if (c.commandType == CommandType.Reset) {
 			doResetStuff();
 		}
 	}
@@ -46,7 +45,7 @@ public class Logic implements ICommand {
 			gameState.serverReady = ready;
 		}
 		
-		if (gameState.clientReady & gameState.serverReady) {
+		if (gameState.clientReady && gameState.serverReady) {
 			if (gameState.gamePhase == GamePhase.PlacingShips) {
 				gameState.gamePhase = GamePhase.ShootingShips;
 			}
@@ -68,7 +67,7 @@ public class Logic implements ICommand {
 		gameState.clientGameSpace.ownText_f = false;
 		gameState.serverGameSpace.enemyText_f = false;
 		gameState.clientGameSpace.enemyText_f = false;
-		if (origin == NetworkType.Client) {
+		if (origin == NetworkType.Client && gameState.clientGameSpace.enemyTable[position.x][position.y] == CellType.Unknown) {
 			CellType newType = checkShot(gameState.serverGameSpace.ownTable, position);
 			System.out.println("\nCelltype " + newType + "\n");
 			if(newType == null)
@@ -103,7 +102,7 @@ public class Logic implements ICommand {
 		/*
 		 * ha a szerver lõtt, akkor a kliens saját táblájában állítjuk a cellát
 		 */
-		else {
+		else if (origin == NetworkType.Server && gameState.serverGameSpace.enemyTable[position.x][position.y] == CellType.Unknown)  {
 			CellType newType = checkShot(gameState.clientGameSpace.ownTable, position);
 			if(newType  == null)
 				return; //Védelem a dupla kattintáshoz. Nem a legjobb de mûködik
@@ -127,6 +126,7 @@ public class Logic implements ICommand {
 					}
 				}
 			}
+			else return;
 			if(IntStream.of(gameState.clientGameSpace.ownShips.shotShips).sum() == gameState.clientGameSpace.allShips){
 				gameState.serverGameSpace.ownText_f = true;
 				gameState.serverGameSpace.ownText = "Gratulálok! Nyertél! Új játék indításához nyomd meg a Reset gombot.";

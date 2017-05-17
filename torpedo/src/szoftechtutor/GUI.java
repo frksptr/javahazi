@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -75,6 +76,7 @@ public class GUI extends JFrame implements IGameState {
 							if (gameState.gamePhase == GamePhase.ShootingShips) {
 								JButton button = (JButton) e.getSource();
 								if (enemyTurn) {
+									setStatusBarText("Az ellenfél van soron!");
 									return;
 								}
 								Point pos = enemyBoard.getPosition(button);
@@ -88,7 +90,7 @@ public class GUI extends JFrame implements IGameState {
 							}
 						}
 						catch(Exception ex){
-							System.out.print("Elobb pakoljátok le a hajóitokat!");
+							System.out.print("Elobb pakoljátok le a hajóitokat!\n");
 						}
 					}
 				});
@@ -105,14 +107,11 @@ public class GUI extends JFrame implements IGameState {
 						try{
 							if (gameState.gamePhase == GamePhase.PlacingShips) {
 								Object asd = e.getSource();
-								/*
-								 * TODO: felvenni GameState/GameSpace-be
-								 */
 								Command c = new Command();
 								c.position = playerBoard.getPosition((JButton)asd);
 								c.commandType = CommandType.PlacedShip;
 								c.commandOrigin = ctrl.networkType;
-								System.out.print("\n" + c.commandOrigin + " sending " + c.commandType + " command...");
+								System.out.print("\n" + c.commandOrigin + " sending " + c.commandType + " command...\n");
 								commandProcessor.onCommand(c);
 							} 
 							textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
@@ -133,7 +132,7 @@ public class GUI extends JFrame implements IGameState {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				serverIP = JOptionPane.showInputDialog("Mi az ellenfeled IPv4 címe?","192.168.56.1");
+				serverIP = JOptionPane.showInputDialog("Mi az ellenfeled IPv4 címe?");
 				ctrl.startClient(serverIP); 
 			}
 		});
@@ -178,14 +177,6 @@ public class GUI extends JFrame implements IGameState {
 						}
 					}
 				}
-				//TODO: ez itt
-//				Command c = new Command();
-//				c.position = playerBoard.getPosition((JButton)asd);
-//				c.commandType = CommandType.PlacedShip;
-//
-//				c.commandOrigin = getCommandOriginFromNetworkType(ctrl.networkType);
-//				System.out.print(c.commandOrigin + "sending " + c.commandType + " command...");
-//				commandProcessor.onCommand(c);
 			}
 		});
 		menuBar.add(menuItemReady);
@@ -221,11 +212,26 @@ public class GUI extends JFrame implements IGameState {
 			}
 		});
 		menuBar.add(menuItem);
+		
+		JMenuItem Turns = new JMenuItem("        ");
+		if(!enemyTurn && gameState.gamePhase == GamePhase.ShootingShips){
+			Turns.setText("Te jössz!");
+			Turns.setBackground(Color.GREEN);
+			Turns.updateUI();
+			Turns.repaint();
+		}
+		else if(enemyTurn && gameState.gamePhase == GamePhase.ShootingShips){
+			Turns.setText("Várj!");
+			Turns.setBackground(Color.RED);
+			Turns.repaint();
+			Turns.updateUI();
+		}
+		menuBar.add(Turns);
 				
 		setJMenuBar(menuBar);
 		textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
 		statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
-		
+				
 		add(playerBoard);
 		add(enemyBoard);
 		add(statusBar);
@@ -234,7 +240,7 @@ public class GUI extends JFrame implements IGameState {
 	}
     
 	public void setStatusBarText(String string) {
-		System.out.print(string);
+		System.out.print(string + "\n");
 		SwingUtilities.invokeLater(new Runnable(){
 
 			@Override

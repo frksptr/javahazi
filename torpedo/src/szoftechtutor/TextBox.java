@@ -48,9 +48,7 @@ public class TextBox extends JTextArea{
 			enemyShotShips = gs.serverGameSpace.ownShips.shotShips;
 			enemyShotElements = gs.serverGameSpace.ownShips.shotShipElements;
 		}
-//		for(int i=0;i<6;i++){
-//			enemyShotShips[i] = maximumShips[i]-enemyShotShips[i];
-//		}
+
 		if(form==true){ //format == 1 -> textarea
 		    if(placement) {
 				status_text = String.format("Még lepakolható hajóid:\n"

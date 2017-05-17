@@ -39,7 +39,7 @@ class Control {
 			networkType = NetworkType.Server;
 		    System.out.println("Current IP Address : " +currentIp);
 			} catch (UnknownHostException e) {
-				System.out.print("Nem tud csatlakozni");
+				System.out.print("Nem tud csatlakozni\n");
 			}
 		return currentIp;
 	}
