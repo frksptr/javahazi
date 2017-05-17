@@ -2,9 +2,8 @@ package szoftechtutor;
 
 import java.io.Serializable;
 
-/*
- * Jelzi, hogy az aktuális mezõn milyen típusú dolog található,
- * hajó, víz, vagy ezeknek már kilõtt változata
+/**
+ * A játéktér adott mezõjének állapotát írja le.
  */
 public enum CellType implements Serializable {
 	Ship, Water, ShipShot, WaterShot, Unknown

@@ -3,19 +3,36 @@ package szoftechtutor;
 import java.io.Serializable;
 import szoftechtutor.Ship;
 
+/**
+ * A játéktér állapotát leíró osztály.
+ */
 public class GameSpace implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * A játékos saját játéktere.
+	 */
 	public CellType[][] ownTable = new CellType[10][10];
+	
+	/**
+	 * A játékos információi az ellenfele játékterérõl.
+	 */
 	public CellType[][] enemyTable = new CellType[10][10];
-	public Ship[][] ownCellsIsShip = new Ship[10][10];
-	public Ship[][] enemyCellsIsShip = new Ship[10][10];
+	
+	/**
+	 *  A játékos saját cellához tartozó hajók.
+	 */
+	public Ship[][] ownCellsToShip = new Ship[10][10];
+	/**
+	 * A játékos ellenfele celláihoz tartozó hajók.
+	 */
+	public Ship[][] enemyCellsToShip = new Ship[10][10];
+	
 	String ownText = null;
 	String enemyText = null;
+	
 	boolean ownText_f = false;
 	boolean enemyText_f = false;
+	
 	public ShipFlags ownShips = new ShipFlags();
 	public ShipFlags enemyShips = new ShipFlags();
 	public int allShips = 15;
@@ -52,8 +69,8 @@ public class GameSpace implements Serializable {
 		}
 		for (int col = 0; col < 10; col++) {
 			for (int row = 0; row < 10; row++) {
-				ownCellsIsShip[col][row] = new Ship();
-				enemyCellsIsShip[col][row] = new Ship();
+				ownCellsToShip[col][row] = new Ship();
+				enemyCellsToShip[col][row] = new Ship();
 			}
 		}
 	}

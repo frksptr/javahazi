@@ -77,14 +77,14 @@ public class Logic implements ICommand {
 			gameState.serverGameSpace.ownTable[position.x][position.y] = newType;
 			int kilott = 0;
 			if(newType == CellType.ShipShot){
-				gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].scuttled=true;
+				gameState.serverGameSpace.ownCellsToShip[position.x][position.y].scuttled=true;
 				gameState.serverGameSpace.ownShips.shotShipElements--;
 				for (int col = 0; col < 10; col++) {
 					for (int row = 0; row < 10; row++) {
-						if(gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id == gameState.serverGameSpace.ownCellsIsShip[col][row].id){
-							if(gameState.serverGameSpace.ownCellsIsShip[col][row].scuttled==true){
+						if(gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id == gameState.serverGameSpace.ownCellsToShip[col][row].id){
+							if(gameState.serverGameSpace.ownCellsToShip[col][row].scuttled==true){
 								kilott++;
-								if(kilott==gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].size){
+								if(kilott==gameState.serverGameSpace.ownCellsToShip[position.x][position.y].size){
 									gameState.serverGameSpace.ownShips.shotShips[kilott]++;
 								}
 							}
@@ -111,14 +111,14 @@ public class Logic implements ICommand {
 			gameState.serverGameSpace.enemyTable[position.x][position.y] = newType;
 			int kilott = 0;
 			if(newType == CellType.ShipShot){
-				gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].scuttled=true;
+				gameState.clientGameSpace.ownCellsToShip[position.x][position.y].scuttled=true;
 				gameState.clientGameSpace.ownShips.shotShipElements--;
 				for (int col = 0; col < 10; col++) {
 					for (int row = 0; row < 10; row++) {
-						if(gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id == gameState.clientGameSpace.ownCellsIsShip[col][row].id){
-							if(gameState.clientGameSpace.ownCellsIsShip[col][row].scuttled==true){
+						if(gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id == gameState.clientGameSpace.ownCellsToShip[col][row].id){
+							if(gameState.clientGameSpace.ownCellsToShip[col][row].scuttled==true){
 								kilott++;
-								if(kilott==gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].size){
+								if(kilott==gameState.clientGameSpace.ownCellsToShip[position.x][position.y].size){
 									gameState.clientGameSpace.ownShips.shotShips[kilott]++;
 								}
 							}
@@ -207,9 +207,9 @@ public class Logic implements ICommand {
 				case 0:
 					if(gameState.clientGameSpace.ownShips.placedShips[1]>0)
 					{
-							gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id = 1 + gameState.clientGameSpace.ownShips.id;
-							gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].elements_no++;
-							gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].size++;
+							gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id = 1 + gameState.clientGameSpace.ownShips.id;
+							gameState.clientGameSpace.ownCellsToShip[position.x][position.y].elements_no++;
+							gameState.clientGameSpace.ownCellsToShip[position.x][position.y].size++;
 							gameState.clientGameSpace.ownShips.placedShips[1]--;
 							gameState.clientGameSpace.ownShips.id++;
 							gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
@@ -224,8 +224,8 @@ public class Logic implements ICommand {
 					if(gameState.clientGameSpace.ownTable[position.x][position.y] == CellType.Ship){
 						gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Water;
 						gameState.clientGameSpace.ownShips.shipElements++;
-						gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].elements_no--;
-						if(gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].elements_no==0){
+						gameState.clientGameSpace.ownCellsToShip[position.x][position.y].elements_no--;
+						if(gameState.clientGameSpace.ownCellsToShip[position.x][position.y].elements_no==0){
 							gameState.clientGameSpace.ownShips.placedShips[1]++;
 						}
 					}
@@ -235,18 +235,18 @@ public class Logic implements ICommand {
 								gameState.clientGameSpace.ownText = "Átlósan nem építkezhetsz, a hajók sarkai nem érhetnek össze!";
 					}
 					else{			
-							int tempInt = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+							int tempInt = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 							if(gameState.clientGameSpace.ownShips.placedShips[tempInt+1] > 0){
 								gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
 								gameState.clientGameSpace.ownShips.shipElements--;
-								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].id;
-								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].elements_no = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].elements_no;
-								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].size = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+								gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].id;
+								gameState.clientGameSpace.ownCellsToShip[position.x][position.y].elements_no = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].elements_no;
+								gameState.clientGameSpace.ownCellsToShip[position.x][position.y].size = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 								for (int col = 0; col < 10; col++) {
 									for (int row = 0; row < 10; row++) {
-										if(gameState.clientGameSpace.ownCellsIsShip[col][row].id == gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id){
-											gameState.clientGameSpace.ownCellsIsShip[col][row].elements_no++;
-											gameState.clientGameSpace.ownCellsIsShip[col][row].size++;
+										if(gameState.clientGameSpace.ownCellsToShip[col][row].id == gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id){
+											gameState.clientGameSpace.ownCellsToShip[col][row].elements_no++;
+											gameState.clientGameSpace.ownCellsToShip[col][row].size++;
 										}
 									}
 								}
@@ -263,15 +263,15 @@ public class Logic implements ICommand {
 					
 					break;
 				case 2:
-					int tempInt = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+					int tempInt = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 					if(gameState.clientGameSpace.ownTable[position.x][position.y] == CellType.Ship){
 						gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Water;
 						gameState.clientGameSpace.ownShips.shipElements++;
 						for (int col = 0; col < 10; col++) {
 							for (int row = 0; row < 10; row++) {
-								if(gameState.clientGameSpace.ownCellsIsShip[col][row].id == gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id){
-									gameState.clientGameSpace.ownCellsIsShip[col][row].elements_no--;
-									gameState.clientGameSpace.ownCellsIsShip[col][row].size--;
+								if(gameState.clientGameSpace.ownCellsToShip[col][row].id == gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id){
+									gameState.clientGameSpace.ownCellsToShip[col][row].elements_no--;
+									gameState.clientGameSpace.ownCellsToShip[col][row].size--;
 								}
 							}
 						}
@@ -288,14 +288,14 @@ public class Logic implements ICommand {
 							if(gameState.clientGameSpace.ownShips.placedShips[tempInt+1] > 0){
 								gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
 								gameState.clientGameSpace.ownShips.shipElements--;
-								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].id;
-								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].elements_no = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].elements_no;
-								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].size = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+								gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].id;
+								gameState.clientGameSpace.ownCellsToShip[position.x][position.y].elements_no = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].elements_no;
+								gameState.clientGameSpace.ownCellsToShip[position.x][position.y].size = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 								for (int col = 0; col < 10; col++) {
 									for (int row = 0; row < 10; row++) {
-										if(gameState.clientGameSpace.ownCellsIsShip[col][row].id == gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id){
-											gameState.clientGameSpace.ownCellsIsShip[col][row].elements_no++;
-											gameState.clientGameSpace.ownCellsIsShip[col][row].size++;
+										if(gameState.clientGameSpace.ownCellsToShip[col][row].id == gameState.clientGameSpace.ownCellsToShip[position.x][position.y].id){
+											gameState.clientGameSpace.ownCellsToShip[col][row].elements_no++;
+											gameState.clientGameSpace.ownCellsToShip[col][row].size++;
 										}
 									}
 								}
@@ -322,8 +322,8 @@ public class Logic implements ICommand {
 			}
 			for (int col = 0; col < 10; col++) {
 				for (int row = 0; row < 10; row++) {
-					if(gameState.clientGameSpace.ownTable[col][row] == CellType.Water && gameState.clientGameSpace.ownCellsIsShip[col][row].id>0){
-						gameState.clientGameSpace.ownCellsIsShip[col][row] = new Ship();
+					if(gameState.clientGameSpace.ownTable[col][row] == CellType.Water && gameState.clientGameSpace.ownCellsToShip[col][row].id>0){
+						gameState.clientGameSpace.ownCellsToShip[col][row] = new Ship();
 					}
 				}
 			}
@@ -369,9 +369,9 @@ public class Logic implements ICommand {
 				case 0:
 					if(gameState.serverGameSpace.ownShips.placedShips[1]>0)
 					{
-							gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id = 1 + gameState.serverGameSpace.ownShips.id;
-							gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no++;
-							gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].size++;
+							gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id = 1 + gameState.serverGameSpace.ownShips.id;
+							gameState.serverGameSpace.ownCellsToShip[position.x][position.y].elements_no++;
+							gameState.serverGameSpace.ownCellsToShip[position.x][position.y].size++;
 							gameState.serverGameSpace.ownShips.placedShips[1]--;
 							gameState.serverGameSpace.ownShips.id++;
 							gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
@@ -386,8 +386,8 @@ public class Logic implements ICommand {
 					if(gameState.serverGameSpace.ownTable[position.x][position.y] == CellType.Ship){
 						gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
 						gameState.serverGameSpace.ownShips.shipElements++;
-						gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no--;
-						if(gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no==0){
+						gameState.serverGameSpace.ownCellsToShip[position.x][position.y].elements_no--;
+						if(gameState.serverGameSpace.ownCellsToShip[position.x][position.y].elements_no==0){
 							gameState.serverGameSpace.ownShips.placedShips[1]++;
 						}
 					}
@@ -397,18 +397,18 @@ public class Logic implements ICommand {
 								gameState.serverGameSpace.ownText = "Átlósan nem építkezhetsz, a hajók sarkai nem érhetnek össze!";
 					}
 					else{			
-							int tempInt = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+							int tempInt = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 							if(gameState.serverGameSpace.ownShips.placedShips[tempInt+1] > 0){
 								gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
 								gameState.serverGameSpace.ownShips.shipElements--;
-								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].id;
-								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].elements_no;
-								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].size = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+								gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].id;
+								gameState.serverGameSpace.ownCellsToShip[position.x][position.y].elements_no = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].elements_no;
+								gameState.serverGameSpace.ownCellsToShip[position.x][position.y].size = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 								for (int col = 0; col < 10; col++) {
 									for (int row = 0; row < 10; row++) {
-										if(gameState.serverGameSpace.ownCellsIsShip[col][row].id == gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id){
-											gameState.serverGameSpace.ownCellsIsShip[col][row].elements_no++;
-											gameState.serverGameSpace.ownCellsIsShip[col][row].size++;
+										if(gameState.serverGameSpace.ownCellsToShip[col][row].id == gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id){
+											gameState.serverGameSpace.ownCellsToShip[col][row].elements_no++;
+											gameState.serverGameSpace.ownCellsToShip[col][row].size++;
 										}
 									}
 								}
@@ -425,15 +425,15 @@ public class Logic implements ICommand {
 					
 					break;
 				case 2:
-					int tempInt = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+					int tempInt = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 					if(gameState.serverGameSpace.ownTable[position.x][position.y] == CellType.Ship){
 						gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Water;
 						gameState.serverGameSpace.ownShips.shipElements++;
 						for (int col = 0; col < 10; col++) {
 							for (int row = 0; row < 10; row++) {
-								if(gameState.serverGameSpace.ownCellsIsShip[col][row].id == gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id){
-									gameState.serverGameSpace.ownCellsIsShip[col][row].elements_no--;
-									gameState.serverGameSpace.ownCellsIsShip[col][row].size--;
+								if(gameState.serverGameSpace.ownCellsToShip[col][row].id == gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id){
+									gameState.serverGameSpace.ownCellsToShip[col][row].elements_no--;
+									gameState.serverGameSpace.ownCellsToShip[col][row].size--;
 								}
 							}
 						}
@@ -450,14 +450,14 @@ public class Logic implements ICommand {
 							if(gameState.serverGameSpace.ownShips.placedShips[tempInt+1] > 0){
 								gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
 								gameState.serverGameSpace.ownShips.shipElements--;
-								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].id;
-								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].elements_no = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].elements_no;
-								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].size = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
+								gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].id;
+								gameState.serverGameSpace.ownCellsToShip[position.x][position.y].elements_no = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].elements_no;
+								gameState.serverGameSpace.ownCellsToShip[position.x][position.y].size = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
 								for (int col = 0; col < 10; col++) {
 									for (int row = 0; row < 10; row++) {
-										if(gameState.serverGameSpace.ownCellsIsShip[col][row].id == gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id){
-											gameState.serverGameSpace.ownCellsIsShip[col][row].elements_no++;
-											gameState.serverGameSpace.ownCellsIsShip[col][row].size++;
+										if(gameState.serverGameSpace.ownCellsToShip[col][row].id == gameState.serverGameSpace.ownCellsToShip[position.x][position.y].id){
+											gameState.serverGameSpace.ownCellsToShip[col][row].elements_no++;
+											gameState.serverGameSpace.ownCellsToShip[col][row].size++;
 										}
 									}
 								}
@@ -484,8 +484,8 @@ public class Logic implements ICommand {
 			}
 			for (int col = 0; col < 10; col++) {
 				for (int row = 0; row < 10; row++) {
-					if(gameState.serverGameSpace.ownTable[col][row] == CellType.Water && gameState.serverGameSpace.ownCellsIsShip[col][row].id>0){
-						gameState.serverGameSpace.ownCellsIsShip[col][row] = new Ship();
+					if(gameState.serverGameSpace.ownTable[col][row] == CellType.Water && gameState.serverGameSpace.ownCellsToShip[col][row].id>0){
+						gameState.serverGameSpace.ownCellsToShip[col][row] = new Ship();
 					}
 				}
 			}
