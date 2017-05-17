@@ -5,6 +5,7 @@
 package szoftechtutor;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +18,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import javax.swing.SwingUtilities;
+import javax.swing.event.AncestorListener;
 
 import szoftechtutor.TextBox;
 
@@ -49,6 +51,7 @@ public class GUI extends JFrame implements IGameState {
     private GameState gameState = new GameState();
     
     private JMenuItem menuItemReady;
+	private JMenuItem Turns = new JMenuItem("        ");
     
     private String serverIP = null;
     private String currentIP = null;
@@ -61,7 +64,7 @@ public class GUI extends JFrame implements IGameState {
 		setLayout(null);
 		setName("SzoftechTutor");
 				
-		JMenuBar menuBar = new JMenuBar();
+		final JMenuBar menuBar = new JMenuBar();
 		
 		enemyBoard = new Board(
 				260,
@@ -76,7 +79,6 @@ public class GUI extends JFrame implements IGameState {
 							if (gameState.gamePhase == GamePhase.ShootingShips) {
 								JButton button = (JButton) e.getSource();
 								if (enemyTurn) {
-									setStatusBarText("Az ellenfél van soron!");
 									return;
 								}
 								Point pos = enemyBoard.getPosition(button);
@@ -213,19 +215,6 @@ public class GUI extends JFrame implements IGameState {
 		});
 		menuBar.add(menuItem);
 		
-		JMenuItem Turns = new JMenuItem("        ");
-		if(!enemyTurn && gameState.gamePhase == GamePhase.ShootingShips){
-			Turns.setText("Te jössz!");
-			Turns.setBackground(Color.GREEN);
-			Turns.updateUI();
-			Turns.repaint();
-		}
-		else if(enemyTurn && gameState.gamePhase == GamePhase.ShootingShips){
-			Turns.setText("Várj!");
-			Turns.setBackground(Color.RED);
-			Turns.repaint();
-			Turns.updateUI();
-		}
 		menuBar.add(Turns);
 				
 		setJMenuBar(menuBar);
@@ -238,7 +227,7 @@ public class GUI extends JFrame implements IGameState {
 		add(textArea);
 		setVisible(true);
 	}
-    
+	
 	public void setStatusBarText(String string) {
 		System.out.print(string + "\n");
 		SwingUtilities.invokeLater(new Runnable(){
@@ -270,7 +259,6 @@ public class GUI extends JFrame implements IGameState {
 			}
 			if(ownGameSpace.enemyText_f){
 				setStatusBarText(ownGameSpace.enemyText);
-				ownGameSpace.enemyText_f = false;
 			}
 		} else {
 			ownGameSpace = serverGameSpace;
@@ -282,15 +270,24 @@ public class GUI extends JFrame implements IGameState {
 			}
 			if(ownGameSpace.enemyText_f){
 				setStatusBarText(ownGameSpace.enemyText);
-				ownGameSpace.enemyText_f = false;
 			}
 		}
 		
 		menuItemReady.setBackground(ready ? Color.GREEN : Color.RED);
 		
-		if (gs.gamePhase == GamePhase.ShootingShips) {
-			textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
+		textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
+		
+		if(gameState.gamePhase == GamePhase.ShootingShips){
 			statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips),ctrl, gameState));
+		}
+	
+		if(!enemyTurn && gameState.gamePhase == GamePhase.ShootingShips){
+			Turns.setText("Te jössz!");
+			Turns.setBackground(Color.GREEN);
+		}
+		else if(enemyTurn && gameState.gamePhase == GamePhase.ShootingShips){
+			Turns.setText("Várj!");
+			Turns.setBackground(Color.RED);
 		}
 			
 		playerBoard.redrawFromNewGameState(ownGameSpace.ownTable);

@@ -65,8 +65,7 @@ public class Logic implements ICommand {
 		 */
 		gameState.serverGameSpace.ownText_f = false;
 		gameState.clientGameSpace.ownText_f = false;
-		gameState.serverGameSpace.enemyText_f = false;
-		gameState.clientGameSpace.enemyText_f = false;
+		
 		if (origin == NetworkType.Client && gameState.clientGameSpace.enemyTable[position.x][position.y] == CellType.Unknown) {
 			CellType newType = checkShot(gameState.serverGameSpace.ownTable, position);
 			System.out.println("\nCelltype " + newType + "\n");
@@ -126,7 +125,6 @@ public class Logic implements ICommand {
 					}
 				}
 			}
-			else return;
 			if(IntStream.of(gameState.clientGameSpace.ownShips.shotShips).sum() == gameState.clientGameSpace.allShips){
 				gameState.serverGameSpace.ownText_f = true;
 				gameState.serverGameSpace.ownText = "Gratulálok! Nyertél! Új játék indításához nyomd meg a Reset gombot.";
@@ -217,7 +215,7 @@ public class Logic implements ICommand {
 					}
 					else {
 						gameState.clientGameSpace.ownText_f = true;
-						gameState.clientGameSpace.ownText = "Nem rakhatsz le több 1 elemû hajót!";
+						gameState.clientGameSpace.ownText = "1 elemû hajóból nem rakhatsz már le többet";
 					}
 					break;
 				case 1:
@@ -236,7 +234,7 @@ public class Logic implements ICommand {
 					}
 					else{			
 							int tempInt = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
-							if(gameState.clientGameSpace.ownShips.placedShips[tempInt+1] > 0){
+							if(tempInt<5 && gameState.clientGameSpace.ownShips.placedShips[tempInt+1] > 0){
 								gameState.clientGameSpace.ownTable[position.x][position.y] = CellType.Ship;
 								gameState.clientGameSpace.ownShips.shipElements--;
 								gameState.clientGameSpace.ownCellsIsShip[position.x][position.y].id = gameState.clientGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].id;
@@ -257,7 +255,7 @@ public class Logic implements ICommand {
 							}
 							else{
 								gameState.clientGameSpace.ownText_f = true;
-								gameState.clientGameSpace.ownText = printf("%d elemû hajóból nem rakhatsz már le többet",tempInt+1);
+								gameState.clientGameSpace.ownText = String.format("%d elemû hajóból nem rakhatsz már le többet",(tempInt<5 ? (tempInt+1) : tempInt));
 							}
 						}
 					
@@ -306,7 +304,7 @@ public class Logic implements ICommand {
 							}
 							else{
 								gameState.clientGameSpace.ownText_f = true;
-								gameState.clientGameSpace.ownText = printf("%d elemû hajóból nem rakhatsz már le többet",tempInt+1);
+								gameState.clientGameSpace.ownText = String.format("%d elemû hajóból nem rakhatsz már le többet",(tempInt<5 ? (tempInt+1) : tempInt));
 							}		
 						}
 						else{
@@ -398,7 +396,7 @@ public class Logic implements ICommand {
 					}
 					else{			
 							int tempInt = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].size;
-							if(gameState.serverGameSpace.ownShips.placedShips[tempInt+1] > 0){
+							if(tempInt<5 && gameState.serverGameSpace.ownShips.placedShips[tempInt+1] > 0){
 								gameState.serverGameSpace.ownTable[position.x][position.y] = CellType.Ship;
 								gameState.serverGameSpace.ownShips.shipElements--;
 								gameState.serverGameSpace.ownCellsIsShip[position.x][position.y].id = gameState.serverGameSpace.ownCellsIsShip[szomszed[0].x][szomszed[0].y].id;
@@ -419,7 +417,7 @@ public class Logic implements ICommand {
 							}
 							else{
 								gameState.serverGameSpace.ownText_f = true;
-								gameState.serverGameSpace.ownText = printf("%d elemû hajóból nem rakhatsz már le többet",tempInt+1);
+								gameState.serverGameSpace.ownText = String.format("%d elemû hajóból nem rakhatsz már le többet",(tempInt<5 ? (tempInt+1) : tempInt));
 							}
 						}
 					
@@ -468,7 +466,7 @@ public class Logic implements ICommand {
 							}
 							else{
 								gameState.serverGameSpace.ownText_f = true;
-								gameState.serverGameSpace.ownText = printf("%d elemû hajóból nem rakhatsz már le többet",tempInt+1);
+								gameState.serverGameSpace.ownText = String.format("%d elemû hajóból nem rakhatsz már le többet",(tempInt<5 ? (tempInt+1) : tempInt));
 							}		
 						}
 						else{
@@ -495,10 +493,4 @@ public class Logic implements ICommand {
 		gameState.serverGameSpace.ownText_f = false;
 		gameState.clientGameSpace.ownText_f = false;
 	}
-
-	private String printf(String string, int tempInt) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
