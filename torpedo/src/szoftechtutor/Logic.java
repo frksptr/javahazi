@@ -10,10 +10,6 @@ import szoftechtutor.GameState.GamePhase;
 /**
  * A játék logikáját kezelõ osztály.
  */
-/**
- * @author nempeter
- *
- */
 public class Logic implements ICommand {
 	
 	/**

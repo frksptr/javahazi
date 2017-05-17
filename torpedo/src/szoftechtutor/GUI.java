@@ -5,7 +5,6 @@
 package szoftechtutor;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +17,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import javax.swing.SwingUtilities;
-import javax.swing.event.AncestorListener;
 
 import szoftechtutor.TextBox;
 
@@ -299,10 +297,10 @@ public class GUI extends JFrame implements IGameState {
 		
 		menuItemReady.setBackground(ready ? Color.GREEN : Color.RED);
 		
-		textArea.setText(textArea.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),ctrl,gameState));
+		shipInformation.setText(shipInformation.textCreator(true,(gameState.gamePhase == GamePhase.PlacingShips),ctrl.networkType,gameState));
 		
 		if(gameState.gamePhase == GamePhase.ShootingShips){
-			statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips),ctrl, gameState));
+			statusBar.setText(statusBar.textCreator(false,(gameState.gamePhase == GamePhase.PlacingShips),ctrl.networkType, gameState));
 		}
 	
 		if(!enemyTurn && gameState.gamePhase == GamePhase.ShootingShips){
