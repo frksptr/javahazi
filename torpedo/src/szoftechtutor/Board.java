@@ -16,18 +16,6 @@ import java.awt.Font;
  * A játékteret leíró osztály, a lőhető cellák gombokként kerülnek megvalósításra
  *
  */
-/**
- * @author nempeter
- *
- */
-/**
- * @author nempeter
- *
- */
-/**
- * @author nempeter
- *
- */
 public class Board extends JPanel {
 
 	/**
@@ -130,7 +118,7 @@ public class Board extends JPanel {
 	}
 		
 	/** A játékteret frissíti az új állás alapján. A cellák új állapota alapján az azoknak megfelelő színezést alkalmazza.
-	 * @param A frissítendő cellák aktuális állapota mátrix formátumban.
+	 * @param cellTypes A frissítendő cellák aktuális állapota mátrix formátumban.
 	 */
 	public void redrawFromNewGameState(CellType[][] cellTypes) {
 		for (int i = 0; i < 10; i++) {

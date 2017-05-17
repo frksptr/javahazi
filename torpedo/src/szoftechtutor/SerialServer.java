@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 
 /**
- * A szerver hálózati kommunikációját írja le.
+ * A szerver hï¿½lï¿½zati kommunikï¿½ciï¿½jï¿½t ï¿½rja le.
  */
 public class SerialServer extends Network implements IGameState{
 
@@ -25,7 +25,7 @@ public class SerialServer extends Network implements IGameState{
 	}
 
 	/**
-	 * Fogadja a másik fél üzeneteit.
+	 * Fogadja a mï¿½sik fï¿½l ï¿½zeneteit.
 	 */
 	private class ReceiverThread implements Runnable {
 
@@ -52,8 +52,8 @@ public class SerialServer extends Network implements IGameState{
 
 			try {
 				while (true) {
-					/* a szerver csak parancsot kap ami alapján számol
-					 * és visszaküld új gamestatet
+					/* a szerver csak parancsot kap ami alapjï¿½n szï¿½mol
+					 * ï¿½s visszakï¿½ld ï¿½j gamestatet
 					 */
 					Command c = (Command) in.readObject();
 					logic.onCommand(c);
@@ -84,8 +84,8 @@ public class SerialServer extends Network implements IGameState{
 	}
 
 	/**
-	 * Elküldi az aktuális játék állapotát leíró osztályt.
-	 * @param gs A játék aktuális állapota.
+	 * Elkï¿½ldi az aktuï¿½lis jï¿½tï¿½k ï¿½llapotï¿½t leï¿½rï¿½ osztï¿½lyt.
+	 * @param gs A jï¿½tï¿½k aktuï¿½lis ï¿½llapota.
 	 */
 	void send(GameState gs) {
 		if (out == null)

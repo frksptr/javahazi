@@ -3,45 +3,45 @@ package szoftechtutor;
 import java.io.Serializable;
 
 /**
- * A játék aktuális állapotát leíró osztály.
+ * A jÃ¡tÃ©k aktuÃ¡lis Ã¡llapotÃ¡t leÃ­rÃ³ osztÃ¡ly.
  */
 public class GameState implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Éppen a szerver jön-e, vagy a kliens.
+	 * Ã‰ppen a szerver jÃ¶n-e, vagy a kliens.
 	 */
 	public boolean serversTurn = true;
 	
 	/**
-	 * A játék melyik állapotban tart.
+	 * A jÃ¡tÃ©k melyik Ã¡llapotban tart.
 	 */
 	public GamePhase gamePhase = GamePhase.PlacingShips;
 	
 	
 	/**
-	 * A szerver által ismert játéktér.
+	 * A szerver Ã¡ltal ismert jÃ¡tÃ©ktÃ©r.
 	 */
 	public GameSpace serverGameSpace = new GameSpace();
 	
 
 	/**
-	 * A kliens által ismert játéktér. 
+	 * A kliens Ã¡ltal ismert jÃ¡tÃ©ktÃ©r.
 	 */
 	public GameSpace clientGameSpace = new GameSpace();
 	
 	/**
-	 * A szerver befejezte-e a hajók lerakását, készen áll-e a játék megkezdésére.
+	 * A szerver befejezte-e a hajÃ³k lerakÃ¡sÃ¡t, kÃ©szen Ã¡ll-e a jÃ¡tÃ©k megkezdÃ©sÃ©re.
 	 */
 	public boolean serverReady;
 	
 	/**
-	 * A klien befejezte-e a hajók lerakását, készen áll-e a játék megkezdésére. 
+	 * A klien befejezte-e a hajÃ³k lerakÃ¡sÃ¡t, kÃ©szen Ã¡ll-e a jÃ¡tÃ©k megkezdÃ©sÃ©re.
 	 */
 	public boolean clientReady;
 	
 	/**
-	 * A játék lehetséges állapotai.
+	 * A jï¿½tï¿½k lehetsÃ©ges Ã¡llapotai.
 	 */
 	public enum GamePhase {
 		PlacingShips, ShootingShips

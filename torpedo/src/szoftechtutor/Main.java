@@ -6,7 +6,7 @@
 package szoftechtutor;
 
 /**
- * Az alkalmaz·s indÌt·sa
+ * Az alkalmaz√°s ind√≠t√°sa
  */
 public class Main {
 

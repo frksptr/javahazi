@@ -3,7 +3,7 @@ package szoftechtutor;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 /**
- * A hálózati kapcsolat felépítéséért és a rendszer inicializálásáért felelõs osztály.
+ * A hï¿½lï¿½zati kapcsolat felÃ©pÃ­tÃ©sÃ©Ã©rt Ã©s a rendszer inicializÃ¡lÃ¡sÃ¡Ã©rt felelÅ‘s osztÃ¡Sly.
  */
 class Control {
 	private Network net = null;
@@ -12,7 +12,7 @@ class Control {
 	public GUI gui = null;
 
 	/**
-	 * Eltárolja, hogy az aktuális alkalmazás szerver, vagy kliens üzemmódban üzemel.
+	 * EltÃ¡rolja, hogy az aktuÃ¡lis alkalmazÃ¡s szerver, vagy kliens Ã¼zemmÃ³dban Ã¼zemel.
 	 */
 	public NetworkType networkType = null;
 
@@ -20,8 +20,8 @@ class Control {
 	}
 
 	/**
-	 * Az alkalmazás inicializálása szerver üzemmódban.
-	 * @return A szerver IP címe.
+	 * Az alkalmazÃ¡s inicializÃ¡lÃ¡sa szerver Ã¼zemmÃ³dban.
+	 * @return A szerver IP cï¿½me.
 	 */
 	public String startServer() {
 		String currentIp = null;
@@ -44,7 +44,8 @@ class Control {
 	}
 
 	/**
-	 * Az alkalmazás inicializálása kliens üzemmódban.
+	 * Az alkalmazÃ¡s inicializÃ¡lÃ¡sa kliens Ã¼zemmÃ³dban.
+	 * @param ip A kliens IP cÃ­me.
 	 */
 	void startClient(String ip) {
 		if (net != null)
@@ -59,7 +60,7 @@ class Control {
 	}
 	
 	/**
-	 * Az alkalmazás üzemmódjának (szerver, vagy kliens) típusa.
+	 * Az alkalmazÃ¡s Ã¼zemmÃ³djÃ¡nak (szerver, vagy kliens) tÃ­pusa.
 	 */
 	public enum NetworkType {
 		Client, 

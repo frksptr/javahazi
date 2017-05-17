@@ -8,21 +8,21 @@ import szoftechtutor.Control.NetworkType;
 import szoftechtutor.GameState.GamePhase;
 
 /**
- * A játék logikáját kezelõ osztály.
+ * A jï¿½tï¿½k logikï¿½jï¿½t kezelï¿½ osztï¿½ly.
  */
 public class Logic implements ICommand {
 	
 	/**
-	 * A játék aktuális állapota.
+	 * A jï¿½tï¿½k aktuï¿½lis ï¿½llapota.
 	 */
 	private GameState gameState = new GameState();
 	/**
-	 * Az alkalmazás GUI-ja.
+	 * Az alkalmazï¿½s GUI-ja.
 	 */
 	public IGameState gui;
 	
 	/**
-	 * A szervert megvalósító osztály. 
+	 * A szervert megvalï¿½sï¿½tï¿½ osztï¿½ly. 
 	 */
 	public SerialServer server;
 	
@@ -50,7 +50,7 @@ public class Logic implements ICommand {
 	}
 	
 	/**
-	 * A játék alapállapotba helyezése.
+	 * A jï¿½tï¿½k alapï¿½llapotba helyezï¿½se.
 	 */
 	private void doResetStuff(){
 		gameState = new GameState();
@@ -59,9 +59,9 @@ public class Logic implements ICommand {
 	}
 	
 	/**
-	 * A játékosok készenléti állapotának kezelése.
-	 * @param ready Készen áll-e a játékos.
-	 * @param commandOrigin Mely játékos adta a készenléti üzenetet.
+	 * A jï¿½tï¿½kosok kï¿½szenlï¿½ti ï¿½llapotï¿½nak kezelï¿½se.
+	 * @param ready Kï¿½szen ï¿½ll-e a jï¿½tï¿½kos.
+	 * @param commandOrigin Mely jï¿½tï¿½kos adta a kï¿½szenlï¿½ti ï¿½zenetet.
 	 */
 	private void doReadyStuff(boolean ready, NetworkType commandOrigin) {
 		if (commandOrigin == NetworkType.Client) {
@@ -82,15 +82,15 @@ public class Logic implements ICommand {
 	}
 
 	/**
-	 * A táblán való lövés kezelése.
-	 * @param position	A lövés pozíciója.
-	 * @param origin	Mely játékos lõtt.
+	 * A tï¿½blï¿½n valï¿½ lï¿½vï¿½s kezelï¿½se.
+	 * @param position	A lï¿½vï¿½s pozï¿½ciï¿½ja.
+	 * @param origin	Mely jï¿½tï¿½kos lï¿½tt.
 	 */
 	private void doShotStuff(Point position, NetworkType origin) {
 		/*
 		 * A logic a szerveren van
-		 * ha a kliens lõtt, akkor a szerver saját táblájában megnézzük mit
-		 * talált el és átállítjuk
+		 * ha a kliens lï¿½tt, akkor a szerver sajï¿½t tï¿½blï¿½jï¿½ban megnï¿½zzï¿½k mit
+		 * talï¿½lt el ï¿½s ï¿½tï¿½llï¿½tjuk
 		 */
 		gameState.serverGameSpace.ownText_f = false;
 		gameState.clientGameSpace.ownText_f = false;
@@ -123,13 +123,13 @@ public class Logic implements ICommand {
 			
 			if(IntStream.of(gameState.serverGameSpace.ownShips.shotShips).sum() == gameState.serverGameSpace.allShips){
 				gameState.clientGameSpace.ownText_f = true;
-				gameState.clientGameSpace.ownText = "Gratulálok! Nyertél! Új játék indításához nyomd meg a Reset gombot.";
+				gameState.clientGameSpace.ownText = "Gratulï¿½lok! Nyertï¿½l! ï¿½j jï¿½tï¿½k indï¿½tï¿½sï¿½hoz nyomd meg a Reset gombot.";
 				gameState.serverGameSpace.enemyText_f = true;
-				gameState.serverGameSpace.enemyText = "Sajnálom! Vesztettél! Új játék indításához nyomd meg a Reset gombot.";
+				gameState.serverGameSpace.enemyText = "Sajnï¿½lom! Vesztettï¿½l! ï¿½j jï¿½tï¿½k indï¿½tï¿½sï¿½hoz nyomd meg a Reset gombot.";
 			}
 		}
 		/*
-		 * ha a szerver lõtt, akkor a kliens saját táblájában állítjuk a cellát
+		 * ha a szerver lï¿½tt, akkor a kliens sajï¿½t tï¿½blï¿½jï¿½ban ï¿½llï¿½tjuk a cellï¿½t
 		 */
 		else if (origin == NetworkType.Server && gameState.serverGameSpace.enemyTable[position.x][position.y] == CellType.Unknown)  {
 			CellType newType = checkShot(gameState.clientGameSpace.ownTable, position);
@@ -157,9 +157,9 @@ public class Logic implements ICommand {
 			}
 			if(IntStream.of(gameState.clientGameSpace.ownShips.shotShips).sum() == gameState.clientGameSpace.allShips){
 				gameState.serverGameSpace.ownText_f = true;
-				gameState.serverGameSpace.ownText = "Gratulálok! Nyertél! Új játék indításához nyomd meg a Reset gombot.";
+				gameState.serverGameSpace.ownText = "Gratulï¿½lok! Nyertï¿½l! ï¿½j jï¿½tï¿½k indï¿½tï¿½sï¿½hoz nyomd meg a Reset gombot.";
 				gameState.clientGameSpace.enemyText_f = true;
-				gameState.clientGameSpace.enemyText = "Sajnálom! Vesztettél! Új játék indításához nyomd meg a Reset gombot.";
+				gameState.clientGameSpace.enemyText = "Sajnï¿½lom! Vesztettï¿½l! ï¿½j jï¿½tï¿½k indï¿½tï¿½sï¿½hoz nyomd meg a Reset gombot.";
 			}
 		}
 		
@@ -172,10 +172,10 @@ public class Logic implements ICommand {
 	}
 	
 	/**
-	 * A lõtt pozíción leellenõrzi a lõtt cella állapotát, azt megváltoztatja a lövés hatására.
-	 * @param cells	A lövéshez tartozó játéktér cellái.
-	 * @param pos	A lövés pozíciója.
-	 * @return	A lõtt cella új típusa.
+	 * A lï¿½tt pozï¿½ciï¿½n leellenï¿½rzi a lï¿½tt cella ï¿½llapotï¿½t, azt megvï¿½ltoztatja a lï¿½vï¿½s hatï¿½sï¿½ra.
+	 * @param cells	A lï¿½vï¿½shez tartozï¿½ jï¿½tï¿½ktï¿½r cellï¿½i.
+	 * @param pos	A lï¿½vï¿½s pozï¿½ciï¿½ja.
+	 * @return	A lï¿½tt cella ï¿½j tï¿½pusa.
 	 */
 	private CellType checkShot(CellType[][] cells, Point pos) {
 		CellType shotCell = cells[pos.x][pos.y];
@@ -191,9 +191,9 @@ public class Logic implements ICommand {
 	}
 	
 	/**
-	 * Hajók lerakását kezelõ függvény.
-	 * @param position	Hova rakunk hajót.
-	 * @param commandOrigin	Mely játékos rakta a hajót.
+	 * Hajï¿½k lerakï¿½sï¿½t kezelï¿½ fï¿½ggvï¿½ny.
+	 * @param position	Hova rakunk hajï¿½t.
+	 * @param commandOrigin	Mely jï¿½tï¿½kos rakta a hajï¿½t.
 	 */
 	private void doPlaceShipStuff(Point position, NetworkType commandOrigin) {
 
@@ -253,7 +253,7 @@ public class Logic implements ICommand {
 					}
 					else {
 						gameState.clientGameSpace.ownText_f = true;
-						gameState.clientGameSpace.ownText = "1 elemû hajóból nem rakhatsz már le többet";
+						gameState.clientGameSpace.ownText = "1 elemï¿½ hajï¿½bï¿½l nem rakhatsz mï¿½r le tï¿½bbet";
 					}
 					break;
 				case 1:
@@ -268,7 +268,7 @@ public class Logic implements ICommand {
 					else if(atlo_f==true){
 								atlo_f = false;
 								gameState.clientGameSpace.ownText_f = true;
-								gameState.clientGameSpace.ownText = "Átlósan nem építkezhetsz, a hajók sarkai nem érhetnek össze!";
+								gameState.clientGameSpace.ownText = "ï¿½tlï¿½san nem ï¿½pï¿½tkezhetsz, a hajï¿½k sarkai nem ï¿½rhetnek ï¿½ssze!";
 					}
 					else{			
 							int tempInt = gameState.clientGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
@@ -293,7 +293,7 @@ public class Logic implements ICommand {
 							}
 							else{
 								gameState.clientGameSpace.ownText_f = true;
-								gameState.clientGameSpace.ownText = String.format("%d elemû hajóból nem rakhatsz már le többet",(tempInt<5 ? (tempInt+1) : tempInt));
+								gameState.clientGameSpace.ownText = String.format("%d elemï¿½ hajï¿½bï¿½l nem rakhatsz mï¿½r le tï¿½bbet",(tempInt<5 ? (tempInt+1) : tempInt));
 							}
 						}
 					
@@ -342,12 +342,12 @@ public class Logic implements ICommand {
 							}
 							else{
 								gameState.clientGameSpace.ownText_f = true;
-								gameState.clientGameSpace.ownText = String.format("%d elemû hajóból nem rakhatsz már le többet",(tempInt<5 ? (tempInt+1) : tempInt));
+								gameState.clientGameSpace.ownText = String.format("%d elemï¿½ hajï¿½bï¿½l nem rakhatsz mï¿½r le tï¿½bbet",(tempInt<5 ? (tempInt+1) : tempInt));
 							}		
 						}
 						else{
 							gameState.clientGameSpace.ownText_f = true;
-							gameState.clientGameSpace.ownText = "Két hajót nem köthetsz össze!";
+							gameState.clientGameSpace.ownText = "Kï¿½t hajï¿½t nem kï¿½thetsz ï¿½ssze!";
 						}
 					}
 					break;
@@ -415,7 +415,7 @@ public class Logic implements ICommand {
 					}
 					else {
 						gameState.serverGameSpace.ownText_f = true;
-						gameState.serverGameSpace.ownText = "Nem rakhatsz le több 1 elemû hajót!";
+						gameState.serverGameSpace.ownText = "Nem rakhatsz le tï¿½bb 1 elemï¿½ hajï¿½t!";
 					}
 					break;
 				case 1:
@@ -430,7 +430,7 @@ public class Logic implements ICommand {
 					else if(atlo_f==true){
 								atlo_f = false;
 								gameState.serverGameSpace.ownText_f = true;
-								gameState.serverGameSpace.ownText = "Átlósan nem építkezhetsz, a hajók sarkai nem érhetnek össze!";
+								gameState.serverGameSpace.ownText = "ï¿½tlï¿½san nem ï¿½pï¿½tkezhetsz, a hajï¿½k sarkai nem ï¿½rhetnek ï¿½ssze!";
 					}
 					else{			
 							int tempInt = gameState.serverGameSpace.ownCellsToShip[szomszed[0].x][szomszed[0].y].size;
@@ -455,7 +455,7 @@ public class Logic implements ICommand {
 							}
 							else{
 								gameState.serverGameSpace.ownText_f = true;
-								gameState.serverGameSpace.ownText = String.format("%d elemû hajóból nem rakhatsz már le többet",(tempInt<5 ? (tempInt+1) : tempInt));
+								gameState.serverGameSpace.ownText = String.format("%d elemï¿½ hajï¿½bï¿½l nem rakhatsz mï¿½r le tï¿½bbet",(tempInt<5 ? (tempInt+1) : tempInt));
 							}
 						}
 					
@@ -504,12 +504,12 @@ public class Logic implements ICommand {
 							}
 							else{
 								gameState.serverGameSpace.ownText_f = true;
-								gameState.serverGameSpace.ownText = String.format("%d elemû hajóból nem rakhatsz már le többet",(tempInt<5 ? (tempInt+1) : tempInt));
+								gameState.serverGameSpace.ownText = String.format("%d elemï¿½ hajï¿½bï¿½l nem rakhatsz mï¿½r le tï¿½bbet",(tempInt<5 ? (tempInt+1) : tempInt));
 							}		
 						}
 						else{
 							gameState.serverGameSpace.ownText_f = true;
-							gameState.serverGameSpace.ownText = "Két hajót nem köthetsz össze!";
+							gameState.serverGameSpace.ownText = "Kï¿½t hajï¿½t nem kï¿½thetsz ï¿½ssze!";
 						}
 					}
 					break;

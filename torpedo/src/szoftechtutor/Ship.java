@@ -3,7 +3,7 @@ package szoftechtutor;
 import java.io.Serializable;
 
 /**
- * Az egyes hajók állapotát leíró osztály.
+ * Az egyes hajï¿½k ï¿½llapotï¿½t leï¿½rï¿½ osztï¿½ly.
  */
 public class Ship  implements Serializable {
 	/**
@@ -12,24 +12,24 @@ public class Ship  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
     /**
-     * A hajó maximális mérete.
+     * A hajï¿½ maximï¿½lis mï¿½rete.
      */
     public int size; 
     
     /**
-     * A hajó aktuális elemeinek száma.
+     * A hajï¿½ aktuï¿½lis elemeinek szï¿½ma.
      */
     public int elements_no;
     /**
-     * A hajó azonosítója
+     * A hajï¿½ azonosï¿½tï¿½ja
      */
     public int id;
     /**
-     * Elsüllyedt-e a hajó.
+     * Elsï¿½llyedt-e a hajï¿½.
      */
     public boolean scuttled;
     /**
-     * A hajó rendelkezik-e minden elemével.
+     * A hajï¿½ rendelkezik-e minden elemï¿½vel.
      */
     public boolean completed;
     

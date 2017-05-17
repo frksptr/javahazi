@@ -1,12 +1,12 @@
 package szoftechtutor;
 
 /**
- * A játék új állapotára reagáló interface.
+ * A jï¿½tï¿½k ï¿½j ï¿½llapotï¿½ra reagï¿½lï¿½ interface.
  */
 public interface IGameState {
 	/**
-	 * A játék új állapotára adandó reakció.
-	 * @param gs	A játék új állapota.
+	 * A jï¿½tï¿½k ï¿½j ï¿½llapotï¿½ra adandï¿½ reakciï¿½.
+	 * @param gs	A jï¿½tï¿½k ï¿½j ï¿½llapota.
 	 */
 	public void onNewGameState(GameState gs);
 	void toString(String string);

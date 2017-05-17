@@ -5,27 +5,27 @@
 package szoftechtutor;
 
 /**
- * Hálózati kapcsolatért létrehozása, bontása.
+ * HÃ¡zati kapcsolat lÃ©rehozÃ¡sa, bontÃ¡sa.
  */
 abstract class Network {
 
 	protected Control ctrl;
 
 	/**
-	 * @param c	A hálózat inicializálásáért felelõs osztály.
+	 * @param c	A hÃ¡lÃ³zat inicializÃ¡lÃ¡sÃ¡Ã©rt felelÅ‘s osztÃ¡ly.
 	 */
 	Network(Control c) {
 		ctrl = c;
 	}
 
 	/**
-	 * Csatlakozás egy másik félhez.
-	 * @param ip	Csatlakozandó IP cím.
+	 * Csatlakozï¿½s egy mï¿½sik fï¿½lhez.
+	 * @param ip	Csatlakozandï¿½ IP cï¿½m.
 	 */
 	abstract void connect(String ip);
 
 	/**
-	 * A kapcsolat bontása.
+	 * A kapcsolat bontï¿½sa.
 	 */
 	abstract void disconnect();
 

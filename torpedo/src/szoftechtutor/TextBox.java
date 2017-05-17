@@ -35,9 +35,9 @@ public class TextBox extends JTextArea {
 	 * Kiírja a lerakandó/kilövendő hajókhoz tartozó információt.
 	 * @param form Mely helyre írunk információt.
 	 * @param placement	Lerakás fázis van-e, vagy lövés.
-	 * @param ctrl	Az alkalmazás kliens-e, vagy szerver.
+	 * @param networkType	Az alkalmazás kliens-e, vagy szerver.
 	 * @param gs	A játék aktuális állapota.
-	 * @return
+	 * @return A kiírandó szöveg.
 	 */
 	public String textCreator(boolean form, boolean placement, NetworkType networkType, GameState gs){
 		if(networkType == NetworkType.Server){

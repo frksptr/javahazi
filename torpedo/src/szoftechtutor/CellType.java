@@ -3,7 +3,7 @@ package szoftechtutor;
 import java.io.Serializable;
 
 /**
- * A j·tÈktÈr adott mezıjÈnek ·llapot·t Ìrja le.
+ * A j√°t√©kt√©r adott mez≈ëj√©nek √°llapot√°t √≠rja le
  */
 public enum CellType implements Serializable {
 	Ship, Water, ShipShot, WaterShot, Unknown

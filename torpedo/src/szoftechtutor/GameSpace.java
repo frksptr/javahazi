@@ -4,55 +4,55 @@ import java.io.Serializable;
 import szoftechtutor.Ship;
 
 /**
- * A játéktér állapotát leíró osztály.
+ * A jï¿½tï¿½ktï¿½r ï¿½llapotï¿½t leï¿½rï¿½ osztï¿½ly.
  */
 public class GameSpace implements Serializable {
 	private static final long serialVersionUID = 1L;
 	/**
-	 * A játékos saját játéktere.
+	 * A jï¿½tï¿½kos sajï¿½t jï¿½tï¿½ktere.
 	 */
 	public CellType[][] ownTable = new CellType[10][10];
 	
 	/**
-	 * A játékos információi az ellenfele játékterérõl.
+	 * A jï¿½tï¿½kos informï¿½ciï¿½i az ellenfele jï¿½tï¿½kterï¿½rï¿½l.
 	 */
 	public CellType[][] enemyTable = new CellType[10][10];
 	
 	/**
-	 *  A játékos saját cellához tartozó hajók.
+	 *  A jï¿½tï¿½kos sajï¿½t cellï¿½hoz tartozï¿½ hajï¿½k.
 	 */
 	public Ship[][] ownCellsToShip = new Ship[10][10];
 	/**
-	 * A játékos ellenfele celláihoz tartozó hajók.
+	 * A jï¿½tï¿½kos ellenfele cellï¿½ihoz tartozï¿½ hajï¿½k.
 	 */
 	public Ship[][] enemyCellsToShip = new Ship[10][10];
 	
 	/**
-	 * Saját állapotot leíró üzenet.
+	 * SajÃ¡t Ã¡llapotot leÃ­rÃ³ Ã¼zenet.
 	 */
 	String ownText = null;
 	
 	/**
-	 * Az ellenfél állapotát leíró üzenet. 
+	 * Az ellenfï¿½l ï¿½llapotï¿½t leï¿½rï¿½ ï¿½zenet. 
 	 */
 	String enemyText = null;
 	
 	/**
-	 * ownText megjelenítendõ-e.
+	 * ownText megjelenï¿½tendï¿½-e.
 	 */
 	boolean ownText_f = false;
 	/**
-	 * enemyText megjelenítendõ-e.
+	 * enemyText megjelenï¿½tendï¿½-e.
 	 */
 	boolean enemyText_f = false;
 	
 	
 	/**
-	 * Játékos hajóira vonatkozó információk.
+	 * Jï¿½tï¿½kos hajï¿½ira vonatkozï¿½ informï¿½ciï¿½k.
 	 */
 	public ShipFlags ownShips = new ShipFlags();
 	/**
-	 * Az ellenfél hajóira vonatkozó információk.
+	 * Az ellenfï¿½l hajï¿½ira vonatkozï¿½ informï¿½ciï¿½k.
 	 */
 	public ShipFlags enemyShips = new ShipFlags();
 	public int allShips = 15;
@@ -70,11 +70,11 @@ public class GameSpace implements Serializable {
 	}
 	
 	/**
-	 * A játéktér initcializációja. Az ellenfél mezõirõl alapesetben nem rendelkezünk információval, a játékos mezei pedig vízként szereplnek.
+	 * A jï¿½tï¿½ktï¿½r initcializï¿½ciï¿½ja. Az ellenfï¿½l mezï¿½irï¿½l alapesetben nem rendelkezï¿½nk informï¿½ciï¿½val, a jï¿½tï¿½kos mezei pedig vï¿½zkï¿½nt szereplnek.
 	 */
 	public GameSpace() {
-		/* elõször nem tudjuk, hogy az ellenfél térfelén milyen
-		 * mezõk vannak
+		/* elï¿½szï¿½r nem tudjuk, hogy az ellenfï¿½l tï¿½rfelï¿½n milyen
+		 * mezï¿½k vannak
 		 */
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
@@ -83,7 +83,7 @@ public class GameSpace implements Serializable {
 		}
 		
 		/*
-		 * Saját mezeinken elõször víz van
+		 * Sajï¿½t mezeinken elï¿½szï¿½r vï¿½z van
 		 */
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {

@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 
 
 /**
- * A kliens hálózati kommunikációját írja le.
+ * A kliens hï¿½lï¿½zati kommunikï¿½ciï¿½jï¿½t ï¿½rja le.
  */
 public class SerialClient extends Network implements ICommand {
 
@@ -20,7 +20,7 @@ public class SerialClient extends Network implements ICommand {
 	}
 
 	/**
-	 * Adatok fogadása a másik féltõl.
+	 * Adatok fogadï¿½sa a mï¿½sik fï¿½ltï¿½l.
 	 */
 	private class ReceiverThread implements Runnable {
 		public void run() {
@@ -28,10 +28,10 @@ public class SerialClient extends Network implements ICommand {
 			try {
 				while (true) {
 					/*
-					 * a kliens csak gamestatet kap, majd ha valami történik
-					 * azt command formájában továbbküldi a szerónak
-					 * ami kiszámolja hogy mi is történt és visszaküld
-					 * egy új gamestatet
+					 * a kliens csak gamestatet kap, majd ha valami tï¿½rtï¿½nik
+					 * azt command formï¿½jï¿½ban tovï¿½bbkï¿½ldi a szerï¿½nak
+					 * ami kiszï¿½molja hogy mi is tï¿½rtï¿½nt ï¿½s visszakï¿½ld
+					 * egy ï¿½j gamestatet
 					 */
 					GameState gs = (GameState) in.readObject();
 					gui.onNewGameState(gs);
@@ -69,8 +69,8 @@ public class SerialClient extends Network implements ICommand {
 	}
 
 	/**
-	 * Parancs küldése a szervernek.
-	 * @param c	A parancs tartalmát leíró osztály.
+	 * Parancs kï¿½ldï¿½se a szervernek.
+	 * @param c	A parancs tartalmï¿½t leï¿½rï¿½ osztï¿½ly.
 	 */
 	void send(Command c) {
 		if (out == null)

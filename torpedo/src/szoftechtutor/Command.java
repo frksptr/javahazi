@@ -6,31 +6,31 @@ import java.io.Serializable;
 import szoftechtutor.Control.NetworkType;
 
 /**
- * A szerver logikája és a játszó felek közti utasítások leírását tartalmazza.
+ * A szerver logikÃ¡ja Ã©s a jÃ¡tszÃ³ felek  kÃ¶zti utasÃ­tÃ¡sok leÃ­rÃ¡sÃ¡t tartalmazza.
  */
 public class Command implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	
 	/**
-	 * Amennyiben hajólerakás, vagy lövés történt, annak pozíciója.
+	 * Amennyiben hajÃ³ lerakÃ¡sa, vagy ha lÃ¶vÃ©s tÃ¶rtÃ©nt, annak pozÃ­ciÃ³ja.
 	 */
 	public Point position;
 	
 	/**
-	 * Az utasítás típusa.
+	 * Az utasÃ­tÃ¡s tÃ­pusa.
 	 */
 	public CommandType commandType;
 	
 	/**
-	 * Az utasítás küldõje. 
+	 * Az utasÃ­tÃ¡s kÃ¼ldÅ‘je 
 	 */
 	public NetworkType commandOrigin;
 	public boolean ready = false;
 	
 
 	/**
-	 * Az utasítás lehetséges típusai.
+	 * Az utasÃ­tÃ¡s lehetsÃ©ges tÃ­pusai.
 	 */
 	public enum CommandType {
 		Shot,

@@ -1,11 +1,11 @@
 package szoftechtutor;
 
 /**
- * Parancsra reagáló interface.
+ * Parancsra reagï¿½lï¿½ interface.
  */
 public interface ICommand {
 	/**
-	 * A kapott parancsra való reakció.
+	 * A kapott parancsra valï¿½ reakciï¿½.
 	 * @param c	Kapott parancs.
 	 */
 	public void onCommand(Command c);
