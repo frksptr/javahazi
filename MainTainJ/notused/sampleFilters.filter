@@ -1,0 +1,19 @@
+#Sample MaintainJ filter definition file for the sample trace file Alfresco_Login.ser. 
+#This file uses the standard Java properties file syntax.
+#You can define either 'delete' or 'exclude' filters on both classes and/or packages.
+#'Delete' filter deletes all calls to and from a class.
+#'Exclude' filter deletes all calls to that class, but retains all calls from that class.
+#Patterns like * are not recognized. Use complete class and/or package names.
+#When a package filter is defined, all classes in that package are filtered out.
+#Use comma when defining multiple classes or packages as filters.
+#Uncomment the properties below to define the filters applicable to your application.
+
+#DeleteClasses=org.alfresco.repo.security.permissions.dynamic.LockOwnerDynamicAuthority,\
+			org.alfresco.repo.security.permissions.dynamic.OwnerDynamicAuthority
+
+#DeletePackages=org.alfresco.repo.workflow,\
+			org.alfresco.repo.workflow.jbpm
+
+#ExcludeClasses=org.alfresco.repo.security.permissions.impl.ExceptionTranslatorMethodInterceptor
+
+#ExcludePackages=

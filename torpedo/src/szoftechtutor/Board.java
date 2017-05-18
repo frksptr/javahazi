@@ -16,18 +16,7 @@ import java.awt.Font;
  * A jatekteret leiro osztaly, a loheto cellak gombokkent kerulnek megvalositasra
  *
  */
-/**
- * @author nempeter
- *
- */
-/**
- * @author nempeter
- *
- */
-/**
- * @author nempeter
- *
- */
+
 public class Board extends JPanel {
 
 	/**
@@ -86,7 +75,6 @@ public class Board extends JPanel {
 					button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 					button.setPreferredSize(new java.awt.Dimension(height / 11, width / 11));
 					button.addActionListener(handler);
-					//button.setBorder(new LineBorder(Color.BLACK));
 				}
 				c.gridx = col;
 				c.gridy = row;
